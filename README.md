@@ -2,44 +2,74 @@
 
 Fail-closed disaster recovery framework for self-hosted Linux servers.
 
-> **Status:** private preparation repository. The public release is being rebuilt from a sanitized codebase. Do not use this repository for production recovery yet.
+> **Status:** sanitized pre-release. The repository remains private until the final public-release review. Do not use it as a production recovery solution yet.
 
-## Goals
+## What it does
 
-HP Server Recovery is intended to make restoration of a self-hosted Linux server reproducible, testable and conservative by default.
+HP Server Recovery is designed to make restoration of a self-hosted Linux server reproducible, testable and conservative by default.
 
 Core design goals:
 
-- fail closed when required recovery inputs are missing or ambiguous
+- fail closed when recovery inputs, target identity or safety bindings are missing or ambiguous
 - separate generic recovery logic from host-specific configuration
-- validate manifests and release identity before destructive actions
-- support dry runs and isolated restore tests
-- make recovery steps auditable and repeatable
-- keep secrets, production payloads and machine identifiers outside the source repository
+- validate manifests and release identity before destructive operations
+- support fixture-driven tests and isolated real-restore testing
+- make recovery state, command execution and cleanup auditable
+- keep secrets, production payloads and machine identities outside the source repository
 
-## Planned public structure
+## Safety model
 
-- `lib/` — reusable recovery engine
+The recovery engine treats destructive actions as explicitly gated operations. Isolated realtests require bound target identities, allowed and forbidden hostnames, protected path prefixes, read-only recovery sources and an isolated container runtime. Missing bindings cause the operation to stop instead of falling back to permissive defaults.
+
+Persistent reports and audit data are checked for secret-marker leakage before a run can be considered complete.
+
+See [SECURITY.md](SECURITY.md) and `docs/SAFETY-MODEL.md`.
+
+## Repository structure
+
+- `lib/hp_recovery/` — reusable recovery engine
 - `bin/` — command-line entry points
-- `profiles/` — generic service profiles and examples
-- `config/` — sanitized templates only
-- `tests/` — automated tests and fixtures
-- `docs/` — architecture, recovery model and safety documentation
-- `tools/` — build and validation helpers
+- `config/` — sanitized example configuration
+- `tests/` — automated tests and synthetic fixtures
+- `runtime-data/` — synthetic catalog data used by the test package
+- `manifests/` — integrity manifest for the synthetic package
+- `payload/` — synthetic test-only package contracts; no production payloads
 
-## Security model
+## Test status
 
-The public repository must never contain production secrets, private keys, access tokens, real server payloads, personal hostnames/domains, device UUIDs, backup contents or machine-specific restore identities.
+The sanitized release tree currently passes **183/183 automated tests**, including:
 
-Destructive restore operations must require explicit, validated target identity and should refuse to continue when safety preconditions are not met.
+- recovery planner and state-machine tests
+- confirmation and storage safety gates
+- wizard behavior
+- isolated realtest identity binding
+- read-only source enforcement
+- target/source overlap protection
+- Docker Compose isolation
+- cleanup and resume behavior
+- secret-marker redaction and final evidence checks
 
-See [SECURITY.md](SECURITY.md).
+The publication scan currently reports no personal username, personal domain, private-LAN address, standard UUID, e-mail address, private key or risky archive/database/dump file in the release tree.
 
-## Current state
+## Quick start
 
-The project originated as a private recovery system for a real self-hosted server. The reusable implementation is currently being separated from production-specific data and rewritten into a publishable form.
+For development/test use only:
 
-The first public release will be published only after a clean-source review, secret scan and isolated recovery test.
+```bash
+python3 -m unittest tests.test_t01_t35 tests.test_wizard_v028 tests.test_realtest_mode
+```
+
+Run the CLI help:
+
+```bash
+./bin/hp-recovery menu --help
+```
+
+The realtest mode is intentionally not plug-and-play. It requires an explicitly bound isolated environment and validated target/sentinel configuration.
+
+## Origin
+
+The project originated from a real self-hosted server recovery system after treating backup creation alone as insufficient. The public version publishes the reusable engine, safety model and synthetic tests — not the original infrastructure, backup contents, secrets or machine identities.
 
 ## License
 
