@@ -83,7 +83,7 @@ def validate_image_lock(usb_root):
 
 
 REPOSITORY_METADATA = {".gitignore", "README.md", "LICENSE", "SECURITY.md", "CONTRIBUTING.md", "CHANGELOG.md"}
-REPOSITORY_METADATA_DIRS = {".github", "docs"}
+REPOSITORY_METADATA_DIRS = {".git", ".github", "docs"}
 
 
 def _is_repository_metadata(relative_path):
