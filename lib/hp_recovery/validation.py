@@ -82,13 +82,23 @@ def validate_image_lock(usb_root):
     return {"status": "PASS", "service_contracts": len(contracts)}
 
 
+REPOSITORY_METADATA = {".gitignore", "README.md", "LICENSE", "SECURITY.md", "CONTRIBUTING.md", "CHANGELOG.md"}
+REPOSITORY_METADATA_DIRS = {".github", "docs"}
+
+
+def _is_repository_metadata(relative_path):
+    path = pathlib.PurePosixPath(relative_path)
+    return relative_path in REPOSITORY_METADATA or (path.parts and path.parts[0] in REPOSITORY_METADATA_DIRS)
+
+
 def validate_usb(usb_root):
     root = pathlib.Path(usb_root).resolve()
     manifest = root / "manifests/usb-files.sha256"
     checked = verify_manifest(root, manifest)
     actual = sorted(p.relative_to(root).as_posix() for p in root.rglob("*")
                     if p.is_file() and not p.is_symlink() and p != manifest
-                    and "__pycache__" not in p.parts and p.suffix != ".pyc")
+                    and "__pycache__" not in p.parts and p.suffix != ".pyc"
+                    and not _is_repository_metadata(p.relative_to(root).as_posix()))
     if checked != actual:
         raise ValidationError("USB manifest coverage mismatch")
     catalog_result = validate_catalog(root)
