@@ -1,0 +1,118 @@
+{
+  "documents": {
+    "inventory/components.yaml": {
+      "components": [
+        {
+          "component_id": "nextcloud",
+          "dependencies": [],
+          "integration_state": "COMPLETE",
+          "recovery_profile": {
+            "path": "NOT_REQUIRED"
+          },
+          "status": "ACTIVE"
+        },
+        {
+          "component_id": "immich",
+          "dependencies": [],
+          "integration_state": "COMPLETE",
+          "recovery_profile": {
+            "path": "NOT_REQUIRED"
+          },
+          "status": "ACTIVE"
+        },
+        {
+          "component_id": "paperless",
+          "dependencies": [],
+          "integration_state": "COMPLETE",
+          "recovery_profile": {
+            "path": "NOT_REQUIRED"
+          },
+          "status": "ACTIVE"
+        },
+        {
+          "component_id": "jellyfin",
+          "dependencies": [],
+          "integration_state": "COMPLETE",
+          "recovery_profile": {
+            "path": "NOT_REQUIRED"
+          },
+          "status": "ACTIVE"
+        },
+        {
+          "component_id": "adguard",
+          "dependencies": [],
+          "integration_state": "COMPLETE",
+          "recovery_profile": {
+            "path": "NOT_REQUIRED"
+          },
+          "status": "ACTIVE"
+        },
+        {
+          "component_id": "npm",
+          "dependencies": [],
+          "integration_state": "COMPLETE",
+          "recovery_profile": {
+            "path": "NOT_REQUIRED"
+          },
+          "status": "ACTIVE"
+        },
+        {
+          "component_id": "analyzer",
+          "dependencies": [],
+          "integration_state": "COMPLETE",
+          "recovery_profile": {
+            "path": "NOT_REQUIRED"
+          },
+          "status": "ACTIVE"
+        },
+        {
+          "component_id": "snowflake",
+          "dependencies": [],
+          "integration_state": "COMPLETE",
+          "recovery_profile": {
+            "path": "NOT_REQUIRED"
+          },
+          "status": "ACTIVE"
+        },
+        {
+          "component_id": "storage",
+          "dependencies": [],
+          "integration_state": "COMPLETE",
+          "recovery_profile": {
+            "path": "NOT_REQUIRED"
+          },
+          "status": "ACTIVE"
+        },
+        {
+          "component_id": "urlaubsplaner",
+          "dependencies": [],
+          "integration_state": "COMPLETE",
+          "recovery_profile": {
+            "path": "NOT_REQUIRED"
+          },
+          "status": "ACTIVE"
+        },
+        {
+          "component_id": "devicewatchdog",
+          "dependencies": [],
+          "integration_state": "COMPLETE",
+          "recovery_profile": {
+            "path": "NOT_REQUIRED"
+          },
+          "status": "ACTIVE"
+        },
+        {
+          "component_id": "monatsausgaben",
+          "dependencies": [],
+          "integration_state": "COMPLETE",
+          "recovery_profile": {
+            "path": "NOT_REQUIRED"
+          },
+          "status": "ACTIVE"
+        }
+      ]
+    }
+  },
+  "schema_version": "1.0",
+  "sources": []
+}

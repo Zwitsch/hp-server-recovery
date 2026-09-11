@@ -1,0 +1,6 @@
+{
+  "compatibility_if_outdated": "INCOMPATIBLE",
+  "production_version": "0.0.0-test",
+  "release_gates": "SYNTHETIC_TEST_ONLY",
+  "version": "0.0.0-test"
+}

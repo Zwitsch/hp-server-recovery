@@ -1,0 +1,9 @@
+services:
+  app:
+    {}
+  db:
+    environment:
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
+    healthcheck:
+      test: ["CMD-SHELL", "test -n '${MYSQL_PASSWORD}'"]

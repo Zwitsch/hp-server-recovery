@@ -1,0 +1,27 @@
+{
+  "allowed_hostnames": [
+    "HP-EVIDENCE-INTAKE-HOSTNAME-NACH-ERHEBUNG"
+  ],
+  "override_allowed": false,
+  "purpose": "HP_EVIDENCE_INTAKE_REALTEST",
+  "release_allowed": false,
+  "schema_version": "1.0",
+  "target_devices": {
+    "data": {
+      "device": "UNKNOWN",
+      "model": "UNKNOWN",
+      "size": "UNKNOWN",
+      "type": "UNKNOWN",
+      "uuid": "UNKNOWN",
+      "virtual": true
+    },
+    "system": {
+      "device": "UNKNOWN",
+      "model": "UNKNOWN",
+      "size": "UNKNOWN",
+      "type": "UNKNOWN",
+      "uuid": "UNKNOWN",
+      "virtual": true
+    }
+  }
+}

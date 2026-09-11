@@ -1,0 +1,9 @@
+services:
+  immich-server:
+    {}
+  immich-machine-learning:
+    {}
+  database:
+    {}
+  redis:
+    {}

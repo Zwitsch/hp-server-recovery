@@ -1,0 +1,7 @@
+{
+  "synthetic": true,
+  "productive_paths_forbidden": true,
+  "dummy_secret_prefix": "DUMMY_TEST_ONLY_",
+  "release_allowed": false,
+  "override_allowed": false
+}

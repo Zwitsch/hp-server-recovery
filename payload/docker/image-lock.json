@@ -1,0 +1,16 @@
+{
+  "service_image_contracts": [
+    {
+      "compose_image_or_build": {
+        "image_expression": "example.invalid/recovery@sha256:1111111111111111111111111111111111111111111111111111111111111111"
+      },
+      "contract_id": "synthetic-test",
+      "immutable_restore_reference": "example.invalid/recovery@sha256:1111111111111111111111111111111111111111111111111111111111111111",
+      "offline_image_archive": {
+        "present": true,
+        "sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+        "status": "PASS_VERIFIED_P3_07"
+      }
+    }
+  ]
+}

@@ -1,0 +1,1704 @@
+{
+  "allowed_command_basenames": [
+    "docker",
+    "dpkg",
+    "getfacl",
+    "mariadb",
+    "mysql",
+    "mysqldump",
+    "pg_dump",
+    "psql",
+    "rsync",
+    "sqlite3",
+    "systemctl",
+    "true"
+  ],
+  "allowed_hostnames": [
+    "RECOVERY_TEST_VM_REQUIRED"
+  ],
+  "allowed_units": [
+    "backup_level2.timer",
+    "backup_level3.timer",
+    "getmail-paperless.timer",
+    "hp-server-analyzer-biweekly.timer",
+    "hp-server-analyzer-hdd-cleanup.timer",
+    "nextcloud-cron.timer",
+    "nextcloud-app-auto-update.timer",
+    "hp-check-snowflake.timer",
+    "snowflake-monitor.timer",
+    "snowflake-weekly-report.timer",
+    "snowflake-monthly-report.timer"
+  ],
+  "base_system": {
+    "copies": [
+      {
+        "required": true,
+        "source": "USB",
+        "source_rel": "tests/fixtures/base/config",
+        "target_rel": "etc/hp-recovery-example"
+      }
+    ]
+  },
+  "container_runtime": {
+    "production_context_connected": false,
+    "socket": "VM_BINDING_REQUIRED"
+  },
+  "data_target": "VM_BINDING_REQUIRED",
+  "forbidden_hostnames": [
+    "PRODUCTION_HOST_REQUIRED"
+  ],
+  "image_archive_root": "VM_BINDING_REQUIRED",
+  "images": [
+    {
+      "archive_rel": "tests/fixtures/images/image-1.tar",
+      "archive_sha256": "3333333333333333333333333333333333333333333333333333333333333333",
+      "expected_image_id": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+      "kind": "REGISTRY",
+      "reference": "example.invalid/image-1@sha256:2222222222222222222222222222222222222222222222222222222222222222",
+      "services": [
+        "adguard"
+      ]
+    },
+    {
+      "archive_rel": "tests/fixtures/images/image-2.tar",
+      "archive_sha256": "4444444444444444444444444444444444444444444444444444444444444444",
+      "expected_image_id": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+      "kind": "REGISTRY",
+      "reference": "example.invalid/image-2@sha256:3333333333333333333333333333333333333333333333333333333333333333",
+      "services": [
+        "analyzer"
+      ]
+    },
+    {
+      "archive_rel": "tests/fixtures/images/image-3.tar",
+      "archive_sha256": "5555555555555555555555555555555555555555555555555555555555555555",
+      "expected_image_id": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+      "kind": "REGISTRY",
+      "reference": "example.invalid/image-3@sha256:4444444444444444444444444444444444444444444444444444444444444444",
+      "services": [
+        "immich"
+      ]
+    },
+    {
+      "archive_rel": "tests/fixtures/images/image-4.tar",
+      "archive_sha256": "6666666666666666666666666666666666666666666666666666666666666666",
+      "expected_image_id": "sha256:5555555555555555555555555555555555555555555555555555555555555555",
+      "kind": "REGISTRY",
+      "reference": "example.invalid/image-4@sha256:5555555555555555555555555555555555555555555555555555555555555555",
+      "services": [
+        "immich"
+      ]
+    },
+    {
+      "archive_rel": "tests/fixtures/images/image-5.tar",
+      "archive_sha256": "7777777777777777777777777777777777777777777777777777777777777777",
+      "expected_image_id": "sha256:6666666666666666666666666666666666666666666666666666666666666666",
+      "kind": "REGISTRY",
+      "reference": "example.invalid/image-5@sha256:6666666666666666666666666666666666666666666666666666666666666666",
+      "services": [
+        "immich"
+      ]
+    },
+    {
+      "archive_rel": "tests/fixtures/images/image-6.tar",
+      "archive_sha256": "8888888888888888888888888888888888888888888888888888888888888888",
+      "expected_image_id": "sha256:7777777777777777777777777777777777777777777777777777777777777777",
+      "kind": "REGISTRY",
+      "reference": "example.invalid/image-6@sha256:7777777777777777777777777777777777777777777777777777777777777777",
+      "services": [
+        "immich"
+      ]
+    },
+    {
+      "archive_rel": "tests/fixtures/images/image-7.tar",
+      "archive_sha256": "9999999999999999999999999999999999999999999999999999999999999999",
+      "expected_image_id": "sha256:8888888888888888888888888888888888888888888888888888888888888888",
+      "kind": "REGISTRY",
+      "reference": "example.invalid/image-7@sha256:8888888888888888888888888888888888888888888888888888888888888888",
+      "services": [
+        "jellyfin"
+      ]
+    },
+    {
+      "archive_rel": "tests/fixtures/images/image-8.tar",
+      "archive_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+      "expected_image_id": "sha256:9999999999999999999999999999999999999999999999999999999999999999",
+      "kind": "REGISTRY",
+      "reference": "example.invalid/image-8@sha256:9999999999999999999999999999999999999999999999999999999999999999",
+      "services": [
+        "monatsausgaben"
+      ]
+    },
+    {
+      "archive_rel": "tests/fixtures/images/image-9.tar",
+      "archive_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+      "expected_image_id": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+      "kind": "REGISTRY",
+      "reference": "example.invalid/image-9@sha256:1111111111111111111111111111111111111111111111111111111111111111",
+      "services": [
+        "nextcloud"
+      ]
+    },
+    {
+      "archive_rel": "tests/fixtures/images/image-10.tar",
+      "archive_sha256": "3333333333333333333333333333333333333333333333333333333333333333",
+      "expected_image_id": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+      "kind": "REGISTRY",
+      "reference": "example.invalid/image-10@sha256:2222222222222222222222222222222222222222222222222222222222222222",
+      "services": [
+        "nextcloud"
+      ]
+    },
+    {
+      "archive_rel": "tests/fixtures/images/image-11.tar",
+      "archive_sha256": "4444444444444444444444444444444444444444444444444444444444444444",
+      "expected_image_id": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+      "kind": "REGISTRY",
+      "reference": "example.invalid/image-11@sha256:3333333333333333333333333333333333333333333333333333333333333333",
+      "services": [
+        "npm"
+      ]
+    },
+    {
+      "archive_rel": "tests/fixtures/images/image-12.tar",
+      "archive_sha256": "5555555555555555555555555555555555555555555555555555555555555555",
+      "expected_image_id": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+      "kind": "REGISTRY",
+      "reference": "example.invalid/image-12@sha256:4444444444444444444444444444444444444444444444444444444444444444",
+      "services": [
+        "paperless"
+      ]
+    },
+    {
+      "archive_rel": "tests/fixtures/images/image-13.tar",
+      "archive_sha256": "6666666666666666666666666666666666666666666666666666666666666666",
+      "expected_image_id": "sha256:5555555555555555555555555555555555555555555555555555555555555555",
+      "kind": "REGISTRY",
+      "reference": "example.invalid/image-13@sha256:5555555555555555555555555555555555555555555555555555555555555555",
+      "services": [
+        "paperless"
+      ]
+    },
+    {
+      "archive_rel": "tests/fixtures/images/image-14.tar",
+      "archive_sha256": "7777777777777777777777777777777777777777777777777777777777777777",
+      "expected_image_id": "sha256:6666666666666666666666666666666666666666666666666666666666666666",
+      "kind": "REGISTRY",
+      "reference": "example.invalid/image-14@sha256:6666666666666666666666666666666666666666666666666666666666666666",
+      "services": [
+        "snowflake"
+      ]
+    }
+  ],
+  "override_allowed": false,
+  "packages": {
+    "offline_debs": [],
+    "required": [
+      "acl",
+      "age",
+      "attr",
+      "ca-certificates",
+      "curl",
+      "dnsutils",
+      "docker.io",
+      "jq",
+      "mariadb-client",
+      "python3-yaml",
+      "rsync",
+      "sqlite3"
+    ],
+    "required_any": [
+      [
+        "docker-compose-v2",
+        "docker-compose-plugin"
+      ]
+    ]
+  },
+  "productive_ips": [
+    "192.0.2.10"
+  ],
+  "protected_prefixes": [
+    "/srv/production-data",
+    "/srv/production-backup"
+  ],
+  "release_allowed": false,
+  "runtime_mode": "ISOLATED_REALTEST",
+  "runtime_version": "0.2.8-dev-ASSISTENT",
+  "schema_version": "1.0",
+  "secrets": {
+    "age_package": "VM_BINDING_REQUIRED",
+    "authentication": "PASSPHRASE_PROMPT",
+    "required_files": [
+      "compose/adguard.env",
+      "compose/analyzer.env",
+      "compose/immich.env",
+      "compose/jellyfin.env",
+      "compose/monatsausgaben.env",
+      "compose/nextcloud.env",
+      "compose/npm.env",
+      "compose/paperless.env",
+      "db/immich.env",
+      "db/nextcloud.env",
+      "paperless/getmailrc"
+    ]
+  },
+  "sentinel_path": "VM_BINDING_REQUIRED",
+  "sentinel_sha256": "VM_BINDING_REQUIRED",
+  "services": {
+    "adguard": {
+      "check_failure": "UNAVAILABLE",
+      "checks": [
+        {
+          "kind": "PATH",
+          "target_rel": "adguard/conf"
+        },
+        {
+          "kind": "PATH",
+          "target_rel": "adguard/work"
+        },
+        {
+          "kind": "ENDPOINT",
+          "status": [
+            200,
+            302
+          ],
+          "url": "http://127.0.0.1:3000/"
+        }
+      ],
+      "compose": {
+        "allowed_networks": [
+          "realtest"
+        ],
+        "companions": [],
+        "container_names": {
+          "adguardhome": "hp-realtest-adguard-adguardhome"
+        },
+        "env_file_services": [],
+        "env_secret_rel": "compose/adguard.env",
+        "expected_services": [
+          "adguardhome"
+        ],
+        "health_required": [],
+        "image_bindings": {
+          "adguardhome": "example.invalid/adguard-adguardhome@sha256:4444444444444444444444444444444444444444444444444444444444444444"
+        },
+        "mounts": {
+          "adguardhome": [
+            {
+              "source_rel": "data/adguard/work",
+              "target": "/opt/adguardhome/work"
+            },
+            {
+              "source_rel": "data/adguard/conf",
+              "target": "/opt/adguardhome/conf"
+            }
+          ]
+        },
+        "payload_file": "tests/fixtures/compose/adguard.yml",
+        "ports": {
+          "adguardhome": [
+            {
+              "host_ip": "127.0.0.1",
+              "protocol": "tcp",
+              "published": 53,
+              "target": 53
+            },
+            {
+              "host_ip": "127.0.0.1",
+              "protocol": "udp",
+              "published": 53,
+              "target": 53
+            },
+            {
+              "host_ip": "127.0.0.1",
+              "protocol": "tcp",
+              "published": 3000,
+              "target": 3000
+            }
+          ]
+        },
+        "profile": "adguard",
+        "project_name": "hp-realtest-adguard",
+        "service_networks": {
+          "adguardhome": [
+            "realtest"
+          ]
+        },
+        "start": true,
+        "target_rel": "work/compose/adguard/isolated-compose.json",
+        "verify_services": [
+          "adguardhome"
+        ]
+      },
+      "copies": [
+        {
+          "modes": [
+            "L2_ONLY"
+          ],
+          "required": true,
+          "source": "L2",
+          "source_rel": "adguard/conf",
+          "target_rel": "adguard/conf"
+        },
+        {
+          "modes": [
+            "L2_ONLY"
+          ],
+          "required": true,
+          "source": "L2",
+          "source_rel": "adguard/work",
+          "target_rel": "adguard/work"
+        },
+        {
+          "modes": [
+            "L3_ONLY",
+            "COMBINED_L2_L3"
+          ],
+          "required": true,
+          "source": "L3",
+          "source_rel": "adguard/conf",
+          "target_rel": "adguard/conf"
+        },
+        {
+          "modes": [
+            "L3_ONLY",
+            "COMBINED_L2_L3"
+          ],
+          "required": true,
+          "source": "L3",
+          "source_rel": "adguard/work",
+          "target_rel": "adguard/work"
+        }
+      ],
+      "success_status": "FULL"
+    },
+    "analyzer": {
+      "check_failure": "PARTIAL",
+      "checks": [
+        {
+          "kind": "PATH",
+          "target_rel": "hp-analyzer-backup"
+        }
+      ],
+      "compose": {
+        "allowed_networks": [
+          "realtest"
+        ],
+        "companions": [
+          {
+            "payload_rel": "tests/fixtures/companions/analyzer/nginx.conf",
+            "required": true,
+            "sha256": "285d00e266d1e87f64b28e53da17662ca164ffabb49c0a0bf3e20ad572d4db0f",
+            "target_rel": "work/compose/analyzer/companions/nginx.conf",
+            "type": "file"
+          },
+          {
+            "payload_rel": "tests/fixtures/companions/analyzer/portal",
+            "required": true,
+            "target_rel": "work/compose/analyzer/companions/portal",
+            "type": "directory"
+          }
+        ],
+        "container_names": {
+          "hp-analyzer-portal": "hp-realtest-analyzer-hp-analyzer-portal"
+        },
+        "env_file_services": [],
+        "env_secret_rel": "compose/analyzer.env",
+        "expected_services": [
+          "hp-analyzer-portal"
+        ],
+        "health_required": [
+          "hp-analyzer-portal"
+        ],
+        "image_bindings": {
+          "hp-analyzer-portal": "example.invalid/analyzer-hp-analyzer-portal@sha256:1111111111111111111111111111111111111111111111111111111111111111"
+        },
+        "missing_companion_policy": "PARTIAL",
+        "mounts": {
+          "hp-analyzer-portal": [
+            {
+              "read_only": true,
+              "source_rel": "work/compose/analyzer/companions/portal",
+              "source_type": "companion",
+              "target": "/usr/share/nginx/html"
+            },
+            {
+              "read_only": true,
+              "source_rel": "work/compose/analyzer/companions/nginx.conf",
+              "source_type": "companion",
+              "target": "/etc/nginx/conf.d/default.conf"
+            },
+            {
+              "read_only": true,
+              "source_rel": "data/hp-analyzer-backup",
+              "target": "/usr/share/nginx/html/reports"
+            }
+          ]
+        },
+        "payload_file": "tests/fixtures/compose/analyzer.yml",
+        "ports": {
+          "hp-analyzer-portal": [
+            {
+              "host_ip": "127.0.0.1",
+              "published": 18090,
+              "target": 80
+            }
+          ]
+        },
+        "profile": "analyzer",
+        "project_name": "hp-realtest-analyzer",
+        "service_networks": {
+          "hp-analyzer-portal": [
+            "realtest"
+          ]
+        },
+        "start": false,
+        "target_rel": "work/compose/analyzer/isolated-compose.json",
+        "verify_services": [
+          "hp-analyzer-portal"
+        ]
+      },
+      "copies": [
+        {
+          "modes": [
+            "L2_ONLY",
+            "COMBINED_L2_L3"
+          ],
+          "required": false,
+          "source": "L2",
+          "source_rel": "hp-analyzer-backup",
+          "target_rel": "hp-analyzer-backup"
+        },
+        {
+          "modes": [
+            "L3_ONLY",
+            "COMBINED_L2_L3"
+          ],
+          "required": false,
+          "source": "L3",
+          "source_rel": "analyzer",
+          "target_rel": "hp-analyzer-backup"
+        }
+      ],
+      "copy_required": false,
+      "success_status": "FULL"
+    },
+    "base-system": {
+      "checks": [
+        {
+          "kind": "PATH",
+          "target_rel": "etc/hp-recovery-example"
+        }
+      ],
+      "copies": [
+        {
+          "modes": [
+            "L2_ONLY",
+            "COMBINED_L2_L3",
+            "BASE_ONLY"
+          ],
+          "required": true,
+          "source": "USB",
+          "source_rel": "tests/fixtures/base/config",
+          "target_rel": "etc/hp-recovery-example"
+        }
+      ],
+      "copy_required": false
+    },
+    "immich": {
+      "check_failure": "UNAVAILABLE",
+      "checks": [
+        {
+          "kind": "PATH",
+          "target_rel": "immich"
+        },
+        {
+          "kind": "ENDPOINT",
+          "status": [
+            200,
+            302,
+            404
+          ],
+          "url": "http://127.0.0.1:2283/"
+        }
+      ],
+      "compose": {
+        "allowed_networks": [
+          "realtest"
+        ],
+        "companions": [],
+        "container_names": {
+          "database": "hp-realtest-immich-database",
+          "immich-machine-learning": "hp-realtest-immich-immich-machine-learning",
+          "immich-server": "hp-realtest-immich-immich-server",
+          "redis": "hp-realtest-immich-redis"
+        },
+        "env_file_services": [
+          "immich-server",
+          "immich-machine-learning"
+        ],
+        "env_secret_rel": "compose/immich.env",
+        "expected_services": [
+          "immich-server",
+          "immich-machine-learning",
+          "database",
+          "redis"
+        ],
+        "health_required": [
+          "immich-server",
+          "immich-machine-learning",
+          "redis"
+        ],
+        "image_bindings": {
+          "database": "example.invalid/immich-database@sha256:7777777777777777777777777777777777777777777777777777777777777777",
+          "immich-machine-learning": "example.invalid/immich-immich-machine-learning@sha256:8888888888888888888888888888888888888888888888888888888888888888",
+          "immich-server": "example.invalid/immich-immich-server@sha256:9999999999999999999999999999999999999999999999999999999999999999",
+          "redis": "example.invalid/immich-redis@sha256:1111111111111111111111111111111111111111111111111111111111111111"
+        },
+        "mounts": {
+          "database": [
+            {
+              "source_rel": "data/immich_pgdata",
+              "target": "/var/lib/postgresql/data"
+            }
+          ],
+          "immich-machine-learning": [
+            {
+              "source_rel": "data/immich-model-cache",
+              "target": "/cache"
+            }
+          ],
+          "immich-server": [
+            {
+              "source_rel": "data/immich",
+              "target": "/usr/src/app/upload"
+            },
+            {
+              "read_only": true,
+              "source_rel": "work/compose/immich/companions/localtime",
+              "source_type": "localtime_copy",
+              "target": "/etc/localtime"
+            }
+          ],
+          "redis": []
+        },
+        "payload_file": "tests/fixtures/compose/immich.yml",
+        "ports": {
+          "database": [],
+          "immich-machine-learning": [],
+          "immich-server": [
+            {
+              "host_ip": "127.0.0.1",
+              "published": 2283,
+              "target": 2283
+            }
+          ],
+          "redis": []
+        },
+        "profile": "immich",
+        "project_name": "hp-realtest-immich",
+        "service_networks": {
+          "database": [
+            "realtest"
+          ],
+          "immich-machine-learning": [
+            "realtest"
+          ],
+          "immich-server": [
+            "realtest"
+          ],
+          "redis": [
+            "realtest"
+          ]
+        },
+        "start": true,
+        "target_rel": "work/compose/immich/isolated-compose.json",
+        "verify_services": [
+          "immich-server",
+          "immich-machine-learning",
+          "database",
+          "redis"
+        ]
+      },
+      "copies": [
+        {
+          "modes": [
+            "L2_ONLY",
+            "COMBINED_L2_L3"
+          ],
+          "required": true,
+          "source": "L2",
+          "source_rel": "immich",
+          "target_rel": "immich"
+        },
+        {
+          "modes": [
+            "L3_ONLY"
+          ],
+          "required": false,
+          "source": "L3",
+          "source_rel": "immich",
+          "target_rel": "immich"
+        }
+      ],
+      "database": {
+        "commands": {
+          "import_dump": {
+            "argv": [
+              "docker",
+              "--host",
+              "{DOCKER_SOCKET}",
+              "exec",
+              "--interactive",
+              "hp-realtest-immich-target",
+              "pg_restore",
+              "--clean",
+              "--if-exists",
+              "--username=postgres",
+              "--dbname=immich"
+            ]
+          },
+          "initialize_empty": {
+            "argv": [
+              "docker",
+              "--host",
+              "{DOCKER_SOCKET}",
+              "run",
+              "--detach",
+              "--name",
+              "hp-realtest-immich-target",
+              "--env-file",
+              "{SECRET_DIR}/db/immich.env",
+              "--mount",
+              "type=bind,src={DATA_TARGET}/immich_pgdata,dst=/var/lib/postgresql/data",
+              "ghcr.io/immich-app/postgres@sha256:bcf63357191b76a916ae5eb93464d65c07511da41e3bf7a8416db519b40b1c23"
+            ]
+          },
+          "isolated_start": {
+            "argv": [
+              "docker",
+              "--host",
+              "{DOCKER_SOCKET}",
+              "run",
+              "--detach",
+              "--name",
+              "hp-realtest-immich-export",
+              "--env-file",
+              "{SECRET_DIR}/db/immich.env",
+              "--mount",
+              "type=bind,src={RAW_SOURCE},dst=/var/lib/postgresql/data",
+              "ghcr.io/immich-app/postgres@sha256:bcf63357191b76a916ae5eb93464d65c07511da41e3bf7a8416db519b40b1c23"
+            ]
+          },
+          "isolated_stop": {
+            "argv": [
+              "docker",
+              "--host",
+              "{DOCKER_SOCKET}",
+              "container",
+              "rm",
+              "--force",
+              "hp-realtest-immich-export"
+            ]
+          },
+          "logical_export": {
+            "argv": [
+              "docker",
+              "--host",
+              "{DOCKER_SOCKET}",
+              "exec",
+              "hp-realtest-immich-export",
+              "pg_dump",
+              "--format=custom",
+              "--username=postgres",
+              "immich"
+            ]
+          },
+          "target_stop": {
+            "argv": [
+              "docker",
+              "--host",
+              "{DOCKER_SOCKET}",
+              "container",
+              "rm",
+              "--force",
+              "hp-realtest-immich-target"
+            ]
+          },
+          "test_query": {
+            "argv": [
+              "docker",
+              "--host",
+              "{DOCKER_SOCKET}",
+              "exec",
+              "hp-realtest-immich-target",
+              "psql",
+              "--username=postgres",
+              "--dbname=immich",
+              "--tuples-only",
+              "--command",
+              "SELECT COUNT(*) FROM information_schema.tables;"
+            ]
+          },
+          "wait_export": {
+            "argv": [
+              "docker",
+              "--host",
+              "{DOCKER_SOCKET}",
+              "exec",
+              "hp-realtest-immich-export",
+              "pg_isready",
+              "--username=postgres"
+            ],
+            "attempts": 30,
+            "retry_delay": 2,
+            "timeout": 10
+          },
+          "wait_target": {
+            "argv": [
+              "docker",
+              "--host",
+              "{DOCKER_SOCKET}",
+              "exec",
+              "hp-realtest-immich-target",
+              "pg_isready",
+              "--username=postgres"
+            ],
+            "attempts": 30,
+            "retry_delay": 2,
+            "timeout": 10
+          }
+        },
+        "kind": "POSTGRESQL",
+        "workflows": {
+          "COMBINED_L2_L3": {
+            "dump_glob": "immich/db/immich_*.sql",
+            "source_kind": "L3_DUMP"
+          },
+          "L2_ONLY": {
+            "raw_source_rel": "immich_pgdata",
+            "source_kind": "L2_RAW"
+          },
+          "L3_ONLY": {
+            "dump_glob": "immich/db/immich_*.sql",
+            "source_kind": "L3_DUMP"
+          }
+        }
+      },
+      "success_status": "FULL"
+    },
+    "jellyfin": {
+      "check_failure": "UNAVAILABLE",
+      "checks": [
+        {
+          "kind": "PATH",
+          "target_rel": "jellyfin/config"
+        },
+        {
+          "kind": "ENDPOINT",
+          "status": [
+            200,
+            302
+          ],
+          "url": "http://127.0.0.1:8096/"
+        }
+      ],
+      "compose": {
+        "allowed_networks": [
+          "realtest"
+        ],
+        "companions": [],
+        "container_names": {
+          "jellyfin": "hp-realtest-jellyfin-jellyfin"
+        },
+        "env_file_services": [
+          "jellyfin"
+        ],
+        "env_secret_rel": "compose/jellyfin.env",
+        "expected_services": [
+          "jellyfin"
+        ],
+        "health_required": [
+          "jellyfin"
+        ],
+        "image_bindings": {
+          "jellyfin": "example.invalid/jellyfin-jellyfin@sha256:9999999999999999999999999999999999999999999999999999999999999999"
+        },
+        "mounts": {
+          "jellyfin": [
+            {
+              "source_rel": "data/jellyfin/config",
+              "target": "/config"
+            },
+            {
+              "source_rel": "data/jellyfin/cache",
+              "target": "/cache"
+            },
+            {
+              "source_rel": "data/cloud/musik",
+              "target": "/media/musik"
+            },
+            {
+              "source_rel": "data/cloud/filme",
+              "target": "/media/filme"
+            },
+            {
+              "source_rel": "data/cloud/serien",
+              "target": "/media/serien"
+            },
+            {
+              "source_rel": "data/cloud/hoerbuecher",
+              "target": "/media/hoerbuecher"
+            },
+            {
+              "source_rel": "data/jellyfin-transcode",
+              "target": "/config/transcodes"
+            }
+          ]
+        },
+        "payload_file": "tests/fixtures/compose/jellyfin.yml",
+        "ports": {
+          "jellyfin": [
+            {
+              "host_ip": "127.0.0.1",
+              "published": 8096,
+              "target": 8096
+            }
+          ]
+        },
+        "profile": "jellyfin",
+        "project_name": "hp-realtest-jellyfin",
+        "service_networks": {
+          "jellyfin": [
+            "realtest"
+          ]
+        },
+        "start": true,
+        "target_rel": "work/compose/jellyfin/isolated-compose.json",
+        "verify_services": [
+          "jellyfin"
+        ]
+      },
+      "copies": [
+        {
+          "modes": [
+            "L2_ONLY"
+          ],
+          "required": true,
+          "source": "L2",
+          "source_rel": "jellyfin/config",
+          "target_rel": "jellyfin/config"
+        },
+        {
+          "modes": [
+            "L2_ONLY",
+            "COMBINED_L2_L3"
+          ],
+          "required": true,
+          "source": "L2",
+          "source_rel": "cloud",
+          "target_rel": "cloud"
+        },
+        {
+          "modes": [
+            "L3_ONLY",
+            "COMBINED_L2_L3"
+          ],
+          "required": true,
+          "source": "L3",
+          "source_rel": "jellyfin/config",
+          "target_rel": "jellyfin/config"
+        }
+      ],
+      "success_status": "FULL"
+    },
+    "monatsausgaben": {
+      "check_failure": "UNAVAILABLE",
+      "checks": [
+        {
+          "kind": "PATH",
+          "target_rel": "monatsausgaben/expenses.db"
+        },
+        {
+          "kind": "ENDPOINT",
+          "status": [
+            200,
+            302
+          ],
+          "url": "http://127.0.0.1:3020/"
+        }
+      ],
+      "compose": {
+        "allowed_networks": [
+          "realtest"
+        ],
+        "companions": [],
+        "container_names": {
+          "monatsausgaben": "hp-realtest-monatsausgaben-monatsausgaben"
+        },
+        "env_file_services": [
+          "monatsausgaben"
+        ],
+        "env_secret_rel": "compose/monatsausgaben.env",
+        "expected_services": [
+          "monatsausgaben"
+        ],
+        "health_required": [],
+        "image_bindings": {
+          "monatsausgaben": "example.invalid/monatsausgaben-monatsausgaben@sha256:2222222222222222222222222222222222222222222222222222222222222222"
+        },
+        "mounts": {
+          "monatsausgaben": [
+            {
+              "source_rel": "data/monatsausgaben",
+              "target": "/data"
+            }
+          ]
+        },
+        "payload_file": "tests/fixtures/compose/monatsausgaben.yml",
+        "ports": {
+          "monatsausgaben": [
+            {
+              "host_ip": "127.0.0.1",
+              "published": 3020,
+              "target": 3000
+            }
+          ]
+        },
+        "profile": "monatsausgaben",
+        "project_name": "hp-realtest-monatsausgaben",
+        "service_networks": {
+          "monatsausgaben": [
+            "realtest"
+          ]
+        },
+        "start": true,
+        "target_rel": "work/compose/monatsausgaben/isolated-compose.json",
+        "verify_services": [
+          "monatsausgaben"
+        ]
+      },
+      "copies": [
+        {
+          "modes": [
+            "L2_ONLY",
+            "COMBINED_L2_L3"
+          ],
+          "required": true,
+          "source": "L2",
+          "source_rel": "monatsausgaben",
+          "target_rel": "monatsausgaben"
+        },
+        {
+          "modes": [
+            "L3_ONLY"
+          ],
+          "required": true,
+          "source": "L3",
+          "source_rel": "monatsausgaben",
+          "target_rel": "monatsausgaben"
+        }
+      ],
+      "database": {
+        "invalid_policy": "UNAVAILABLE",
+        "kind": "SQLITE",
+        "target_rel": "monatsausgaben/expenses.db"
+      },
+      "success_status": "FULL"
+    },
+    "nextcloud": {
+      "check_failure": "UNAVAILABLE",
+      "checks": [
+        {
+          "kind": "PATH",
+          "target_rel": "nextcloud_core"
+        },
+        {
+          "kind": "PATH",
+          "target_rel": "nextcloud"
+        },
+        {
+          "kind": "ENDPOINT",
+          "status": [
+            200,
+            302,
+            503
+          ],
+          "url": "http://127.0.0.1:8092/"
+        }
+      ],
+      "compose": {
+        "allowed_networks": [
+          "realtest"
+        ],
+        "companions": [],
+        "container_names": {
+          "app": "hp-realtest-nextcloud-app",
+          "db": "hp-realtest-nextcloud-db"
+        },
+        "env_file_services": [
+          "app",
+          "db"
+        ],
+        "env_secret_rel": "compose/nextcloud.env",
+        "expected_services": [
+          "app",
+          "db"
+        ],
+        "health_required": [
+          "app",
+          "db"
+        ],
+        "image_bindings": {
+          "app": "example.invalid/nextcloud-app@sha256:6666666666666666666666666666666666666666666666666666666666666666",
+          "db": "example.invalid/nextcloud-db@sha256:7777777777777777777777777777777777777777777777777777777777777777"
+        },
+        "mounts": {
+          "app": [
+            {
+              "source_rel": "data/nextcloud_core",
+              "target": "/var/www/html"
+            },
+            {
+              "source_rel": "data/nextcloud",
+              "target": "/mnt/data/nextcloud"
+            }
+          ],
+          "db": [
+            {
+              "source_rel": "data/nextcloud_db_data",
+              "target": "/var/lib/mysql"
+            }
+          ]
+        },
+        "payload_file": "tests/fixtures/compose/nextcloud.yml",
+        "ports": {
+          "app": [
+            {
+              "host_ip": "127.0.0.1",
+              "published": 8092,
+              "target": 80
+            }
+          ],
+          "db": []
+        },
+        "profile": "nextcloud",
+        "project_name": "hp-realtest-nextcloud",
+        "service_networks": {
+          "app": [
+            "realtest"
+          ],
+          "db": [
+            "realtest"
+          ]
+        },
+        "start": true,
+        "target_rel": "work/compose/nextcloud/isolated-compose.json",
+        "verify_services": [
+          "app",
+          "db"
+        ]
+      },
+      "copies": [
+        {
+          "modes": [
+            "L2_ONLY",
+            "COMBINED_L2_L3"
+          ],
+          "required": true,
+          "source": "L2",
+          "source_rel": "nextcloud_core",
+          "target_rel": "nextcloud_core"
+        },
+        {
+          "modes": [
+            "L2_ONLY",
+            "COMBINED_L2_L3"
+          ],
+          "required": true,
+          "source": "L2",
+          "source_rel": "nextcloud",
+          "target_rel": "nextcloud"
+        },
+        {
+          "modes": [
+            "L3_ONLY",
+            "COMBINED_L2_L3"
+          ],
+          "required": true,
+          "source": "L3",
+          "source_rel": "nextcloud/core",
+          "target_rel": "nextcloud_core"
+        },
+        {
+          "modes": [
+            "L3_ONLY",
+            "COMBINED_L2_L3"
+          ],
+          "required": true,
+          "source": "L3",
+          "source_rel": "nextcloud/external",
+          "target_rel": "nextcloud"
+        }
+      ],
+      "database": {
+        "commands": {
+          "import_dump": {
+            "argv": [
+              "docker",
+              "--host",
+              "{DOCKER_SOCKET}",
+              "exec",
+              "--interactive",
+              "hp-realtest-nextcloud-target",
+              "mariadb"
+            ]
+          },
+          "initialize_empty": {
+            "argv": [
+              "docker",
+              "--host",
+              "{DOCKER_SOCKET}",
+              "run",
+              "--detach",
+              "--name",
+              "hp-realtest-nextcloud-target",
+              "--env-file",
+              "{SECRET_DIR}/db/nextcloud.env",
+              "--mount",
+              "type=bind,src={DATA_TARGET}/nextcloud_db_data,dst=/var/lib/mysql",
+              "mariadb@sha256:114d40be36852d0a019afd8458f7e1cc63fd300403b115b1f32e31130d5f671b"
+            ]
+          },
+          "isolated_start": {
+            "argv": [
+              "docker",
+              "--host",
+              "{DOCKER_SOCKET}",
+              "run",
+              "--detach",
+              "--name",
+              "hp-realtest-nextcloud-export",
+              "--env-file",
+              "{SECRET_DIR}/db/nextcloud.env",
+              "--mount",
+              "type=bind,src={RAW_SOURCE},dst=/var/lib/mysql",
+              "mariadb@sha256:114d40be36852d0a019afd8458f7e1cc63fd300403b115b1f32e31130d5f671b"
+            ]
+          },
+          "isolated_stop": {
+            "argv": [
+              "docker",
+              "--host",
+              "{DOCKER_SOCKET}",
+              "container",
+              "rm",
+              "--force",
+              "hp-realtest-nextcloud-export"
+            ]
+          },
+          "logical_export": {
+            "argv": [
+              "docker",
+              "--host",
+              "{DOCKER_SOCKET}",
+              "exec",
+              "hp-realtest-nextcloud-export",
+              "mariadb-dump",
+              "--single-transaction",
+              "--all-databases"
+            ]
+          },
+          "target_stop": {
+            "argv": [
+              "docker",
+              "--host",
+              "{DOCKER_SOCKET}",
+              "container",
+              "rm",
+              "--force",
+              "hp-realtest-nextcloud-target"
+            ]
+          },
+          "test_query": {
+            "argv": [
+              "docker",
+              "--host",
+              "{DOCKER_SOCKET}",
+              "exec",
+              "hp-realtest-nextcloud-target",
+              "mariadb",
+              "--execute",
+              "SELECT COUNT(*) FROM information_schema.tables;"
+            ]
+          },
+          "wait_export": {
+            "argv": [
+              "docker",
+              "--host",
+              "{DOCKER_SOCKET}",
+              "exec",
+              "hp-realtest-nextcloud-export",
+              "mariadb-admin",
+              "ping"
+            ],
+            "attempts": 30,
+            "retry_delay": 2,
+            "timeout": 10
+          },
+          "wait_target": {
+            "argv": [
+              "docker",
+              "--host",
+              "{DOCKER_SOCKET}",
+              "exec",
+              "hp-realtest-nextcloud-target",
+              "mariadb-admin",
+              "ping"
+            ],
+            "attempts": 30,
+            "retry_delay": 2,
+            "timeout": 10
+          }
+        },
+        "kind": "MARIADB",
+        "workflows": {
+          "COMBINED_L2_L3": {
+            "dump_glob": "nextcloud/db/nextcloud_*.sql",
+            "source_kind": "L3_DUMP"
+          },
+          "L2_ONLY": {
+            "raw_source_rel": "nextcloud_db_data",
+            "source_kind": "L2_RAW"
+          },
+          "L3_ONLY": {
+            "dump_glob": "nextcloud/db/nextcloud_*.sql",
+            "source_kind": "L3_DUMP"
+          }
+        }
+      },
+      "success_status": "FULL"
+    },
+    "npm": {
+      "check_failure": "UNAVAILABLE",
+      "checks": [
+        {
+          "kind": "PATH",
+          "target_rel": "npm/data/database.sqlite"
+        },
+        {
+          "kind": "PATH",
+          "target_rel": "npm/letsencrypt"
+        },
+        {
+          "kind": "ENDPOINT",
+          "status": [
+            200,
+            301,
+            302
+          ],
+          "url": "http://127.0.0.1:81/"
+        }
+      ],
+      "compose": {
+        "allowed_networks": [
+          "realtest"
+        ],
+        "companions": [],
+        "container_names": {
+          "npm": "hp-realtest-npm-npm"
+        },
+        "env_file_services": [
+          "npm"
+        ],
+        "env_secret_rel": "compose/npm.env",
+        "expected_services": [
+          "npm"
+        ],
+        "health_required": [
+          "npm"
+        ],
+        "image_bindings": {
+          "npm": "example.invalid/npm-npm@sha256:5555555555555555555555555555555555555555555555555555555555555555"
+        },
+        "mounts": {
+          "npm": [
+            {
+              "source_rel": "data/npm/data",
+              "target": "/data"
+            },
+            {
+              "source_rel": "data/npm/letsencrypt",
+              "target": "/etc/letsencrypt"
+            }
+          ]
+        },
+        "payload_file": "tests/fixtures/compose/npm.yml",
+        "ports": {
+          "npm": [
+            {
+              "host_ip": "127.0.0.1",
+              "published": 80,
+              "target": 80
+            },
+            {
+              "host_ip": "127.0.0.1",
+              "published": 81,
+              "target": 81
+            },
+            {
+              "host_ip": "127.0.0.1",
+              "published": 443,
+              "target": 443
+            }
+          ]
+        },
+        "profile": "npm",
+        "project_name": "hp-realtest-npm",
+        "service_networks": {
+          "npm": [
+            "realtest"
+          ]
+        },
+        "start": true,
+        "target_rel": "work/compose/npm/isolated-compose.json",
+        "verify_services": [
+          "npm"
+        ]
+      },
+      "copies": [
+        {
+          "modes": [
+            "L2_ONLY"
+          ],
+          "required": true,
+          "source": "L2",
+          "source_rel": "npm/data",
+          "target_rel": "npm/data"
+        },
+        {
+          "modes": [
+            "L2_ONLY"
+          ],
+          "required": true,
+          "source": "L2",
+          "source_rel": "npm/letsencrypt",
+          "target_rel": "npm/letsencrypt"
+        },
+        {
+          "modes": [
+            "L3_ONLY",
+            "COMBINED_L2_L3"
+          ],
+          "required": true,
+          "source": "L3",
+          "source_rel": "npm/data",
+          "target_rel": "npm/data"
+        },
+        {
+          "modes": [
+            "L3_ONLY",
+            "COMBINED_L2_L3"
+          ],
+          "required": true,
+          "source": "L3",
+          "source_rel": "npm/letsencrypt",
+          "target_rel": "npm/letsencrypt"
+        }
+      ],
+      "database": {
+        "invalid_policy": "UNAVAILABLE",
+        "kind": "SQLITE",
+        "target_rel": "npm/data/database.sqlite"
+      },
+      "success_status": "FULL"
+    },
+    "paperless": {
+      "check_failure": "UNAVAILABLE",
+      "checks": [
+        {
+          "kind": "PATH",
+          "target_rel": "paperless/data"
+        },
+        {
+          "kind": "PATH",
+          "target_rel": "paperless/media"
+        },
+        {
+          "kind": "ENDPOINT",
+          "status": [
+            200,
+            302
+          ],
+          "url": "http://127.0.0.1:8010/"
+        }
+      ],
+      "compose": {
+        "allowed_networks": [
+          "realtest"
+        ],
+        "companions": [],
+        "container_names": {
+          "paperless": "hp-realtest-paperless-paperless",
+          "redis": "hp-realtest-paperless-redis"
+        },
+        "env_file_services": [
+          "paperless"
+        ],
+        "env_secret_rel": "compose/paperless.env",
+        "expected_services": [
+          "paperless",
+          "redis"
+        ],
+        "health_required": [],
+        "image_bindings": {
+          "paperless": "example.invalid/paperless-paperless@sha256:8888888888888888888888888888888888888888888888888888888888888888",
+          "redis": "example.invalid/paperless-redis@sha256:9999999999999999999999999999999999999999999999999999999999999999"
+        },
+        "mounts": {
+          "paperless": [
+            {
+              "source_rel": "data/paperless/consume",
+              "target": "/usr/src/paperless/consume"
+            },
+            {
+              "source_rel": "data/paperless/data",
+              "target": "/usr/src/paperless/data"
+            },
+            {
+              "source_rel": "data/paperless/export",
+              "target": "/usr/src/paperless/export"
+            },
+            {
+              "source_rel": "data/paperless/media",
+              "target": "/usr/src/paperless/media"
+            }
+          ],
+          "redis": []
+        },
+        "payload_file": "tests/fixtures/compose/paperless.yml",
+        "ports": {
+          "paperless": [
+            {
+              "host_ip": "127.0.0.1",
+              "published": 8010,
+              "target": 8000
+            }
+          ],
+          "redis": []
+        },
+        "profile": "paperless",
+        "project_name": "hp-realtest-paperless",
+        "service_networks": {
+          "paperless": [
+            "realtest"
+          ],
+          "redis": [
+            "realtest"
+          ]
+        },
+        "start": true,
+        "target_rel": "work/compose/paperless/isolated-compose.json",
+        "verify_services": [
+          "paperless",
+          "redis"
+        ]
+      },
+      "copies": [
+        {
+          "modes": [
+            "L2_ONLY",
+            "COMBINED_L2_L3"
+          ],
+          "required": true,
+          "source": "L2",
+          "source_rel": "paperless/data",
+          "target_rel": "paperless/data"
+        },
+        {
+          "modes": [
+            "L2_ONLY",
+            "COMBINED_L2_L3"
+          ],
+          "required": true,
+          "source": "L2",
+          "source_rel": "paperless/media",
+          "target_rel": "paperless/media"
+        },
+        {
+          "modes": [
+            "L2_ONLY"
+          ],
+          "required": false,
+          "source": "L2",
+          "source_rel": "paperless/consume",
+          "target_rel": "paperless/consume"
+        },
+        {
+          "modes": [
+            "L2_ONLY"
+          ],
+          "required": false,
+          "source": "L2",
+          "source_rel": "paperless/export",
+          "target_rel": "paperless/export"
+        },
+        {
+          "modes": [
+            "L3_ONLY",
+            "COMBINED_L2_L3"
+          ],
+          "required": true,
+          "source": "L3",
+          "source_rel": "paperless/data",
+          "target_rel": "paperless/data"
+        },
+        {
+          "modes": [
+            "L3_ONLY",
+            "COMBINED_L2_L3"
+          ],
+          "required": true,
+          "source": "L3",
+          "source_rel": "paperless/media",
+          "target_rel": "paperless/media"
+        }
+      ],
+      "database": {
+        "invalid_policy": "UNAVAILABLE",
+        "kind": "SQLITE",
+        "target_rel": "paperless/data/db.sqlite3"
+      },
+      "success_status": "FULL"
+    },
+    "snowflake": {
+      "check_failure": "SKIPPED_OPTIONAL",
+      "checks": [
+        {
+          "argv": [
+            "docker",
+            "--host",
+            "{DOCKER_SOCKET}",
+            "image",
+            "inspect",
+            "thetorproject/snowflake-proxy@sha256:1ded2a9bbb5d67d41f3c11f6b392b8a2735964e7b070e1bcb1278fddf28f90a4"
+          ],
+          "kind": "COMMAND"
+        }
+      ],
+      "compose": {
+        "allowed_networks": [
+          "realtest"
+        ],
+        "companions": [],
+        "container_names": {
+          "snowflake": "hp-realtest-snowflake-snowflake"
+        },
+        "env_file_services": [],
+        "env_secret_rel": "compose/snowflake.env",
+        "expected_services": [
+          "snowflake"
+        ],
+        "health_required": [],
+        "image_bindings": {
+          "snowflake": "example.invalid/snowflake-snowflake@sha256:3333333333333333333333333333333333333333333333333333333333333333"
+        },
+        "mounts": {
+          "snowflake": []
+        },
+        "payload_file": "tests/fixtures/compose/snowflake.yml",
+        "ports": {
+          "snowflake": []
+        },
+        "profile": "snowflake",
+        "project_name": "hp-realtest-snowflake",
+        "service_networks": {
+          "snowflake": [
+            "realtest"
+          ]
+        },
+        "start": false,
+        "target_rel": "work/compose/snowflake/isolated-compose.json",
+        "verify_services": [
+          "snowflake"
+        ]
+      },
+      "copies": [
+        {
+          "modes": [
+            "L2_ONLY",
+            "COMBINED_L2_L3"
+          ],
+          "required": false,
+          "source": "L2",
+          "source_rel": "snowflake-proxy",
+          "target_rel": "snowflake-proxy"
+        }
+      ],
+      "copy_required": false,
+      "success_status": "SKIPPED_OPTIONAL"
+    }
+  },
+  "sources": {
+    "l2": [
+      {
+        "device": "VM_BINDING_REQUIRED",
+        "path": "VM_BINDING_REQUIRED"
+      }
+    ],
+    "l3": [
+      {
+        "device": "VM_BINDING_REQUIRED",
+        "path": "VM_BINDING_REQUIRED"
+      }
+    ]
+  },
+  "system_required_bytes": "VM_BINDING_REQUIRED",
+  "system_target": "VM_BINDING_REQUIRED",
+  "target_devices": {
+    "data": {
+      "device": "VM_BINDING_REQUIRED",
+      "model": "VM_BINDING_REQUIRED",
+      "size": "VM_BINDING_REQUIRED",
+      "type": "VM_BINDING_REQUIRED",
+      "uuid": "VM_BINDING_REQUIRED",
+      "virtual": true
+    },
+    "system": {
+      "device": "VM_BINDING_REQUIRED",
+      "model": "VM_BINDING_REQUIRED",
+      "size": "VM_BINDING_REQUIRED",
+      "type": "VM_BINDING_REQUIRED",
+      "uuid": "VM_BINDING_REQUIRED",
+      "virtual": true
+    }
+  },
+  "target_root": "VM_BINDING_REQUIRED",
+  "timers": {
+    "enable_after_acceptance": {
+      "analyzer": [
+        "hp-server-analyzer-biweekly.timer",
+        "hp-server-analyzer-hdd-cleanup.timer"
+      ],
+      "nextcloud": [
+        "nextcloud-cron.timer"
+      ],
+      "paperless": [
+        "getmail-paperless.timer"
+      ]
+    },
+    "hold": [
+      "backup_level2.timer",
+      "backup_level3.timer",
+      "getmail-paperless.timer",
+      "hp-server-analyzer-biweekly.timer",
+      "hp-server-analyzer-hdd-cleanup.timer",
+      "nextcloud-cron.timer",
+      "nextcloud-app-auto-update.timer",
+      "hp-check-snowflake.timer",
+      "snowflake-monitor.timer",
+      "snowflake-weekly-report.timer",
+      "snowflake-monthly-report.timer"
+    ]
+  }
+}
