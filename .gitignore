@@ -1,0 +1,48 @@
+# Secrets and credentials
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.p12
+*.pfx
+*.crt
+*.token
+secrets/
+credentials/
+
+# Production payloads and recovery data
+payload/
+evidence/
+runtime-data/
+source-metadata/
+reports/*
+!reports/.keep
+backups/
+restore-data/
+
+# Machine-specific configuration
+config/local/
+inventory/local/
+*.local.yaml
+*.local.json
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+
+# Editors / OS
+.DS_Store
+.idea/
+.vscode/
+
+# Archives and disk images
+*.tar
+*.tar.gz
+*.tgz
+*.zip
+*.img
+*.iso
