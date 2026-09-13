@@ -1,0 +1,51 @@
+name: Bug report
+description: Report a reproducible problem in the recovery framework
+title: "[Bug]: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve HP Server Recovery. Do not include secrets, production manifests, backups, device identifiers, private network details, or unredacted logs.
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What happened?
+      placeholder: Describe the problem without private data.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Reproduction steps
+      description: Use synthetic or sanitized inputs only.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version or commit
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected fail-closed behavior
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Sanitized evidence
+      description: Remove secrets, hostnames, paths, UUIDs, IP addresses, domains, and backup data.
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Safety confirmation
+      options:
+        - label: I removed secrets and production-specific identifiers.
+          required: true
+        - label: I did not attach backups, database dumps, .env files, or private manifests.
+          required: true
