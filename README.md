@@ -2,7 +2,7 @@
 
 Fail-closed disaster recovery framework for self-hosted Linux servers.
 
-> **Status:** sanitized pre-release. The repository remains private until the final public-release review. Do not use it as a production recovery solution yet.
+> **Status:** public sanitized pre-release. The current codebase is published for review, testing and continued development. Do not use it as a production recovery solution yet.
 
 ## What it does
 
@@ -53,19 +53,37 @@ The publication scan currently reports no personal username, personal domain, pr
 
 ## Quick start
 
-For development/test use only:
+For development and test use only:
 
 ```bash
-python3 -m unittest tests.test_t01_t35 tests.test_wizard_v028 tests.test_realtest_mode
+PYTHONDONTWRITEBYTECODE=1 \
+PYTHONPATH=lib \
+python3 -B -m unittest \
+  tests.test_t01_t35 \
+  tests.test_wizard_v028 \
+  tests.test_realtest_mode -q
+```
+
+Expected result:
+
+```text
+Ran 183 tests
+OK
 ```
 
 Run the CLI help:
 
 ```bash
-./bin/hp-recovery menu --help
+PYTHONPATH=lib ./bin/hp-recovery menu --help
 ```
 
 The realtest mode is intentionally not plug-and-play. It requires an explicitly bound isolated environment and validated target/sentinel configuration.
+
+## Development status
+
+The repository is now public, but the project is still preparing its first stable OSS release. Current work focuses on release-readiness, documentation quality, external reproducibility and preserving the fail-closed safety model while removing remaining internal-version terminology.
+
+See [CHANGELOG.md](CHANGELOG.md) for ongoing changes.
 
 ## Origin
 
