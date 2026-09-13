@@ -1,5 +1,7 @@
 # HP Server Recovery
 
+[![Tests](https://github.com/Zwitsch/hp-server-recovery/actions/workflows/tests.yml/badge.svg)](https://github.com/Zwitsch/hp-server-recovery/actions/workflows/tests.yml)
+
 Fail-closed disaster recovery framework for self-hosted Linux servers.
 
 > **Status:** public sanitized pre-release. The current codebase is published for review, testing and continued development. Do not use it as a production recovery solution yet.
@@ -50,45 +52,3 @@ The sanitized release tree currently passes **183/183 automated tests**, includi
 - secret-marker redaction and final evidence checks
 
 The publication scan currently reports no personal username, personal domain, private-LAN address, standard UUID, e-mail address, private key or risky archive/database/dump file in the release tree.
-
-## Quick start
-
-For development and test use only:
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 \
-PYTHONPATH=lib \
-python3 -B -m unittest \
-  tests.test_t01_t35 \
-  tests.test_wizard_v028 \
-  tests.test_realtest_mode -q
-```
-
-Expected result:
-
-```text
-Ran 183 tests
-OK
-```
-
-Run the CLI help:
-
-```bash
-PYTHONPATH=lib ./bin/hp-recovery menu --help
-```
-
-The realtest mode is intentionally not plug-and-play. It requires an explicitly bound isolated environment and validated target/sentinel configuration.
-
-## Development status
-
-The repository is now public, but the project is still preparing its first stable OSS release. Current work focuses on release-readiness, documentation quality, external reproducibility and preserving the fail-closed safety model while removing remaining internal-version terminology.
-
-See [CHANGELOG.md](CHANGELOG.md) for ongoing changes.
-
-## Origin
-
-The project originated from a real self-hosted server recovery system after treating backup creation alone as insufficient. The public version publishes the reusable engine, safety model and synthetic tests — not the original infrastructure, backup contents, secrets or machine identities.
-
-## License
-
-MIT — see [LICENSE](LICENSE).
