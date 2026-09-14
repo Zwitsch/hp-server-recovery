@@ -20,6 +20,16 @@ The project is currently preparing its first stable OSS release.
 - Separated repository metadata from recovery-package manifest coverage.
 - Excluded Git checkout metadata from recovery-package validation.
 - Updated the README to reflect the public pre-release state and provide a reproducible external test command.
+- Continued isolated runtime validation against containerd 2.2.x and overlayfs behavior.
+- Hardened the recovery design around mutation boundaries: runtime state must be re-inventoried after state-changing image or snapshot operations instead of relying on a previously computed deletion plan.
+- Added explicit fail-closed handling for unexpected snapshot lifecycle transitions discovered during isolated round-trip testing.
+
+### Development status — 2026-09-14
+
+- Isolated end-to-end validation is still in progress; no stable release is claimed yet.
+- Current work focuses on containerd image/snapshot lifecycle semantics and deterministic rollback behavior.
+- Real runtime testing has exposed lifecycle behavior that synthetic fixtures alone did not reveal, and those findings are being folded back into the recovery contracts and regression suite.
+- Public releases remain intentionally sanitized and exclude production backup data, credentials, private infrastructure details and machine-specific recovery evidence.
 
 ### Security
 
