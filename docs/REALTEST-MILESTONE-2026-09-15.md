@@ -17,7 +17,10 @@ The validation sequence included:
 5. isolated snapshot migration round-trip
 6. independent verification of the persisted round-trip report
 7. separately authorized bound system migration apply
-8. post-apply verification of runtime and safety boundaries
+8. separately authorized report-bound rollback
+9. read-only audit of the restored pre-migration state
+10. second separately authorized bound system migration apply
+11. post-apply verification of runtime and safety boundaries
 
 ## Result
 
@@ -26,9 +29,15 @@ The K22 validation sequence completed successfully:
 - read-only audit: **PASS**
 - isolated migration round-trip: **PASS**
 - persisted round-trip report verification: **PASS**
-- bound system migration apply: **PASS**
+- first bound system migration apply: **PASS**
+- report-bound rollback: **PASS**
+- post-rollback state audit: **PASS**
+- second bound system migration apply: **PASS**
+- `apply -> rollback -> apply`: **PASS**
 - system Docker safety boundary remained isolated during validation
-- rollback evidence remained available after successful migration
+- rollback evidence remained available after successful migrations
+
+The rollback restored the expected pre-migration snapshot structure, including the expected snapshot count, ChainID set, parent relationships and committed kinds. The second apply reproduced the same bounded asynchronous-cleanup lifecycle as the first successful apply.
 
 ## Lifecycle finding
 
@@ -46,11 +55,11 @@ K22 addresses this by using a bounded, fail-closed state-stabilization contract:
 - do not broadly ignore `NOT_FOUND`
 - do not introduce generic cleanup, prune behavior or snapshotter fallback
 
-During the successful real system apply, the snapshots were initially still visible after image removal and were then removed asynchronously by containerd. K22 correctly recognized the terminal empty state and did not execute unnecessary explicit snapshot removals.
+During both successful real system applies, the expected snapshots were initially still visible after image removal and were then removed asynchronously by containerd. K22 correctly recognized the terminal empty state and did not execute unnecessary explicit snapshot removals.
 
 ## Safety boundary
 
-This milestone proves the K22 containerd migration lifecycle in the dedicated recovery environment.
+This milestone proves the K22 containerd migration and rollback lifecycle in the dedicated recovery environment.
 
 It does **not** prove:
 
@@ -58,5 +67,7 @@ It does **not** prove:
 - a complete physical-server restore
 - end-to-end disaster recovery for every service and data class
 - a stable public release
+
+The next private validation stage is the complete server-restore workflow on the recovery VM.
 
 The public repository remains a sanitized development tree. Private recovery archives and raw machine-specific evidence are intentionally not published.
