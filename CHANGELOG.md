@@ -32,8 +32,13 @@ The project is currently preparing its first stable OSS release.
 - K22 read-only runtime audit: **PASS**.
 - K22 isolated snapshot migration round-trip: **PASS**.
 - Independent K22 round-trip report verification: **PASS**.
-- K22 bound system containerd migration apply on the dedicated recovery VM: **PASS**.
-- The real runtime demonstrated asynchronous snapshot cleanup after image removal; the K22 lifecycle correctly stabilized and re-inventoried state before deciding whether explicit snapshot removals were required.
+- First K22 bound system containerd migration apply on the dedicated recovery VM: **PASS**.
+- Report-bound K22 rollback: **PASS**.
+- Post-rollback read-only audit of the restored pre-migration snapshot structure: **PASS**.
+- Second K22 bound system containerd migration apply: **PASS**.
+- `apply -> rollback -> apply`: **PASS**.
+- Both successful applies reproduced the same bounded asynchronous snapshot-cleanup lifecycle without unnecessary explicit snapshot removals.
+- The next private validation stage is the complete server-restore workflow on the recovery VM.
 - No production-ready, full-server-restore or disaster-recovery certification is claimed yet.
 - Public releases remain intentionally sanitized and exclude production backup data, credentials, private infrastructure details, machine-specific paths and raw recovery evidence.
 
