@@ -13,6 +13,7 @@ The project is currently preparing its first stable OSS release.
 - Isolated realtest configuration templates using documentation-only network addresses and reserved example domains.
 - GitHub Actions CI on Ubuntu 24.04 with Python 3.12.
 - Architecture, safety and contribution documentation.
+- Public documentation of the 2026-09-15 K22 real-runtime validation milestone, while keeping private recovery evidence and production data out of the repository.
 
 ### Changed
 
@@ -23,19 +24,25 @@ The project is currently preparing its first stable OSS release.
 - Continued isolated runtime validation against containerd 2.2.x and overlayfs behavior.
 - Hardened the recovery design around mutation boundaries: runtime state must be re-inventoried after state-changing image or snapshot operations instead of relying on a previously computed deletion plan.
 - Added explicit fail-closed handling for unexpected snapshot lifecycle transitions discovered during isolated round-trip testing.
+- Extended the private K22 migration lifecycle so the real system-apply path uses the same bounded post-image-removal stabilization model as isolated validation.
+- Added fail-closed handling for asynchronous snapshot disappearance without introducing broad cleanup, snapshotter fallback or generic `NOT_FOUND` suppression.
 
-### Development status — 2026-09-14
+### Development status — 2026-09-15
 
-- Isolated end-to-end validation is still in progress; no stable release is claimed yet.
-- Current work focuses on containerd image/snapshot lifecycle semantics and deterministic rollback behavior.
-- Real runtime testing has exposed lifecycle behavior that synthetic fixtures alone did not reveal, and those findings are being folded back into the recovery contracts and regression suite.
-- Public releases remain intentionally sanitized and exclude production backup data, credentials, private infrastructure details and machine-specific recovery evidence.
+- K22 read-only runtime audit: **PASS**.
+- K22 isolated snapshot migration round-trip: **PASS**.
+- Independent K22 round-trip report verification: **PASS**.
+- K22 bound system containerd migration apply on the dedicated recovery VM: **PASS**.
+- The real runtime demonstrated asynchronous snapshot cleanup after image removal; the K22 lifecycle correctly stabilized and re-inventoried state before deciding whether explicit snapshot removals were required.
+- No production-ready, full-server-restore or disaster-recovery certification is claimed yet.
+- Public releases remain intentionally sanitized and exclude production backup data, credentials, private infrastructure details, machine-specific paths and raw recovery evidence.
 
 ### Security
 
 - Destructive recovery logic remains fail-closed when required target identity or safety bindings are missing.
 - Public fixtures contain no production credentials, backup data, personal domains, machine UUIDs or private-LAN topology.
-- The sanitized release tree currently passes 183 automated tests.
+- Broad cleanup and fallback behavior remain prohibited in the validated migration lifecycle.
+- The sanitized public release tree currently passes 183 automated tests.
 
 ## 0.1.0
 
