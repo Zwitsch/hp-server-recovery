@@ -14,6 +14,7 @@ The project is currently preparing its first stable OSS release.
 - GitHub Actions CI on Ubuntu 24.04 with Python 3.12.
 - Architecture, safety and contribution documentation.
 - Public documentation of the 2026-09-15 K22 real-runtime validation milestone, while keeping private recovery evidence and production data out of the repository.
+- Public sanitized documentation of the 2026-09-16 K25 read-only realtest milestone and backup/release identity checks.
 
 ### Changed
 
@@ -26,20 +27,26 @@ The project is currently preparing its first stable OSS release.
 - Added explicit fail-closed handling for unexpected snapshot lifecycle transitions discovered during isolated round-trip testing.
 - Extended the private K22 migration lifecycle so the real system-apply path uses the same bounded post-image-removal stabilization model as isolated validation.
 - Added fail-closed handling for asynchronous snapshot disappearance without introducing broad cleanup, snapshotter fallback or generic `NOT_FOUND` suppression.
+- Hardened application backup planning so compatibility requires an exact version + executable image identity match with the selected release.
+- Added explicit `INCOMPATIBLE_RELEASE_IDENTITY` handling for mismatched application backup/release tuples.
+- Kept data-only planning inside the same provenance contract instead of treating it as an image-identity exception.
+- Prevented same-version image fallback, metadata normalization and silent release substitution.
+- Unified selected-release identity between planning and execution paths, including previous-release handling.
 
-### Development status — 2026-09-15
+### Development status — 2026-09-16
 
 - K22 read-only runtime audit: **PASS**.
 - K22 isolated snapshot migration round-trip: **PASS**.
 - Independent K22 round-trip report verification: **PASS**.
-- First K22 bound system containerd migration apply on the dedicated recovery VM: **PASS**.
-- Report-bound K22 rollback: **PASS**.
-- Post-rollback read-only audit of the restored pre-migration snapshot structure: **PASS**.
-- Second K22 bound system containerd migration apply: **PASS**.
-- `apply -> rollback -> apply`: **PASS**.
-- Both successful applies reproduced the same bounded asynchronous snapshot-cleanup lifecycle without unnecessary explicit snapshot removals.
-- The next private validation stage is the complete server-restore workflow on the recovery VM.
-- No production-ready, full-server-restore or disaster-recovery certification is claimed yet.
+- K22 bound system migration apply / rollback / repeat-apply lifecycle: **PASS**.
+- K25 final fresh validation of the private recovery package: **PASS**.
+- K25 isolated runtime gate on the dedicated recovery environment: **PASS**.
+- K25 read-only application backup/release tuple classification: **PASS**.
+- Compatible application data/full planning remains available.
+- A same-version backup created from a different executable image identity is rejected as `INCOMPATIBLE_RELEASE_IDENTITY`.
+- The mismatch is fail-closed for data-only, full-app and full-server planning.
+- No real application restore or full-server restore has been claimed yet.
+- No production-ready or disaster-recovery certification is claimed yet.
 - Public releases remain intentionally sanitized and exclude production backup data, credentials, private infrastructure details, machine-specific paths and raw recovery evidence.
 
 ### Security
@@ -47,6 +54,7 @@ The project is currently preparing its first stable OSS release.
 - Destructive recovery logic remains fail-closed when required target identity or safety bindings are missing.
 - Public fixtures contain no production credentials, backup data, personal domains, machine UUIDs or private-LAN topology.
 - Broad cleanup and fallback behavior remain prohibited in the validated migration lifecycle.
+- Application backup provenance is bound to the selected executable release identity; equal version strings alone are insufficient.
 - The sanitized public release tree currently passes 183 automated tests.
 
 ## 0.1.0
