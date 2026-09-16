@@ -15,6 +15,7 @@ The project is currently preparing its first stable OSS release.
 - Architecture, safety and contribution documentation.
 - Public documentation of the 2026-09-15 K22 real-runtime validation milestone, while keeping private recovery evidence and production data out of the repository.
 - Public sanitized documentation of the 2026-09-16 K25 read-only realtest milestone and backup/release identity checks.
+- Public sanitized documentation of the 2026-09-16 K27 isolated application data restore milestone.
 
 ### Changed
 
@@ -42,10 +43,12 @@ The project is currently preparing its first stable OSS release.
 - K25 final fresh validation of the private recovery package: **PASS**.
 - K25 isolated runtime gate on the dedicated recovery environment: **PASS**.
 - K25 read-only application backup/release tuple classification: **PASS**.
+- K27 isolated single-application `APP_DATA_ONLY` restore: **PASS**.
+- The restored application data passed its integrity and application-specific validation checks, and isolated runtime cleanup completed successfully.
 - Compatible application data/full planning remains available.
 - A same-version backup created from a different executable image identity is rejected as `INCOMPATIBLE_RELEASE_IDENTITY`.
 - The mismatch is fail-closed for data-only, full-app and full-server planning.
-- No real application restore or full-server restore has been claimed yet.
+- A full-server restore has not been claimed yet.
 - No production-ready or disaster-recovery certification is claimed yet.
 - Public releases remain intentionally sanitized and exclude production backup data, credentials, private infrastructure details, machine-specific paths and raw recovery evidence.
 
