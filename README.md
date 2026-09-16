@@ -27,22 +27,25 @@ Persistent reports and audit data are checked for secret-marker leakage before a
 
 See [SECURITY.md](SECURITY.md) and `docs/SAFETY-MODEL.md`.
 
-## Development milestone — 2026-09-15
+## Development milestone — 2026-09-16
 
-The private full recovery package reached a significant real-runtime milestone on a dedicated recovery VM:
+The private full recovery package has progressed through K25 and completed the current read-only isolated-realtest stage on a dedicated recovery environment:
 
-- read-only containerd audit: **PASS**
-- isolated snapshot migration round-trip: **PASS**
-- independent round-trip report verification: **PASS**
-- bound system containerd migration apply: **PASS**
-- tested with containerd 2.2.x and an explicitly bound overlayfs snapshotter
-- post-mutation snapshot state is re-inventoried and stabilized before destructive follow-up actions
-- asynchronous image-removal cleanup is handled without broad cleanup, snapshotter fallback or generic `NOT_FOUND` suppression
-- rollback evidence remains available after a successful migration
+- archive identity and fresh extraction validation: **PASS**
+- full regression/root-gate suite: **PASS**
+- isolated container-runtime gate and clean post-state: **PASS**
+- read-only application backup/release compatibility planning: **PASS**
+- compatible application backup tuples remain planable
+- mismatched backup/runtime image identities are classified as `INCOMPATIBLE_RELEASE_IDENTITY`
+- mismatched application tuples fail closed for data-only, full-app and full-server planning
+- application backup identity requires both version and executable image identity to match the selected release
+- no metadata normalization, same-version fallback or silent release substitution is allowed
 
-This milestone validates the K22 migration lifecycle in the dedicated recovery environment. It does **not** claim a production-ready release, a complete physical-server restore, or a disaster-recovery certification.
+This milestone validates the K25 read-only planning boundary and real backup/release identity checks. It does **not** claim a successful application restore, full-server restore, production-ready release or disaster-recovery certification.
 
 The public repository intentionally remains a sanitized subset and does not contain production backup archives, credentials, machine identities, private infrastructure paths or raw recovery evidence.
+
+See `docs/REALTEST-MILESTONE-2026-09-16.md` for the sanitized milestone summary.
 
 ## Repository structure
 
