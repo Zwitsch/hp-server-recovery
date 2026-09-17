@@ -16,6 +16,7 @@ The project is currently preparing its first stable OSS release.
 - Public documentation of the 2026-09-15 K22 real-runtime validation milestone, while keeping private recovery evidence and production data out of the repository.
 - Public sanitized documentation of the 2026-09-16 K25 read-only realtest milestone and backup/release identity checks.
 - Public sanitized documentation of the 2026-09-16 K27 isolated application data restore milestone.
+- Public sanitized documentation of the 2026-09-17 K30 isolated full-application restore milestone.
 
 ### Changed
 
@@ -33,8 +34,11 @@ The project is currently preparing its first stable OSS release.
 - Kept data-only planning inside the same provenance contract instead of treating it as an image-identity exception.
 - Prevented same-version image fallback, metadata normalization and silent release substitution.
 - Unified selected-release identity between planning and execution paths, including previous-release handling.
+- Hardened full-app runtime identity handling for containerd-backed Docker image stores by binding verified archive identity, OCI target/manifest digest, image config digest, selected release identity and runtime-resolved identity.
+- Added fail-closed isolated runtime-store cleanup before the final secret-marker scan; the marker scan itself remains unchanged and mandatory.
+- Bound full-app data ownership to the numerically declared runtime user from the verified image config instead of using a privileged-container workaround.
 
-### Development status — 2026-09-16
+### Development status — 2026-09-17
 
 - K22 read-only runtime audit: **PASS**.
 - K22 isolated snapshot migration round-trip: **PASS**.
@@ -44,10 +48,12 @@ The project is currently preparing its first stable OSS release.
 - K25 isolated runtime gate on the dedicated recovery environment: **PASS**.
 - K25 read-only application backup/release tuple classification: **PASS**.
 - K27 isolated single-application `APP_DATA_ONLY` restore: **PASS**.
-- The restored application data passed its integrity and application-specific validation checks, and isolated runtime cleanup completed successfully.
-- Compatible application data/full planning remains available.
+- K30 isolated single-application `APP_FULL` restore: **PASS**.
+- The restored application data passed integrity and application-specific database checks.
+- Offline image provenance, runtime identity binding, runtime cleanup and final secret-marker verification completed successfully.
 - A same-version backup created from a different executable image identity is rejected as `INCOMPATIBLE_RELEASE_IDENTITY`.
 - The mismatch is fail-closed for data-only, full-app and full-server planning.
+- A separate application identity mismatch remains a blocker for broader full-server validation.
 - A full-server restore has not been claimed yet.
 - No production-ready or disaster-recovery certification is claimed yet.
 - Public releases remain intentionally sanitized and exclude production backup data, credentials, private infrastructure details, machine-specific paths and raw recovery evidence.
@@ -58,6 +64,7 @@ The project is currently preparing its first stable OSS release.
 - Public fixtures contain no production credentials, backup data, personal domains, machine UUIDs or private-LAN topology.
 - Broad cleanup and fallback behavior remain prohibited in the validated migration lifecycle.
 - Application backup provenance is bound to the selected executable release identity; equal version strings alone are insufficient.
+- The final secret-marker scan remains mandatory after isolated runtime cleanup.
 - The sanitized public release tree currently passes 183 automated tests.
 
 ## 0.1.0
