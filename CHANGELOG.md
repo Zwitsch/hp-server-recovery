@@ -38,7 +38,7 @@ The project is currently preparing its first stable OSS release.
 - Added fail-closed isolated runtime-store cleanup before the final secret-marker scan; the marker scan itself remains unchanged and mandatory.
 - Bound full-app data ownership to the numerically declared runtime user from the verified image config instead of using a privileged-container workaround.
 
-### Development status — 2026-09-17
+### Development status — 2026-09-22
 
 - K22 read-only runtime audit: **PASS**.
 - K22 isolated snapshot migration round-trip: **PASS**.
@@ -53,8 +53,11 @@ The project is currently preparing its first stable OSS release.
 - Offline image provenance, runtime identity binding, runtime cleanup and final secret-marker verification completed successfully.
 - A same-version backup created from a different executable image identity is rejected as `INCOMPATIBLE_RELEASE_IDENTITY`.
 - The mismatch is fail-closed for data-only, full-app and full-server planning.
-- A separate application identity mismatch remains a blocker for broader full-server validation.
-- A full-server restore has not been claimed yet.
+- The focused Nextcloud database recovery workflow has completed successfully in the isolated realtest environment.
+- The first full-server launch stopped fail-closed during planning when a stale static application-release binding disagreed with the selected backup metadata.
+- The direct full-server planning path now resolves application releases from the selected backup and snapshot before compatibility classification, preserving exact version + executable image identity checks.
+- A focused backup-bound application release preflight now passes against the selected recovery snapshot without executing a restore.
+- Full-server real restore validation remains pending; a full-server restore has not been claimed yet.
 - No production-ready or disaster-recovery certification is claimed yet.
 - Public releases remain intentionally sanitized and exclude production backup data, credentials, private infrastructure details, machine-specific paths and raw recovery evidence.
 
@@ -65,7 +68,8 @@ The project is currently preparing its first stable OSS release.
 - Broad cleanup and fallback behavior remain prohibited in the validated migration lifecycle.
 - Application backup provenance is bound to the selected executable release identity; equal version strings alone are insufficient.
 - The final secret-marker scan remains mandatory after isolated runtime cleanup.
-- The sanitized public release tree currently passes 183 automated tests.
+- Backup-bound release selection remains metadata-driven; the newest or merely present release artifact is never selected implicitly.
+- The sanitized public release tree remains independently tested; private recovery-package realtest results are not represented as public-suite results.
 
 ## 0.1.0
 
