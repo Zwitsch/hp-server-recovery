@@ -29,6 +29,8 @@ See [SECURITY.md](SECURITY.md) and `docs/SAFETY-MODEL.md`.
 
 ## Development milestone — 2026-09-24
 
+### English
+
 The private full recovery package has progressed through K56. The current development state retains the previously validated isolated application restore and database-recovery work while adding two important hardening fixes before the next focused application full-restore realtest:
 
 - dynamic backup-bound CURRENT release resolution is now shared by the wizard and expert CLI
@@ -49,6 +51,29 @@ This milestone does **not** claim a successful full-server restore, production-r
 The public repository intentionally remains a sanitized subset and does not contain production backup archives, credentials, machine identities, private infrastructure paths, raw recovery evidence, private run identifiers or private archive hashes.
 
 See `docs/REALTEST-MILESTONE-2026-09-24.md` for the sanitized K56 milestone summary.
+
+### Deutsch
+
+Das private vollständige Recovery-Paket ist bis K56 fortgeschritten. Der aktuelle Entwicklungsstand behält die bereits validierten isolierten App-Restores und Datenbank-Recovery-Arbeiten bei und ergänzt vor dem nächsten fokussierten vollständigen App-Realtest zwei wichtige Härtungen:
+
+- die dynamische backup-gebundene CURRENT-Release-Auflösung wird jetzt gemeinsam von Wizard und Experten-CLI verwendet
+- der exakte Abgleich von Backup-/Release-Version und Image-Identität bleibt fail-closed
+- fehlende oder mehrdeutige backup-gebundene Release-Artefakte bleiben Blocker
+- die Behandlung von PREVIOUS-Releases bleibt von der CURRENT-Auflösung getrennt
+- der geführte Wizard schreibt Standard-State-/Log-Roots des Realtests nicht mehr fälschlich in einen expliziten Test-Root um
+- explizite Fixture-/Test-Roots bleiben durch das Test-Root-Sicherheitsgate geschützt
+- Execute und Resume verwenden denselben Worker-Root-Vertrag
+- ein Worker-Fehler vor dem ersten Recovery-Schritt kann nicht mehr als erfolgreicher FULL-Restore dargestellt werden
+- die Read-only-Erzwingung der Recovery-Quelle und die Isolation vom Host-Docker bleiben verpflichtend
+- kanonische private Regressionen und die beibehaltenen fokussierten Regression-Gates: **PASS**
+
+Der nächste Validierungsschritt ist ein fokussierter isolierter DeviceWatchdog-`APP_FULL`-Realtest mit dem ausgewählten backup-gebundenen CURRENT-Release. Zum Zeitpunkt dieses Dokumentationsupdates läuft dieser Test noch und wird **nicht** als PASS ausgewiesen.
+
+Dieser Meilenstein beansprucht **keinen** erfolgreichen Full-Server-Restore, keine Produktionsfreigabe und keine Disaster-Recovery-Zertifizierung.
+
+Das öffentliche Repository bleibt absichtlich ein sanitisiertes Teilprojekt und enthält keine produktiven Backup-Archive, Zugangsdaten, Maschinenidentitäten, privaten Infrastrukturpfade, Roh-Evidenz, privaten Run-IDs oder privaten Archiv-Hashes.
+
+Siehe `docs/REALTEST-MILESTONE-2026-09-24.md` für die sanitisierte K56-Meilenstein-Zusammenfassung.
 
 ## Repository structure
 
