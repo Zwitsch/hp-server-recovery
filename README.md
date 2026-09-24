@@ -27,33 +27,28 @@ Persistent reports and audit data are checked for secret-marker leakage before a
 
 See [SECURITY.md](SECURITY.md) and `docs/SAFETY-MODEL.md`.
 
-## Development milestone — 2026-09-22
+## Development milestone — 2026-09-24
 
-The private full recovery package has progressed through K51. Controlled isolated application restores and a focused database recovery workflow have completed successfully, and backup-bound application release selection has now been validated before the next full-server realtest:
+The private full recovery package has progressed through K56. The current development state retains the previously validated isolated application restore and database-recovery work while adding two important hardening fixes before the next focused application full-restore realtest:
 
-- final archive identity and fresh-extraction validation: **PASS**
-- retained regression and release gates: **PASS**
-- isolated application `APP_DATA_ONLY` restore: **PASS**
-- isolated application `APP_FULL` restore: **PASS**
-- backup/release tuple classification: **COMPATIBLE**
-- offline image provenance and runtime binding: **PASS**
-- application-specific database integrity validation: **PASS**
-- runtime cleanup and final secret-marker verification: **PASS**
-- focused Nextcloud database recovery workflow: **PASS**
-- backup-bound application release preflight for the selected snapshot: **PASS**
-- full-server planning rejects stale static release identity and resolves the required application release from backup metadata
-- recovery source remained read-only throughout the run
-- host Docker remained isolated from the realtest runtime
-- mismatched backup/runtime image identities remain classified as `INCOMPATIBLE_RELEASE_IDENTITY`
-- no metadata normalization, same-version fallback or silent release substitution is allowed
+- dynamic backup-bound CURRENT release resolution is now shared by the wizard and expert CLI
+- exact backup/release version and image identity matching remains fail closed
+- missing or ambiguous backup-bound release artifacts remain blockers
+- previous-release handling remains separate from CURRENT release resolution
+- the guided wizard no longer rewrites standard realtest state/log roots into an explicit test root
+- explicit fixture/test roots remain protected by the test-root safety gate
+- execute and resume share the same worker-root contract
+- a worker failure before the first recovery step can no longer be reported as a successful FULL restore
+- recovery source read-only enforcement and host Docker isolation remain required
+- canonical private regression and retained focused regression gates: **PASS**
 
-This milestone validates a real isolated application data restore and full application restore. It does **not** claim a successful full-server restore, production-ready release or disaster-recovery certification.
+The next validation step is a focused DeviceWatchdog `APP_FULL` isolated realtest using the selected backup-bound CURRENT release. At the time of this documentation update that run is still in progress and is **not** recorded as PASS.
 
-The previously observed application backup/release mismatch was traced to a stale static binding in the direct full-server planning path. The corrected planning path retains fail-closed exact release-provenance checks and has passed the focused release preflight. Full-server real restore validation is still pending.
+This milestone does **not** claim a successful full-server restore, production-ready release or disaster-recovery certification.
 
-The public repository intentionally remains a sanitized subset and does not contain production backup archives, credentials, machine identities, private infrastructure paths or raw recovery evidence.
+The public repository intentionally remains a sanitized subset and does not contain production backup archives, credentials, machine identities, private infrastructure paths, raw recovery evidence, private run identifiers or private archive hashes.
 
-See `docs/REALTEST-MILESTONE-2026-09-17.md` for the sanitized milestone summary.
+See `docs/REALTEST-MILESTONE-2026-09-24.md` for the sanitized K56 milestone summary.
 
 ## Repository structure
 
