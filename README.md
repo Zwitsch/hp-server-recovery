@@ -31,49 +31,57 @@ See [SECURITY.md](SECURITY.md) and `docs/SAFETY-MODEL.md`.
 
 ### English
 
-The private full recovery package has progressed through K56. The current development state retains the previously validated isolated application restore and database-recovery work while adding two important hardening fixes before the next focused application full-restore realtest:
+The private full recovery package has progressed through K56.
 
-- dynamic backup-bound CURRENT release resolution is now shared by the wizard and expert CLI
-- exact backup/release version and image identity matching remains fail closed
-- missing or ambiguous backup-bound release artifacts remain blockers
-- previous-release handling remains separate from CURRENT release resolution
-- the guided wizard no longer rewrites standard realtest state/log roots into an explicit test root
-- explicit fixture/test roots remain protected by the test-root safety gate
-- execute and resume share the same worker-root contract
-- a worker failure before the first recovery step can no longer be reported as a successful FULL restore
-- recovery source read-only enforcement and host Docker isolation remain required
-- canonical private regression and retained focused regression gates: **PASS**
+Current sanitized validation status:
 
-The next validation step is a focused DeviceWatchdog `APP_FULL` isolated realtest using the selected backup-bound CURRENT release. At the time of this documentation update that run is still in progress and is **not** recorded as PASS.
+- canonical private regression and retained focused gates: **PASS**
+- dynamic backup-bound CURRENT release resolution: **PASS**
+- worker-root and report-state hardening: **PASS**
+- Compose symbolic/runtime release-binding hardening: **PASS**
+- DeviceWatchdog configuration-format contract hardening: **PASS**
+- focused isolated DeviceWatchdog `APP_FULL` realtest: **PASS**
+- isolated runtime cleanup and read-only source boundary after that run: **PASS**
+- current-K56 `FULL_SERVER` realtest: **not yet executed**
+- full-server restore, disaster-recovery certification and production readiness: **not claimed**
 
-This milestone does **not** claim a successful full-server restore, production-ready release or disaster-recovery certification.
+The remaining full-server gate is currently blocked by insufficient isolated target capacity rather than by a known K56 code failure.
+
+A separate private Immich/Filen path-preserving remote-archive track has also completed its non-destructive Phase 1 design and isolated regression work. Its first remote tier copy is still non-destructive: local media remain present until remote, Level-2 and later lifecycle gates have all passed.
+
+See:
+
+- `docs/REALTEST-MILESTONE-2026-09-24.md`
+- `docs/IMMICH-FILEN-TIERING-PHASE1-2026-09-24.md`
 
 The public repository intentionally remains a sanitized subset and does not contain production backup archives, credentials, machine identities, private infrastructure paths, raw recovery evidence, private run identifiers or private archive hashes.
 
-See `docs/REALTEST-MILESTONE-2026-09-24.md` for the sanitized K56 milestone summary.
-
 ### Deutsch
 
-Das private vollständige Recovery-Paket ist bis K56 fortgeschritten. Der aktuelle Entwicklungsstand behält die bereits validierten isolierten App-Restores und Datenbank-Recovery-Arbeiten bei und ergänzt vor dem nächsten fokussierten vollständigen App-Realtest zwei wichtige Härtungen:
+Das private vollständige Recovery-Paket ist bis K56 fortgeschritten.
 
-- die dynamische backup-gebundene CURRENT-Release-Auflösung wird jetzt gemeinsam von Wizard und Experten-CLI verwendet
-- der exakte Abgleich von Backup-/Release-Version und Image-Identität bleibt fail-closed
-- fehlende oder mehrdeutige backup-gebundene Release-Artefakte bleiben Blocker
-- die Behandlung von PREVIOUS-Releases bleibt von der CURRENT-Auflösung getrennt
-- der geführte Wizard schreibt Standard-State-/Log-Roots des Realtests nicht mehr fälschlich in einen expliziten Test-Root um
-- explizite Fixture-/Test-Roots bleiben durch das Test-Root-Sicherheitsgate geschützt
-- Execute und Resume verwenden denselben Worker-Root-Vertrag
-- ein Worker-Fehler vor dem ersten Recovery-Schritt kann nicht mehr als erfolgreicher FULL-Restore dargestellt werden
-- die Read-only-Erzwingung der Recovery-Quelle und die Isolation vom Host-Docker bleiben verpflichtend
-- kanonische private Regressionen und die beibehaltenen fokussierten Regression-Gates: **PASS**
+Aktueller sanitisierter Validierungsstand:
 
-Der nächste Validierungsschritt ist ein fokussierter isolierter DeviceWatchdog-`APP_FULL`-Realtest mit dem ausgewählten backup-gebundenen CURRENT-Release. Zum Zeitpunkt dieses Dokumentationsupdates läuft dieser Test noch und wird **nicht** als PASS ausgewiesen.
+- kanonische private Regressionen und beibehaltene fokussierte Gates: **PASS**
+- dynamische backup-gebundene CURRENT-Release-Auflösung: **PASS**
+- Worker-Root- und Report-State-Härtung: **PASS**
+- Härtung der symbolischen/Runtime-Compose-Release-Bindung: **PASS**
+- Härtung des DeviceWatchdog-Konfigurationsformat-Vertrags: **PASS**
+- fokussierter isolierter DeviceWatchdog-`APP_FULL`-Realtest: **PASS**
+- Cleanup der isolierten Runtime und Read-only-Quellgrenze nach diesem Lauf: **PASS**
+- aktueller K56-`FULL_SERVER`-Realtest: **noch nicht ausgeführt**
+- Full-Server-Restore, Disaster-Recovery-Zertifizierung und Produktionsreife: **nicht beansprucht**
 
-Dieser Meilenstein beansprucht **keinen** erfolgreichen Full-Server-Restore, keine Produktionsfreigabe und keine Disaster-Recovery-Zertifizierung.
+Das verbleibende Full-Server-Gate ist derzeit durch unzureichende isolierte Zielkapazität blockiert, nicht durch einen bekannten K56-Codefehler.
+
+Ein separater privater Immich/Filen-Zweig für ein pfaderhaltendes Remote-Archiv hat außerdem seine nicht-destruktive Phase-1-Entwicklung und isolierten Regressionen abgeschlossen. Die erste Remote-Tier-Kopie bleibt nicht-destruktiv: Lokale Medien bleiben erhalten, bis Remote-, Level-2- und spätere Lifecycle-Gates vollständig bestanden sind.
+
+Siehe:
+
+- `docs/REALTEST-MILESTONE-2026-09-24.md`
+- `docs/IMMICH-FILEN-TIERING-PHASE1-2026-09-24.md`
 
 Das öffentliche Repository bleibt absichtlich ein sanitisiertes Teilprojekt und enthält keine produktiven Backup-Archive, Zugangsdaten, Maschinenidentitäten, privaten Infrastrukturpfade, Roh-Evidenz, privaten Run-IDs oder privaten Archiv-Hashes.
-
-Siehe `docs/REALTEST-MILESTONE-2026-09-24.md` für die sanitisierte K56-Meilenstein-Zusammenfassung.
 
 ## Repository structure
 
