@@ -18,7 +18,7 @@ Status:
 - first non-destructive remote tier copy: **COMPLETE**
 - productive media deletion: **NOT PERFORMED**
 - productive overlay activation: **NOT PERFORMED**
-- productive Level-2 backup replacement: **NOT PERFORMED**
+- productive Level-2 protection integration: **INSTALLED; REAL DRY RUN PASS**
 - K56 recovery package changed: **NO**
 - full-server realtest performed as part of this work: **NO**
 
@@ -109,17 +109,28 @@ A small real local performance/I/O gate also passed and confirmed that only sele
 
 These private tests are not part of the sanitized public repository test count.
 
+### Real Tier-1 and Level-2 validation
+
+The first roughly 100 GiB tier batch has now passed all Phase 1 identity and Level-2 protection gates:
+
+- local BLAKE3 verification: **410/410 PASS**
+- remote BLAKE3 verification: **410/410 PASS**
+- offline Level-2 BLAKE3 verification: **410/410 PASS**
+- READY_TO_TIER state: **410/410**
+- Level-2 protection approval: **410/410**
+- real Level-2 dry run with the production protection integration: **PASS**
+- managed shrink difference: **0.00 GiB**
+- protected cold-path matches in the dry-run transfer/delete log: **0**
+- Level-2 dry-run final result: **rc=0**
+- backup disk unmounted and powered off after completion
+
+The dry run still reported ordinary non-cold mirror changes, which is expected; the protected cold set did not appear as transfer or delete candidates.
+
 ### Current boundary
 
-No production media may be removed until all of the following gates pass:
+Phase 1 is now complete through real Level-2 dry-run validation. Production media are still not removed and no productive overlay is active.
 
-1. the complete tier batch is re-verified locally using the corrected BLAKE3-only contract;
-2. the same batch is verified on the remote archive using size and BLAKE3;
-3. the existing Level-2 copies are verified using size and BLAKE3;
-4. the Level-2 protection integration passes a real dry run against the offline backup disk;
-5. a later Phase 2 validates the read-only mount/overlay lifecycle, boot dependencies, Immich lifecycle behavior and rollback.
-
-The system remains deliberately non-destructive at this milestone.
+The next work belongs to Phase 2 and must validate the read-only remote mount/overlay lifecycle, boot dependencies, Immich lifecycle behavior, fail-closed startup, rollback/rehydration and a small controlled productive pilot before any large local payload deletion.
 
 ---
 
@@ -141,7 +152,7 @@ Status:
 - erste nicht-destruktive Remote-Tier-Kopie: **ABGESCHLOSSEN**
 - produktive Medienlöschung: **NICHT AUSGEFÜHRT**
 - produktives Overlay: **NICHT AKTIVIERT**
-- produktiver Austausch des Level-2-Backups: **NICHT AUSGEFÜHRT**
+- produktive Level-2-Schutzintegration: **INSTALLIERT; REALER DRY RUN PASS**
 - K56-Recovery-Paket verändert: **NEIN**
 - Full-Server-Realtest im Rahmen dieser Arbeiten: **NEIN**
 
@@ -232,14 +243,25 @@ Zusätzlich bestand ein kleiner realer lokaler Performance-/I/O-Gate und bestät
 
 Diese privaten Tests gehören nicht zum Testzähler des sanitisierten öffentlichen Repositories.
 
+### Reale Tier-1- und Level-2-Validierung
+
+Der erste Tier-Batch von ungefähr 100 GiB hat jetzt alle Phase-1-Identitäts- und Level-2-Schutzgates bestanden:
+
+- lokale BLAKE3-Verifikation: **410/410 PASS**
+- Remote-BLAKE3-Verifikation: **410/410 PASS**
+- Offline-Level-2-BLAKE3-Verifikation: **410/410 PASS**
+- READY_TO_TIER-Zustand: **410/410**
+- Level-2-Schutzfreigabe: **410/410**
+- realer Level-2-Dryrun mit der produktiven Schutzintegration: **PASS**
+- verwaltete Shrink-Differenz: **0,00 GiB**
+- geschützte Cold-Pfad-Treffer im Transfer-/Delete-Log des Dryruns: **0**
+- finales Level-2-Dryrun-Ergebnis: **rc=0**
+- Backup-HDD nach Abschluss unmountet und ausgeschaltet
+
+Der Dryrun meldete weiterhin normale Änderungen außerhalb des geschützten Cold-Bestands, was erwartet ist; der geschützte Cold-Bestand erschien weder als Transfer- noch als Delete-Kandidat.
+
 ### Aktuelle Grenze
 
-Produktive Medien dürfen erst entfernt werden, wenn alle folgenden Gates bestanden sind:
+Phase 1 ist damit bis einschließlich realer Level-2-Dryrun-Validierung abgeschlossen. Produktive Medien werden weiterhin nicht entfernt und es ist kein produktives Overlay aktiv.
 
-1. der vollständige Tier-Batch wurde mit dem korrigierten BLAKE3-only-Vertrag erneut lokal verifiziert;
-2. derselbe Batch wurde remote anhand von Größe und BLAKE3 verifiziert;
-3. die bestehenden Level-2-Kopien wurden anhand von Größe und BLAKE3 verifiziert;
-4. die Level-2-Schutzintegration besteht einen realen Dry Run gegen die Offline-Backup-HDD;
-5. eine spätere Phase 2 validiert Read-only-Mount-/Overlay-Lifecycle, Boot-Abhängigkeiten, Immich-Lifecycle-Verhalten und Rollback.
-
-Dieser Meilenstein bleibt bewusst nicht-destruktiv.
+Die nächsten Arbeiten gehören zu Phase 2 und müssen Read-only-Remote-Mount-/Overlay-Lifecycle, Boot-Abhängigkeiten, Immich-Lifecycle-Verhalten, fail-closed Startup, Rollback/Rehydration sowie einen kleinen kontrollierten produktiven Pilot validieren, bevor größere lokale Payload-Mengen gelöscht werden.
