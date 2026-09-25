@@ -1,0 +1,38 @@
+
+English
+-------
+Phase 1 regression: 36/36 PASS
+Phase 2 isolated tests: 36/36 PASS
+Systemd static verification: PASS
+Read-only FUSE / seek / ffprobe / Docker visibility / cache / reconnect: PASS
+Per-file read-only bind overlay: PASS
+Atomic rehydrate and crash rollback: PASS
+Trash/Delete integration: BLOCKED
+Pilot ready: NO
+Production deletion: NO
+Production cold activation: NO
+
+The default delivery is intentionally fail-closed:
+activationMode=disabled
+trashDeleteGate=BLOCKED
+
+The remaining blocker is a provable pre-delete rehydrate contract for every application deletion path before any production pilot.
+
+Deutsch
+-------
+Phase-1-Regression: 36/36 PASS
+Phase-2-Isolationstests: 36/36 PASS
+Systemd-Verifikation: PASS
+Read-only FUSE / Seek / ffprobe / Docker-Sichtbarkeit / Cache / Reconnect: PASS
+Einzeldatei read-only Bind-Overlay: PASS
+Atomarer Rehydrate- und Crash-Rollback-Pfad: PASS
+Trash/Delete-Integration: BLOCKED
+Pilotbereit: NEIN
+Produktive Dateiloeschung: NEIN
+Produktives COLD_ACTIVE: NEIN
+
+Der Lieferstand ist absichtlich fail-closed:
+activationMode=disabled
+trashDeleteGate=BLOCKED
+
+Offen bleibt ein beweisbarer Pre-Delete-Rehydrate-Vertrag fuer jeden Anwendungs-Loeschpfad vor einem produktiven Pilot.
