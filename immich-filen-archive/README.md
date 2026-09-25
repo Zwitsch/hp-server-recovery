@@ -7,81 +7,69 @@ This project explores a fail-closed architecture for keeping selected Immich sou
 
 Remote object storage
 → read-only rclone FUSE mount
-→ validated manifest
+→ validated BLAKE3 manifest
 → per-file read-only bind mounts
 → unchanged Immich original path
 
-The design intentionally avoids rewriting Immich database paths.
+The design does not rewrite Immich database paths.
 
-### Implemented development contracts
+### Verified development contracts
 
 - BLAKE3-only identity verification
 - deterministic path-preserving manifest
 - local + remote + offline-backup verification
 - protected offline mirror entries
 - read-only rclone mount
-- VFS full cache with maximum size and minimum free-space guard
+- bounded VFS full cache
 - one-file bind mounts only
-- hot neighbors remain local
+- HOT neighbors remain local
 - fail-closed systemd ordering
-- explicit Docker restart-policy gate
+- Docker restart-policy gate
 - crash-safe activation transaction
 - atomic rehydrate
+- fail-closed runtime watcher
+- explicit shared rclone configuration for FUSE and runtime verification
 - no automatic remote garbage collection
 - privacy-preserving structured logs
-- default activation disabled
+- activation disabled by default
 - pilot hard limit: at most three files
 
-### Current verification
+### Verification status
 
-Phase 1 regression tests: 36/36 PASS
+- Phase 1 regression: 36/36 PASS
+- Phase 2 regression: 43/43 PASS
+- Immich v3.2.1 lifecycle A–R: 18/18 PASS
+- Trash/Delete evidence tests: 9/9 PASS
+- Crash recovery: 12/12 PASS
+- systemd verification: PASS
+- read-only FUSE / seek / ffprobe / Docker visibility / cache / reconnect: PASS
+- per-file overlay and hot-neighbor isolation: PASS
+- rehydrate-before-delete: PASS
 
-Phase 2 isolated tests: 36/36 PASS
+### Confirmed Immich v3.2.1 delete behavior
 
-Real isolated runtime gates:
-- read-only FUSE mount PASS
-- random seek PASS
-- ffprobe PASS
-- Docker visibility PASS
-- VFS cache PASS
-- remote-loss read failure PASS
-- reconnect PASS
-- one-file read-only bind mount PASS
-- hot-neighbor isolation PASS
-- systemd unit verification PASS
+Real isolated testing proved:
 
-### Important blocker
+- Move to Trash does not immediately unlink the original.
+- Restore from Trash works with COLD_ACTIVE assets.
+- Empty Trash, force/permanent delete, and automatic retention deletion can remove the database asset while the filesystem unlink fails with EBUSY on a mounted cold file.
+- Immich's deletion job removes the database asset before queuing the file deletion.
+- the available AssetDelete event occurs after database removal.
+- automatic retention deletion is an internal job path and does not pass through an external HTTP gateway.
 
-The architecture is NOT pilot-ready yet.
+A manual rehydrate-before-delete flow works correctly, but Immich v3.2.1 exposes no native blocking pre-delete hook that can enforce it for every internal delete path.
 
-Immich can delete original files when trash is emptied or assets are permanently deleted. A file bind mount is itself a mountpoint, so the project requires a provable pre-delete rehydrate contract for every Immich deletion path before any production pilot can be approved.
+Therefore:
 
-For this reason the delivered configuration is fail-closed:
+TRASH_DELETE_GATES = FAIL
+PILOT_READY = false
+
+The fail-closed delivery remains:
 
 activationMode = disabled
 trashDeleteGate = BLOCKED
 
-No production deletion, no production cold activation, and no remote garbage collection are enabled.
-
-### Next development gate
-
-Use an isolated Immich test stack and a disposable asset to validate:
-- playback
-- original download
-- thumbnails/transcoding
-- health
-- container restart
-- Docker restart
-- reboot recovery
-- remote unavailable at boot/runtime
-- trash
-- restore from trash
-- empty trash
-- force delete
-- retention delete
-- automatic rehydrate before every filesystem unlink
-
-Only after those tests pass may a 1–3 file production pilot be considered.
+No production deletion, production cold activation, writable remote remount, or automatic remote GC is enabled.
 
 ---
 
@@ -93,78 +81,45 @@ Dieses Projekt entwickelt eine Fail-Closed-Architektur, mit der ausgewählte Imm
 
 Remote-Speicher
 → read-only rclone-FUSE
-→ validiertes Manifest
+→ validiertes BLAKE3-Manifest
 → einzelne read-only File-Bind-Mounts
 → unveränderter Immich-originalPath
 
 Die Immich-Datenbankpfade werden nicht umgeschrieben.
 
-### Implementierter Entwicklungsstand
+### Verifizierter Entwicklungsstand
 
-- BLAKE3-only Identitätsprüfung
-- deterministisches path-preserving Manifest
-- lokale, Remote- und Offline-Backup-Verifikation
-- geschützte Offline-Mirror-Dateien
-- read-only rclone-Mount
-- VFS Full Cache mit Max-Size und Min-Free-Space
-- ausschließlich einzelne File-Bind-Mounts
-- lokale HOT-Nachbarn bleiben unverändert
-- Fail-Closed-systemd-Reihenfolge
-- explizites Docker-Restart-Policy-Gate
-- crash-sichere Aktivierungstransaktion
-- atomarer Rehydrate-Pfad
-- kein automatisches Remote-GC
-- datensparsame strukturierte Logs
-- Aktivierung standardmäßig gesperrt
-- Pilotlimit maximal drei Dateien
+- Phase 1: 36/36 PASS
+- Phase 2: 43/43 PASS
+- Immich-v3.2.1-Lifecycle A–R: 18/18 PASS
+- Trash/Delete-Evidenztests: 9/9 PASS
+- Crash Recovery: 12/12 PASS
+- systemd-Verifikation: PASS
+- read-only FUSE / Seek / ffprobe / Docker-Sichtbarkeit / Cache / Reconnect: PASS
+- Einzeldatei-Overlay und HOT-Nachbar-Isolation: PASS
+- Rehydrate-before-delete: PASS
 
-### Verifikation
+### Real bestätigte Delete-Semantik
 
-Phase 1: 36/36 PASS
+Isolierte v3.2.1-Tests zeigen:
 
-Phase 2 isoliert: 36/36 PASS
+- Move to Trash löscht die Originaldatei nicht sofort.
+- Restore aus Trash funktioniert mit COLD_ACTIVE.
+- Empty Trash, Force/Permanent Delete und automatischer Retention-Delete können den DB-Datensatz entfernen, obwohl der Filesystem-Unlink am gemounteten Cold-Original mit EBUSY scheitert.
+- Immich entfernt beim permanenten Delete zuerst den DB-Datensatz und queued den FileDelete erst danach.
+- AssetDelete ist kein blockierender Pre-Delete-Hook.
+- Retention läuft als interner Job und umgeht einen externen HTTP-Gateway-Pfad.
 
-Reale isolierte Gates:
-- FUSE read-only PASS
-- Random Seek PASS
-- ffprobe PASS
-- Docker-Sichtbarkeit PASS
-- VFS Cache PASS
-- Remote-Ausfall erzeugt Read-Fail PASS
-- Wiederverbindung PASS
-- einzelner read-only File-Bind-Mount PASS
-- HOT-Nachbar unverändert PASS
-- systemd Unit-Verifikation PASS
+Rehydrate-before-delete funktioniert technisch korrekt. Immich v3.2.1 bietet aber keinen nativen blockierenden Hook, der diesen Vertrag für alle internen Deletepfade erzwingt.
 
-### Kritischer Blocker
+Daher:
 
-Der Stand ist noch NICHT pilotbereit.
+TRASH_DELETE_GATES = FAIL
+PILOT_READY = false
 
-Immich löscht Originaldateien beim endgültigen Löschen bzw. Leeren des Papierkorbs. Ein File-Bind-Mount ist selbst ein Mountpoint. Vor einem produktiven Pilot muss deshalb für jeden Immich-Löschpfad beweisbar sein, dass eine COLD-Datei zwingend vorher rehydriert wird.
-
-Darum lautet der ausgelieferte Fail-Closed-Stand:
+Der ausgelieferte Stand bleibt fail-closed:
 
 activationMode = disabled
 trashDeleteGate = BLOCKED
 
-Keine produktive Dateilöschung, kein produktives COLD_ACTIVE und kein automatisches Remote-GC.
-
-### Nächster Entwicklungs-Gate
-
-Ein isolierter Immich-Teststack mit Wegwerf-Testasset muss anschließend real prüfen:
-- Wiedergabe
-- Originaldownload
-- Thumbnail/Transcode
-- Health
-- Container-Neustart
-- Docker-Neustart
-- Reboot
-- Remote beim Boot/Lauf nicht verfügbar
-- Trash
-- Restore
-- Empty Trash
-- Force Delete
-- Retention Delete
-- automatische Rehydrate-Pflicht vor jedem Dateisystem-Unlink
-
-Erst danach darf ein produktiver Pilot mit 1–3 Dateien bewertet werden.
+Keine produktive Dateilöschung, kein produktives COLD_ACTIVE, kein writable Remote und kein automatisches Remote-GC.
