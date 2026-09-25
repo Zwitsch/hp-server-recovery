@@ -47,7 +47,7 @@ Current sanitized validation status:
 
 The remaining full-server gate is currently blocked by insufficient isolated target capacity rather than by a known K56 code failure.
 
-A separate private Immich/Filen path-preserving remote-archive track has completed its corrected non-destructive Phase 1 implementation. The corrected private tiering suite reports **36/36 PASS**, including an explicit BLAKE3-only hashing contract and a small real performance/I/O gate. The first roughly 100 GiB remote tier copy has completed, while local media remain present until local, remote, Level-2 and later lifecycle gates have all passed.
+A separate private Immich/Filen path-preserving remote-archive track has completed its corrected non-destructive Phase 1 implementation. The corrected private tiering suite reports **36/36 PASS**, including an explicit BLAKE3-only hashing contract and a small real performance/I/O gate. The first roughly 100 GiB tier batch has now passed local, remote and offline Level-2 BLAKE3 verification as well as a real Level-2 protection dry run. All 410 entries are READY_TO_TIER and Level-2-protected. Local media remain present; no productive overlay or media deletion has been activated.
 
 See:
 
@@ -74,7 +74,7 @@ Aktueller sanitisierter Validierungsstand:
 
 Das verbleibende Full-Server-Gate ist derzeit durch unzureichende isolierte Zielkapazität blockiert, nicht durch einen bekannten K56-Codefehler.
 
-Ein separater privater Immich/Filen-Zweig für ein pfaderhaltendes Remote-Archiv hat außerdem seine korrigierte nicht-destruktive Phase-1-Implementierung abgeschlossen. Die korrigierte private Tiering-Suite meldet **36/36 PASS**, einschließlich eines expliziten BLAKE3-only-Hashvertrags und eines kleinen realen Performance-/I/O-Gates. Die erste Remote-Tier-Kopie von ungefähr 100 GiB ist abgeschlossen; lokale Medien bleiben erhalten, bis lokale, Remote-, Level-2- und spätere Lifecycle-Gates vollständig bestanden sind.
+Ein separater privater Immich/Filen-Zweig für ein pfaderhaltendes Remote-Archiv hat außerdem seine korrigierte nicht-destruktive Phase-1-Implementierung abgeschlossen. Die korrigierte private Tiering-Suite meldet **36/36 PASS**, einschließlich eines expliziten BLAKE3-only-Hashvertrags und eines kleinen realen Performance-/I/O-Gates. Der erste Tier-Batch von ungefähr 100 GiB hat jetzt lokale, Remote- und Offline-Level-2-BLAKE3-Verifikation sowie einen realen Level-2-Schutz-Dryrun bestanden. Alle 410 Einträge sind READY_TO_TIER und Level-2-geschützt. Lokale Medien bleiben erhalten; produktives Overlay und Medienlöschung sind weiterhin nicht aktiviert.
 
 Siehe:
 
