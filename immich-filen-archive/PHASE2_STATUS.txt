@@ -1,38 +1,42 @@
-
-English
 -------
 Phase 1 regression: 36/36 PASS
-Phase 2 isolated tests: 36/36 PASS
-Systemd static verification: PASS
-Read-only FUSE / seek / ffprobe / Docker visibility / cache / reconnect: PASS
-Per-file read-only bind overlay: PASS
-Atomic rehydrate and crash rollback: PASS
-Trash/Delete integration: BLOCKED
+Phase 2 regression: 43/43 PASS
+Lifecycle A-R: 18/18 PASS
+Trash/Delete evidence: 9/9 PASS
+Crash recovery: 12/12 PASS
+Systemd / fail-closed / overlay / rehydrate gates: PASS
+Immich lifecycle gate: PASS
+Trash/Delete safety gate: FAIL
 Pilot ready: NO
 Production deletion: NO
 Production cold activation: NO
+Production overlay: NO
 
-The default delivery is intentionally fail-closed:
+Confirmed blocker:
+Immich v3.2.1 removes the database asset before its FileDelete job. Empty Trash, force delete and internal retention deletion can therefore leave database/filesystem state inconsistent when the original path is a file mount. No native blocking pre-delete hook was found.
+
+Fail-closed delivery:
 activationMode=disabled
 trashDeleteGate=BLOCKED
-
-The remaining blocker is a provable pre-delete rehydrate contract for every application deletion path before any production pilot.
 
 Deutsch
 -------
 Phase-1-Regression: 36/36 PASS
-Phase-2-Isolationstests: 36/36 PASS
-Systemd-Verifikation: PASS
-Read-only FUSE / Seek / ffprobe / Docker-Sichtbarkeit / Cache / Reconnect: PASS
-Einzeldatei read-only Bind-Overlay: PASS
-Atomarer Rehydrate- und Crash-Rollback-Pfad: PASS
-Trash/Delete-Integration: BLOCKED
+Phase-2-Regression: 43/43 PASS
+Lifecycle A-R: 18/18 PASS
+Trash/Delete-Evidenz: 9/9 PASS
+Crash Recovery: 12/12 PASS
+Systemd / Fail-Closed / Overlay / Rehydrate: PASS
+Immich-Lifecycle-Gate: PASS
+Trash/Delete-Sicherheitsgate: FAIL
 Pilotbereit: NEIN
 Produktive Dateiloeschung: NEIN
 Produktives COLD_ACTIVE: NEIN
+Produktives Overlay: NEIN
 
-Der Lieferstand ist absichtlich fail-closed:
+Bestaetigter Blocker:
+Immich v3.2.1 entfernt den DB-Datensatz vor dem FileDelete-Job. Empty Trash, Force Delete und interner Retention Delete koennen deshalb DB und Dateisystem auseinanderlaufen lassen, wenn der originalPath ein File-Mount ist. Ein nativer blockierender Pre-Delete-Hook wurde nicht gefunden.
+
+Fail-Closed-Lieferstand:
 activationMode=disabled
 trashDeleteGate=BLOCKED
-
-Offen bleibt ein beweisbarer Pre-Delete-Rehydrate-Vertrag fuer jeden Anwendungs-Loeschpfad vor einem produktiven Pilot.
