@@ -1,26 +1,52 @@
-# Immich / Filen path-preserving remote archive — Phase 1 milestone — 2026-09-24
+# Immich / Filen path-preserving remote archive — Phase 1 milestone — 2026-09-25
 
 ## English
 
 This document records a sanitized milestone from a separate private storage-tiering development track associated with HP Server Recovery.
 
-It does not publish production paths, media names, credentials, account identifiers, host topology, raw manifests, private hashes or backup artifacts.
+It intentionally excludes production paths, media names, credentials, account identifiers, host topology, raw manifests, private hashes and backup artifacts.
 
-### Phase 1 result
+### Phase 1 corrected result
 
-Phase 1 development for a path-preserving Immich/Filen archive contract is complete in the private development environment.
+Phase 1 has completed its first corrective iteration after a real verification run exposed an overly broad local hash path.
 
 Status:
 
-- Phase 1 development: **COMPLETE**
-- isolated Phase 1 regression tests: **PASS**
+- Phase 1 corrected implementation: **COMPLETE**
+- isolated regression tests: **36/36 PASS**
+- small real BLAKE3-only performance/I/O gate: **PASS**
+- first non-destructive remote tier copy: **COMPLETE**
 - productive media deletion: **NOT PERFORMED**
 - productive overlay activation: **NOT PERFORMED**
 - productive Level-2 backup replacement: **NOT PERFORMED**
 - K56 recovery package changed: **NO**
 - full-server realtest performed as part of this work: **NO**
 
-A first non-destructive tier batch of roughly 100 GiB is currently being copied to the remote archive. Local source media remain present while that transfer and subsequent verification are incomplete.
+The first non-destructive tier batch contains roughly 100 GiB of media. The remote copy completed successfully while all local source media remained present.
+
+### BLAKE3-only correction
+
+The initial implementation used a generic rclone metadata listing with hash collection. On a local backend that advertises many hash algorithms, that path could request more hashing work than the tiering contract actually needs.
+
+The corrected contract separates content identity from metadata:
+
+- content identity: explicit **BLAKE3 only**
+- remote/local metadata: collected separately without hash expansion
+- remote verification does not force a download when the backend can provide BLAKE3 directly
+- no fallback to a broader multi-hash path
+
+The private implementation now executes an explicit BLAKE3 batch operation and validates its exact argument contract.
+
+### Parser and fail-closed behavior
+
+The corrected hash parser requires:
+
+- exactly one expected path result
+- exactly one 64-character lowercase hexadecimal BLAKE3 digest per expected path
+- lossless preservation of full relative paths, including spaces and literal wildcard characters
+- no missing, duplicate or unexpected results
+- no silent canonicalization of invalid uppercase digests
+- no partial manifest on batch failure
 
 ### Architecture contract
 
@@ -52,12 +78,6 @@ Per-file state records include:
 
 Path validation is fail closed for absolute paths, traversal, control characters, symlinks, root escape, duplicate entries and non-deterministic ordering.
 
-### Verification contract
-
-Remote verification is based on exact relative path, size and BLAKE3 identity. Modification time is recorded as supporting metadata but is not trusted as the sole identity.
-
-Level-2 verification independently checks the already existing offline backup copy without requiring access to the remote archive.
-
 ### Level-2 protection contract
 
 The existing Level-2 mirror remains a normal delete-capable mirror for unmanaged data.
@@ -74,16 +94,18 @@ The existing shrink guard remains in place and is adjusted conceptually so manag
 
 ### Private test coverage
 
-The private isolated suite reports **24/24 PASS**, including:
+The corrected private isolated suite reports **36/36 PASS**.
 
-- manifest and path validation
-- local and remote identity mismatch handling
-- Level-2 verification failures
-- protection-approval gates
-- literal handling of rsync wildcard characters
-- receiver protection with delete-enabled mirroring
-- sender hiding without disabling normal sibling-file mirroring
-- preservation of protected data when the remote archive is unavailable
+Coverage includes the previous Phase 1 manifest/path/L2 protection tests plus dedicated regression checks that:
+
+- local, remote and Level-2 content hashing request only BLAKE3;
+- no productive content-hash path uses the broader metadata hash expansion;
+- remote verification does not force content download;
+- spaces and literal wildcard characters survive path parsing;
+- BLAKE3 mismatch, missing hashes, duplicate paths and unexpected paths fail closed;
+- batch failure cannot leave a partial manifest.
+
+A small real local performance/I/O gate also passed and confirmed that only selected files were read and that the manifest BLAKE3 matched a direct reference BLAKE3 command.
 
 These private tests are not part of the sanitized public repository test count.
 
@@ -91,12 +113,11 @@ These private tests are not part of the sanitized public repository test count.
 
 No production media may be removed until all of the following gates pass:
 
-1. the current remote copy finishes successfully;
-2. the full tier batch is verified locally;
-3. the same batch is verified on the remote archive using size and BLAKE3;
-4. the existing Level-2 copies are verified using size and BLAKE3;
-5. the Level-2 protection integration passes a real dry run against the offline backup disk;
-6. a later Phase 2 validates the read-only mount/overlay lifecycle, boot dependencies, Immich lifecycle behavior and rollback.
+1. the complete tier batch is re-verified locally using the corrected BLAKE3-only contract;
+2. the same batch is verified on the remote archive using size and BLAKE3;
+3. the existing Level-2 copies are verified using size and BLAKE3;
+4. the Level-2 protection integration passes a real dry run against the offline backup disk;
+5. a later Phase 2 validates the read-only mount/overlay lifecycle, boot dependencies, Immich lifecycle behavior and rollback.
 
 The system remains deliberately non-destructive at this milestone.
 
@@ -106,23 +127,49 @@ The system remains deliberately non-destructive at this milestone.
 
 Dieses Dokument hält einen sanitisierten Meilenstein aus einem separaten privaten Storage-Tiering-Entwicklungszweig im Umfeld von HP Server Recovery fest.
 
-Produktive Pfade, Mediennamen, Zugangsdaten, Konto-IDs, Host-Topologie, Roh-Manifeste, private Hashes und Backup-Artefakte werden nicht veröffentlicht.
+Produktive Pfade, Mediennamen, Zugangsdaten, Konto-IDs, Host-Topologie, Roh-Manifeste, private Hashes und Backup-Artefakte werden bewusst nicht veröffentlicht.
 
-### Ergebnis Phase 1
+### Korrigiertes Ergebnis Phase 1
 
-Die Phase-1-Entwicklung für einen pfaderhaltenden Immich/Filen-Archivvertrag ist in der privaten Entwicklungsumgebung abgeschlossen.
+Phase 1 hat die erste Korrekturrunde abgeschlossen, nachdem ein realer Verifikationslauf einen zu breiten lokalen Hashpfad offengelegt hatte.
 
 Status:
 
-- Phase-1-Entwicklung: **ABGESCHLOSSEN**
-- isolierte Phase-1-Regressionstests: **PASS**
+- korrigierte Phase-1-Implementierung: **ABGESCHLOSSEN**
+- isolierte Regressionstests: **36/36 PASS**
+- kleiner realer BLAKE3-only Performance-/I/O-Gate: **PASS**
+- erste nicht-destruktive Remote-Tier-Kopie: **ABGESCHLOSSEN**
 - produktive Medienlöschung: **NICHT AUSGEFÜHRT**
 - produktives Overlay: **NICHT AKTIVIERT**
 - produktiver Austausch des Level-2-Backups: **NICHT AUSGEFÜHRT**
 - K56-Recovery-Paket verändert: **NEIN**
 - Full-Server-Realtest im Rahmen dieser Arbeiten: **NEIN**
 
-Ein erster nicht-destruktiver Tier-Batch von ungefähr 100 GiB wird derzeit in das Remote-Archiv kopiert. Die lokalen Quelldateien bleiben vollständig vorhanden, solange Transfer und anschließende Verifikation nicht abgeschlossen sind.
+Der erste nicht-destruktive Tier-Batch umfasst ungefähr 100 GiB Medien. Die Remote-Kopie wurde erfolgreich abgeschlossen, während alle lokalen Quelldateien erhalten blieben.
+
+### BLAKE3-only-Korrektur
+
+Die ursprüngliche Implementierung verwendete eine generische rclone-Metadatenauflistung mit Hash-Erhebung. Auf einem lokalen Backend mit vielen angebotenen Hashalgorithmen konnte dieser Pfad deutlich mehr Hasharbeit auslösen als der Tiering-Vertrag tatsächlich benötigt.
+
+Der korrigierte Vertrag trennt Inhaltsidentität und Metadaten:
+
+- Inhaltsidentität: ausdrücklich **nur BLAKE3**
+- lokale/Remote-Metadaten: separat ohne Hash-Expansion
+- Remote-Verifikation erzwingt keinen Download, wenn das Backend BLAKE3 direkt bereitstellt
+- kein Fallback auf einen breiteren Multi-Hash-Pfad
+
+Die private Implementierung führt jetzt eine explizite BLAKE3-Batchoperation aus und regressionsprüft deren Argumentvertrag.
+
+### Parser und Fail-Closed-Verhalten
+
+Der korrigierte Hashparser verlangt:
+
+- genau ein erwartetes Ergebnis pro Pfad
+- genau einen 64 Zeichen langen lowercase-hexadezimalen BLAKE3-Digest je erwartetem Pfad
+- verlustfreie Erhaltung des vollständigen relativen Pfades einschließlich Leerzeichen und literaler Wildcardzeichen
+- keine fehlenden, doppelten oder unerwarteten Ergebnisse
+- keine stille Kanonisierung ungültiger Uppercase-Digests
+- kein partielles Manifest bei Batchfehler
 
 ### Architekturvertrag
 
@@ -154,12 +201,6 @@ Pro Datei werden unter anderem gespeichert:
 
 Die Pfadvalidierung arbeitet fail-closed bei absoluten Pfaden, Traversal, Steuerzeichen, Symlinks, Root-Escape, doppelten Einträgen und nicht deterministischer Sortierung.
 
-### Verifikationsvertrag
-
-Die Remote-Verifikation basiert auf exakt übereinstimmendem relativem Pfad, Größe und BLAKE3-Identität. Die Änderungszeit wird als Zusatzmetadatum dokumentiert, aber nicht als alleinige Identität vertraut.
-
-Die Level-2-Verifikation prüft unabhängig die bereits vorhandene Offline-Backup-Kopie und benötigt dafür keinen Zugriff auf das Remote-Archiv.
-
 ### Level-2-Schutzvertrag
 
 Der bestehende Level-2-Mirror bleibt für nicht verwaltete Daten ein normaler Mirror mit Löschfunktion.
@@ -176,16 +217,18 @@ Der bestehende Shrink-Guard bleibt erhalten und wird konzeptionell so angepasst,
 
 ### Private Testabdeckung
 
-Die private isolierte Suite meldet **24/24 PASS**, unter anderem für:
+Die korrigierte private isolierte Suite meldet **36/36 PASS**.
 
-- Manifest- und Pfadvalidierung
-- lokale und Remote-Identitätsabweichungen
-- Level-2-Verifikationsfehler
-- Schutzfreigabe-Gates
-- literale Behandlung von rsync-Wildcardzeichen
-- Empfängerschutz bei aktivem Mirror-Delete
-- Sender-Hiding ohne Verlust normalen Mirror-Verhaltens benachbarter Dateien
-- Erhalt geschützter Daten bei nicht verfügbarem Remote-Archiv
+Die Abdeckung enthält die bisherigen Phase-1-Tests für Manifest/Pfade/L2-Schutz sowie eigene Regressionen dafür, dass:
+
+- lokale, Remote- und Level-2-Inhaltshashes ausschließlich BLAKE3 anfordern;
+- kein produktiver Inhaltshashpfad die breite Metadaten-Hash-Expansion verwendet;
+- die Remote-Verifikation keinen Inhaltsdownload erzwingt;
+- Leerzeichen und literale Wildcardzeichen beim Pfadparsing erhalten bleiben;
+- BLAKE3-Mismatch, fehlende Hashes, doppelte Pfade und unerwartete Pfade fail-closed scheitern;
+- ein Batchfehler kein partielles Manifest hinterlassen kann.
+
+Zusätzlich bestand ein kleiner realer lokaler Performance-/I/O-Gate und bestätigte, dass nur ausgewählte Dateien gelesen wurden und der Manifest-BLAKE3 exakt mit einem direkten BLAKE3-Referenzlauf übereinstimmt.
 
 Diese privaten Tests gehören nicht zum Testzähler des sanitisierten öffentlichen Repositories.
 
@@ -193,11 +236,10 @@ Diese privaten Tests gehören nicht zum Testzähler des sanitisierten öffentlic
 
 Produktive Medien dürfen erst entfernt werden, wenn alle folgenden Gates bestanden sind:
 
-1. die aktuelle Remote-Kopie endet erfolgreich;
-2. der vollständige Tier-Batch ist lokal verifiziert;
-3. derselbe Batch ist remote anhand von Größe und BLAKE3 verifiziert;
-4. die bestehenden Level-2-Kopien sind anhand von Größe und BLAKE3 verifiziert;
-5. die Level-2-Schutzintegration besteht einen realen Dry Run gegen die Offline-Backup-HDD;
-6. eine spätere Phase 2 validiert Read-only-Mount-/Overlay-Lifecycle, Boot-Abhängigkeiten, Immich-Lifecycle-Verhalten und Rollback.
+1. der vollständige Tier-Batch wurde mit dem korrigierten BLAKE3-only-Vertrag erneut lokal verifiziert;
+2. derselbe Batch wurde remote anhand von Größe und BLAKE3 verifiziert;
+3. die bestehenden Level-2-Kopien wurden anhand von Größe und BLAKE3 verifiziert;
+4. die Level-2-Schutzintegration besteht einen realen Dry Run gegen die Offline-Backup-HDD;
+5. eine spätere Phase 2 validiert Read-only-Mount-/Overlay-Lifecycle, Boot-Abhängigkeiten, Immich-Lifecycle-Verhalten und Rollback.
 
 Dieser Meilenstein bleibt bewusst nicht-destruktiv.
