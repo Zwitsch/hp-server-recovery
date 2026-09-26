@@ -49,6 +49,32 @@ Official External Library migration proof:
 - existing face links remained intact where present
 - assets remained isExternal=true and attached to the intended official External Library
 - an official library rescan did not recreate duplicates
+- a real read-only Filen/rclone-mounted file was imported successfully into an official External Library
+- ffprobe through that official External Library path passed
+
+Remote-unavailability proof:
+- when the isolated Filen path was hidden and an official library scan was queued, the existing external asset was NOT deleted immediately
+- Immich marked it isOffline=true and set deletedAt
+- after the Filen path was restored and the library rescanned, the SAME asset ID returned to isOffline=false and deletedAt=null
+- therefore short remote outages are recoverable by official scan semantics
+
+Critical long-term safety finding:
+- the cloned production configuration currently has library.watch.enabled=true
+- Immich v3.2.1 file-watcher unlink events queue LibraryRemoveAsset, which removes the asset row directly
+- automatic/manual scans mark inaccessible external assets offline and set deletedAt
+- AssetDeleteCheck later selects assets by deletedAt; after trash retention expires an offline external asset can therefore be removed from the database even when the remote backend was only unavailable
+- Immich defaults library.watch.enabled=false, but this installation currently overrides it to true
+
+Required maintenance-free production contract:
+1. official External Libraries only; no permanent custom Immich image after migration
+2. exactly four libraries, one owner each: Daniel, Cindy, Maja, Emily
+3. library.watch.enabled=false before any production External Library is created
+4. built-in automatic library scan disabled for Filen-backed libraries
+5. scans triggered only by a small systemd-gated safe-scan service/timer after a positive Filen/rclone health probe
+6. if the probe fails: NO scan, alert, leave database untouched
+7. mount/watchdog failure must be fail-closed; stopping Immich is preferred over allowing an unsafe scan
+8. one-time ID-preserving migration must run only after full DB backup and rollback proof
+9. safe-scan/API failure must alert and keep data safe; it must never silently fall back to an ungated scan
 
 Tier-1 metadata impact if plain re-import were used:
 - 410/410 assets matched
@@ -63,11 +89,11 @@ New preferred direction:
 Use official Immich External Libraries for long-term operation, combined with a one-time, fully backed up, ID-preserving migration of existing assets. This removes the need for a permanent custom Immich delete patch after migration.
 
 Still required before production migration:
-- actual Filen/rclone-mounted External Library realtest
-- fail-closed behavior for temporary remote unavailability
-- periodic scan behavior
+- implement and test the gated safe-scan service/timer
+- prove watcher disabled + built-in scan disabled
 - broader invariant checks including favorites, albums, faces/persons, shared links and derived files
 - complete rollback contract and database backup
+- restore the current one-file COLD_ACTIVE pilot to HOT_LOCAL before final architecture cutover
 
 Production permanent deletion: NO
 Automatic remote GC: NO
@@ -124,6 +150,32 @@ Proof für offizielle External-Library-Migration:
 - bestehende Face-Links blieben erhalten, soweit vorhanden
 - Assets blieben isExternal=true und der vorgesehenen offiziellen External Library zugeordnet
 - ein offizieller Library-Rescan erzeugte keine neuen Duplikate
+- eine reale read-only Filen/rclone-Datei wurde erfolgreich über eine offizielle External Library importiert
+- ffprobe über diesen offiziellen External-Library-Pfad war PASS
+
+Remote-Ausfall-Realtest:
+- wurde der isolierte Filen-Pfad verborgen und ein offizieller Library-Scan gestartet, wurde das vorhandene External-Asset NICHT sofort gelöscht
+- Immich setzte isOffline=true und deletedAt
+- nach Wiederherstellung des Filen-Pfads und erneutem Scan kam DIESELBE Asset-ID mit isOffline=false und deletedAt=null zurück
+- kurze Remote-Ausfälle sind damit mit offizieller Scan-Semantik reversibel
+
+Kritische Langzeit-Sicherheitsfeststellung:
+- die geklonte Produktivkonfiguration hat aktuell library.watch.enabled=true
+- Immich v3.2.1 reagiert bei File-Watcher-Unlink mit LibraryRemoveAsset und entfernt dabei den Asset-Datensatz direkt
+- automatische/manuelle Scans setzen bei nicht erreichbaren External Assets isOffline=true und deletedAt
+- AssetDeleteCheck selektiert später anhand deletedAt; nach Ablauf der Trash-Retention kann deshalb ein nur wegen Remote-Ausfall offline gesetztes External Asset aus der DB entfernt werden
+- Immich hat library.watch.enabled standardmäßig false, diese Installation überschreibt das derzeit jedoch auf true
+
+Verbindlicher wartungsarmer Produktivvertrag:
+1. nur offizielle External Libraries; nach Migration kein dauerhaft eigenes Immich-Image
+2. exakt vier Libraries mit je einem Besitzer: Daniel, Cindy, Maja, Emily
+3. library.watch.enabled=false BEVOR irgendeine produktive External Library angelegt wird
+4. eingebauter automatischer Library-Scan für Filen-backed Libraries deaktiviert
+5. Scans nur durch kleinen systemd-gegateten Safe-Scan-Service/Timer nach positivem Filen/rclone-Healthcheck
+6. Healthcheck FAIL => KEIN Scan, Alarm, DB unverändert
+7. Mount-/Watchdog-Fehler fail-closed; lieber Immich stoppen als unsicheren Scan zulassen
+8. einmalige Asset-ID-erhaltende Migration nur nach vollständigem DB-Backup und bewiesenem Rollback
+9. Safe-Scan/API-Fehler alarmiert und bleibt sicher; niemals stiller Fallback auf ungegateten Scan
 
 Auswirkung eines einfachen Reimports auf Tier 1:
 - 410/410 Assets zugeordnet
@@ -138,11 +190,11 @@ Neue bevorzugte Richtung:
 Für den langfristigen Betrieb offizielle Immich External Libraries verwenden und die bestehenden Assets einmalig, vollständig gesichert und Asset-ID-erhaltend migrieren. Danach ist kein dauerhafter eigener Immich-Delete-Patch mehr erforderlich.
 
 Vor produktiver Migration noch erforderlich:
-- Realtest mit echter Filen/rclone-gemounteter External Library
-- Fail-Closed-Verhalten bei temporärer Remote-Unerreichbarkeit
-- Verhalten periodischer Scans
+- gegateten Safe-Scan-Service/Timer implementieren und testen
+- Watcher aus + eingebauten Auto-Scan aus beweisen
 - breitere Invariantenprüfung für Favoriten, Alben, Faces/Personen, Shared Links und Derived Files
 - vollständiger Rollback-Vertrag und Datenbankbackup
+- aktuellen 1-Datei-COLD_ACTIVE-Pilot vor finalem Architektur-Cutover wieder auf HOT_LOCAL zurückführen
 
 Produktive permanente Löschung: NEIN
 Automatisches Remote-GC: NEIN
