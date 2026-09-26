@@ -6,86 +6,79 @@ This project explores a fail-closed architecture for keeping selected Immich sou
 
 ### Architecture
 
-Remote object storage
-→ read-only rclone FUSE mount
-→ validated BLAKE3 manifest
-→ per-file read-only bind mounts
+Remote object storage  
+→ read-only rclone FUSE mount  
+→ validated BLAKE3 manifest  
+→ per-file read-only bind mounts  
 → unchanged Immich original path
 
 The design does not rewrite Immich database paths.
 
-### Verified development contracts
+### Delete-safety contract
 
-- BLAKE3-only identity verification
-- deterministic path-preserving manifest
-- local + remote + offline-backup verification
-- protected offline mirror entries
-- read-only rclone mount
-- bounded VFS full cache
-- one-file bind mounts only
-- HOT neighbors remain local
-- fail-closed systemd ordering
-- Docker restart-policy gate
-- crash-safe activation transaction
-- atomic rehydrate
-- fail-closed runtime watcher
-- explicit shared rclone configuration for FUSE and runtime verification
-- no automatic remote garbage collection
-- privacy-preserving structured logs
-- activation disabled by default
-- pilot hard limit: at most three files
+Immich v3.2.1 has no native synchronous pre-delete hook that covers every permanent delete path. Phase 2.1 therefore integrates a minimal gate at the common permanent delete handler.
 
-### Phase 2.1 delete-safety result
+For a cold asset the enforced sequence is:
 
-Immich v3.2.1 has no native synchronous pre-delete hook that covers every permanent delete path. Therefore Phase 2.1 uses a minimal integration at the common permanent delete handler.
-
-The enforced contract is:
-
-COLD_ACTIVE
-→ verify remote object
-→ verify size and BLAKE3
-→ synchronously rehydrate
-→ verify HOT_LOCAL
+COLD_ACTIVE  
+→ verify remote object  
+→ verify size and BLAKE3  
+→ synchronously rehydrate  
+→ verify HOT_LOCAL  
 → allow Immich permanent delete
 
-If the gate is unavailable, times out, the remote object is missing, BLAKE3 differs, rehydrate fails, or the request conflicts with another delete, deletion is blocked before the database asset is removed.
+The operation fails closed before the database asset is removed if the gate is unavailable, times out, the remote object is missing, BLAKE3 differs, rehydration fails, or another delete conflicts.
 
-The gate covers:
-
-- force/permanent delete
-- Empty Trash
-- automatic retention deletion
-- internal AssetDelete jobs
-
-Move to Trash and Restore remain non-permanent operations and do not force rehydration.
+Covered paths include force/permanent delete, Empty Trash, automatic retention deletion, and internal AssetDelete jobs. Move to Trash and Restore remain non-permanent operations and do not force rehydration.
 
 ### Verification status
 
 - Phase 1 regression: 36/36 PASS
-- Phase 2 regression: 43/43 PASS
+- Phase 2 regression after the path-space fix: 44/44 PASS
 - Immich v3.2.1 lifecycle A–R: 18/18 PASS
 - Delete-safety realtests DS01–DS16: 16/16 PASS
-- Full regression after the final delete-gate changes: 178/178 PASS
-- common permanent delete handler: PASS
+- Full regression after the final fix: 179/179 PASS
 - pre-delete gate before database removal: PASS
-- finalize only after FileDelete semantics: PASS
-- force delete gate: PASS
-- Empty Trash gate: PASS
-- retention delete gate: PASS
-- gate failure fail-closed: PASS
-- database consistency gate: PASS
-- tombstone creation: PASS
-- remote garbage collection remains blocked by default: PASS
+- finalize after FileDelete semantics: PASS
+- fail-closed gate errors and timeouts: PASS
+- database consistency: PASS
+- tombstone and remote-GC blocking: PASS
 
-### Current release gate
+### Production mini-pilot 1
+
+A one-asset production mini-pilot has passed.
+
+Verified:
+
+- exactly one intended COLD_ACTIVE asset
+- read-only FUSE overlay
+- Docker/Immich visibility
+- ffprobe
+- random seek with identical remote/Immich chunk hash
+- unchanged Immich asset identity and original path
+- runtime watcher
+- delete-gate socket visibility
+- managed Immich restart
+- complete tiering lifecycle stop/start
+- Immich returns healthy after restart
+- offline-backup verification/protection remains approved in the manifest
+- remote garbage collection remains disabled
+
+No real user asset was permanently deleted as part of the production pilot. Permanent-delete safety remains covered by the isolated DS01–DS16 realtests.
+
+### Path-with-spaces regression
+
+The first production activation safely rolled back after revealing a real-path edge case: raw `findmnt` output escapes spaces in mount targets. The runtime now uses JSON `findmnt` output for exact mount identity checks, and a dedicated regression test covers paths containing spaces.
+
+### Current state
 
 PHASE21_IMPLEMENTATION_COMPLETE = true  
-TRASH_DELETE_GATES = PASS  
-PILOT_READY = true
+PILOT1_PASS = true  
+PRODUCTIVE_COLD_ACTIVE = 1  
+PRODUCTIVE_REMOTE_GC = false  
+PRODUCTIVE_PERMANENT_DELETE = false
 
-No production cold activation, production overlay, production file deletion, or automatic remote garbage collection was performed during Phase 2.1.
-
-The next step is a production mini-pilot with one to three already verified assets before any broader activation.
+Broader activation should proceed incrementally, with an exact COLD_ACTIVE count and path-identity gate after each batch.
 
 ---
 
@@ -95,62 +88,76 @@ Dieses Projekt entwickelt eine Fail-Closed-Architektur, mit der ausgewählte Imm
 
 ### Architektur
 
-Remote-Speicher
-→ read-only rclone-FUSE
-→ validiertes BLAKE3-Manifest
-→ einzelne read-only File-Bind-Mounts
+Remote-Speicher  
+→ read-only rclone-FUSE  
+→ validiertes BLAKE3-Manifest  
+→ einzelne read-only File-Bind-Mounts  
 → unveränderter Immich-originalPath
 
 Die Immich-Datenbankpfade werden nicht umgeschrieben.
 
-### Ergebnis Phase 2.1 Delete-Safety
+### Delete-Safety-Vertrag
 
 Immich v3.2.1 besitzt keinen nativen synchronen Pre-Delete-Hook für alle permanenten Löschpfade. Phase 2.1 integriert deshalb einen kleinen Gate-Aufruf am gemeinsamen permanenten Delete-Handler.
 
-Verbindlicher Ablauf:
+Für ein ausgelagertes Asset gilt:
 
-COLD_ACTIVE
-→ Remote prüfen
-→ Größe und BLAKE3 prüfen
-→ synchron rehydrieren
-→ HOT_LOCAL prüfen
+COLD_ACTIVE  
+→ Remote prüfen  
+→ Größe und BLAKE3 prüfen  
+→ synchron rehydrieren  
+→ HOT_LOCAL prüfen  
 → erst dann permanentes Immich-Delete zulassen
 
 Bei Gate-Ausfall, Timeout, fehlendem Remote-Objekt, falschem BLAKE3, Rehydrate-Fehler oder konkurrierendem Delete wird vor der Datenbanklöschung fail-closed blockiert.
 
-Abgedeckt sind:
-
-- Force/Permanent Delete
-- Empty Trash
-- automatischer Retention Delete
-- interne AssetDelete-Jobs
-
-Move to Trash und Restore bleiben nicht-permanente Vorgänge und erzwingen keine Rehydration.
+Abgedeckt sind Force/Permanent Delete, Empty Trash, automatischer Retention Delete und interne AssetDelete-Jobs. Move to Trash und Restore bleiben nicht-permanente Vorgänge.
 
 ### Verifizierter Stand
 
 - Phase 1: 36/36 PASS
-- Phase 2: 43/43 PASS
+- Phase 2 nach dem Pfad-Leerzeichen-Fix: 44/44 PASS
 - Immich-v3.2.1-Lifecycle A–R: 18/18 PASS
 - Delete-Safety-Realtests DS01–DS16: 16/16 PASS
-- vollständige Regression nach den finalen Gate-Änderungen: 178/178 PASS
-- gemeinsamer permanenter Delete-Handler: PASS
+- vollständige Regression nach dem finalen Fix: 179/179 PASS
 - Pre-Delete-Gate vor DB-Remove: PASS
-- Finalize erst nach FileDelete-Semantik: PASS
-- Force Delete Gate: PASS
-- Empty Trash Gate: PASS
-- Retention Delete Gate: PASS
-- Gate-Fehler fail-closed: PASS
-- DB-Konsistenz-Gate: PASS
-- Tombstone-Erzeugung: PASS
-- Remote-GC standardmäßig blockiert: PASS
+- Finalize nach FileDelete-Semantik: PASS
+- Fail-Closed bei Gate-Fehlern/Timeouts: PASS
+- DB-Konsistenz: PASS
+- Tombstone und Remote-GC-Sperre: PASS
 
-### Aktuelles Freigabe-Gate
+### Produktiver Mini-Pilot 1
+
+Ein produktiver Pilot mit genau einem Asset ist bestanden.
+
+Geprüft wurden:
+
+- exakt ein beabsichtigtes COLD_ACTIVE
+- read-only FUSE-Overlay
+- Docker-/Immich-Sichtbarkeit
+- ffprobe
+- Random Seek mit identischem Remote-/Immich-Chunk-Hash
+- unveränderte Immich-Asset-Identität und unveränderter originalPath
+- Runtime-Watcher
+- Delete-Gate-Socket
+- verwalteter Immich-Restart
+- vollständiger Stop/Start des Tiering-Lifecycles
+- Immich danach wieder healthy
+- L2-Verifikation und L2-Schutz bleiben im Manifest freigegeben
+- Remote-GC bleibt deaktiviert
+
+Für den produktiven Pilot wurde kein reales Benutzerasset permanent gelöscht. Die Permanent-Delete-Sicherheit bleibt durch die isolierten DS01–DS16-Realtests abgedeckt.
+
+### Regression bei Pfaden mit Leerzeichen
+
+Der erste produktive Aktivierungsversuch rollte sicher zurück und deckte einen realen Pfad-Fall auf: Raw-`findmnt` escaped Leerzeichen im Mount-Target. Der Runtime-Code verwendet nun die JSON-Ausgabe von `findmnt`; zusätzlich existiert ein Regressionstest für Pfade mit Leerzeichen.
+
+### Aktueller Stand
 
 PHASE21_IMPLEMENTATION_COMPLETE = true  
-TRASH_DELETE_GATES = PASS  
-PILOT_READY = true
+PILOT1_PASS = true  
+PRODUCTIVE_COLD_ACTIVE = 1  
+PRODUCTIVE_REMOTE_GC = false  
+PRODUCTIVE_PERMANENT_DELETE = false
 
-Während Phase 2.1 wurden kein produktives COLD_ACTIVE, kein produktives Overlay, keine produktive Dateilöschung und kein automatisches Remote-GC aktiviert.
-
-Nächster Schritt ist ein produktiver Mini-Pilot mit ein bis drei bereits verifizierten Assets, bevor eine breitere Aktivierung erfolgt.
+Eine breitere Aktivierung soll schrittweise erfolgen und nach jedem Batch COLD_ACTIVE-Anzahl und exakte Pfadidentität prüfen.
