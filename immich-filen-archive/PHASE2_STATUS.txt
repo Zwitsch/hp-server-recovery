@@ -3,41 +3,61 @@ English
 Phase 1 regression: 36/36 PASS
 Phase 2 regression: 43/43 PASS
 Lifecycle A-R: 18/18 PASS
-Trash/Delete evidence: 9/9 PASS
-Crash recovery: 12/12 PASS
-Systemd / fail-closed / overlay / rehydrate gates: PASS
-Immich lifecycle gate: PASS
-Trash/Delete safety gate: FAIL
-Pilot ready: NO
+Delete-safety realtests DS01-DS16: 16/16 PASS
+Full regression after final delete-gate changes: 178/178 PASS
+
+Common permanent delete handler: PASS
+Pre-delete gate before database removal: PASS
+Finalize after FileDelete semantics: PASS
+Force delete gate: PASS
+Empty Trash gate: PASS
+Retention delete gate: PASS
+Gate failure fail-closed: PASS
+Database consistency gate: PASS
+Tombstone creation: PASS
+Remote GC blocked by default: PASS
+
+PHASE21_IMPLEMENTATION_COMPLETE=true
+TRASH_DELETE_GATES=PASS
+PILOT_READY=true
+
 Production deletion: NO
 Production cold activation: NO
 Production overlay: NO
+Automatic remote GC: NO
 
-Confirmed blocker:
-Immich v3.2.1 removes the database asset before its FileDelete job. Empty Trash, force delete and internal retention deletion can therefore leave database/filesystem state inconsistent when the original path is a file mount. No native blocking pre-delete hook was found.
-
-Fail-closed delivery:
-activationMode=disabled
-trashDeleteGate=BLOCKED
+Next step:
+Production mini-pilot with 1-3 already remote- and offline-backup-verified assets.
+No broad production activation before that pilot passes.
 
 Deutsch
 -------
 Phase-1-Regression: 36/36 PASS
 Phase-2-Regression: 43/43 PASS
 Lifecycle A-R: 18/18 PASS
-Trash/Delete-Evidenz: 9/9 PASS
-Crash Recovery: 12/12 PASS
-Systemd / Fail-Closed / Overlay / Rehydrate: PASS
-Immich-Lifecycle-Gate: PASS
-Trash/Delete-Sicherheitsgate: FAIL
-Pilotbereit: NEIN
-Produktive Dateiloeschung: NEIN
+Delete-Safety-Realtests DS01-DS16: 16/16 PASS
+Vollständige Regression nach den finalen Delete-Gate-Änderungen: 178/178 PASS
+
+Gemeinsamer permanenter Delete-Handler: PASS
+Pre-Delete-Gate vor DB-Remove: PASS
+Finalize nach FileDelete-Semantik: PASS
+Force Delete Gate: PASS
+Empty Trash Gate: PASS
+Retention Delete Gate: PASS
+Gate-Fehler fail-closed: PASS
+DB-Konsistenz-Gate: PASS
+Tombstone-Erzeugung: PASS
+Remote-GC standardmäßig blockiert: PASS
+
+PHASE21_IMPLEMENTATION_COMPLETE=true
+TRASH_DELETE_GATES=PASS
+PILOT_READY=true
+
+Produktive Dateilöschung: NEIN
 Produktives COLD_ACTIVE: NEIN
 Produktives Overlay: NEIN
+Automatisches Remote-GC: NEIN
 
-Bestaetigter Blocker:
-Immich v3.2.1 entfernt den DB-Datensatz vor dem FileDelete-Job. Empty Trash, Force Delete und interner Retention Delete koennen deshalb DB und Dateisystem auseinanderlaufen lassen, wenn der originalPath ein File-Mount ist. Ein nativer blockierender Pre-Delete-Hook wurde nicht gefunden.
-
-Fail-Closed-Lieferstand:
-activationMode=disabled
-trashDeleteGate=BLOCKED
+Nächster Schritt:
+Produktiver Mini-Pilot mit 1-3 bereits remote- und L2-verifizierten Assets.
+Keine breite Produktivaktivierung vor bestandenem Pilot.
