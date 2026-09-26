@@ -199,3 +199,22 @@ Vor produktiver Migration noch erforderlich:
 Produktive permanente Löschung: NEIN
 Automatisches Remote-GC: NEIN
 Breite produktive Migration: NEIN
+
+
+Scan-guard cycle realtest (2026-09-26):
+- positive path: fuse.rclone mount PASS, read-only PASS, sentinel readable PASS, controlled official scan PASS
+- negative path: sentinel missing => scan blocked, no official scan triggered, DB state remained byte/line-identical to baseline
+- restore path: Filen path restored, guard passed, controlled official scan passed, same asset ID/owner/status preserved
+- SCAN_GUARD_ARCHITECTURE=PASS
+- FAIL_CLOSED_ON_REMOTE_OUTAGE=PASS
+- RECOVERY_AFTER_REMOTE_RETURN=PASS
+- final architecture can use stock Immich after one-time migration; no permanent custom delete patch required
+
+Scan-Guard-Zyklus Realtest (2026-09-26):
+- Positivpfad: fuse.rclone PASS, read-only PASS, Sentinel lesbar PASS, kontrollierter offizieller Scan PASS
+- Negativpfad: Sentinel fehlt => Scan blockiert, kein offizieller Scan ausgelöst, DB blieb exakt identisch zur Baseline
+- Restorepfad: Filen-Pfad wieder vorhanden, Guard PASS, kontrollierter offizieller Scan PASS, gleiche Asset-ID/Owner/Status erhalten
+- SCAN_GUARD_ARCHITECTURE=PASS
+- FAIL_CLOSED_ON_REMOTE_OUTAGE=PASS
+- RECOVERY_AFTER_REMOTE_RETURN=PASS
+- Endarchitektur kann nach einmaliger Migration wieder Stock-Immich verwenden; kein dauerhafter eigener Delete-Patch erforderlich
