@@ -17,18 +17,28 @@ Database consistency gate: PASS
 Tombstone creation: PASS
 Remote GC blocked by default: PASS
 
-PHASE21_IMPLEMENTATION_COMPLETE=true
-TRASH_DELETE_GATES=PASS
-PILOT_READY=true
+Phase 2.1 implementation complete: YES
+Production mini-pilot: PASS (1 asset COLD_ACTIVE)
+Production Immich after pilot: running / healthy
+Systemd fail-closed watcher after pilot: PASS
+Restart test with COLD_ACTIVE asset: PASS
+ffprobe and random-seek reads through the remote overlay: PASS
 
-Production deletion: NO
-Production cold activation: NO
-Production overlay: NO
+Deployment corrections discovered during the first production pilot:
+- the rclone mount unit originally used systemd filesystem-isolation directives that kept the FUSE mount in a private mount namespace; these directives were removed for the mount service
+- tiering services were originally PartOf the Immich supervisor, which conflicted with the required stop-Immich / keep-tiering-infrastructure-active activation workflow; this coupling was removed
+- a findmnt text-parser limitation was exposed by filenames containing whitespace: findmnt escapes whitespace in textual output, so exact target comparison fails closed. The affected asset rolled back safely.
+
+Current rollout gate:
+- 1 no-whitespace asset is productively COLD_ACTIVE and healthy
+- 354 / 410 prepared assets have no whitespace in relativePath (about 89.11 GiB)
+- 56 / 410 prepared assets contain whitespace (about 10.91 GiB)
+- broad rollout remains blocked until the whitespace-safe mount-record parser is corrected and regression-tested
+
+Production deletion: gated / fail-closed
+Production cold activation: pilot only
+Production overlay: 1 asset
 Automatic remote GC: NO
-
-Next step:
-Production mini-pilot with 1-3 already remote- and offline-backup-verified assets.
-No broad production activation before that pilot passes.
 
 Deutsch
 -------
@@ -49,15 +59,25 @@ DB-Konsistenz-Gate: PASS
 Tombstone-Erzeugung: PASS
 Remote-GC standardmäßig blockiert: PASS
 
-PHASE21_IMPLEMENTATION_COMPLETE=true
-TRASH_DELETE_GATES=PASS
-PILOT_READY=true
+Phase-2.1-Implementierung abgeschlossen: JA
+Produktiver Mini-Pilot: PASS (1 Asset COLD_ACTIVE)
+Produktives Immich nach Pilot: running / healthy
+Systemd Fail-Closed Watcher nach Pilot: PASS
+Restart-Test mit COLD_ACTIVE-Asset: PASS
+ffprobe und Random-Seek über das Remote-Overlay: PASS
 
-Produktive Dateilöschung: NEIN
-Produktives COLD_ACTIVE: NEIN
-Produktives Overlay: NEIN
+Beim ersten produktiven Pilot gefundene Deployment-Korrekturen:
+- die ursprünglichen systemd-Dateisystem-Isolationseinstellungen des rclone-Mount-Services hielten den FUSE-Mount in einem privaten Mount-Namespace; diese Einstellungen wurden für den Mount-Service entfernt
+- Tiering-Services waren ursprünglich PartOf des Immich-Supervisors und wurden beim notwendigen Stoppen von Immich mit beendet; diese Kopplung wurde entfernt
+- bei Dateinamen mit Leerzeichen wurde eine Grenze des findmnt-Textparsers sichtbar: findmnt escaped Whitespace, wodurch der exakte Target-Vergleich fail-closed abbrach. Das betroffene Asset wurde sauber zurückgerollt.
+
+Aktuelles Rollout-Gate:
+- 1 Asset ohne Whitespace ist produktiv COLD_ACTIVE und gesund
+- 354 / 410 vorbereitete Assets haben keinen Whitespace im relativePath (ca. 89,11 GiB)
+- 56 / 410 vorbereitete Assets enthalten Whitespace (ca. 10,91 GiB)
+- breiter Rollout bleibt blockiert, bis der whitespace-sichere Mount-Record-Parser korrigiert und regressionsgetestet ist
+
+Produktive Dateilöschung: gegated / fail-closed
+Produktives COLD_ACTIVE: nur Pilot
+Produktives Overlay: 1 Asset
 Automatisches Remote-GC: NEIN
-
-Nächster Schritt:
-Produktiver Mini-Pilot mit 1-3 bereits remote- und L2-verifizierten Assets.
-Keine breite Produktivaktivierung vor bestandenem Pilot.
