@@ -218,3 +218,107 @@ Scan-Guard-Zyklus Realtest (2026-09-26):
 - FAIL_CLOSED_ON_REMOTE_OUTAGE=PASS
 - RECOVERY_AFTER_REMOTE_RETURN=PASS
 - Endarchitektur kann nach einmaliger Migration wieder Stock-Immich verwenden; kein dauerhafter eigener Delete-Patch erforderlich
+
+
+---
+Update 2026-09-26 – maintenance-free architecture proof
+
+English
+-------
+Safe-scan fail-closed proof: PASS
+- Immich library watcher disabled in isolated clone
+- Immich built-in automatic library scan disabled in isolated clone
+- remote hidden for 60 seconds without scan: DB state unchanged
+- guarded negative probe: scan blocked, DB state unchanged
+- guarded positive probe: fuse.rclone + read-only + sentinel PASS, controlled scan PASS
+- remote inventory check using rclone size --files-from-raw:
+  expected 410 files / 107404462414 bytes
+  observed 410 files / 107404462414 bytes
+  runtime about 10 seconds
+- deliberately missing path produced count mismatch and therefore a safe block
+
+Direct ID-preserving External Library migration proof: PASS
+- direct conversion without temporary duplicate asset is viable
+- original asset ID preserved
+- owner preserved
+- favorite preserved
+- album memberships preserved
+- face links preserved
+- memory links preserved in rich-relation tests
+- tag links preserved in rich-relation tests
+- derived asset_file relations preserved
+- official rescan did not create duplicates
+- 11 Tier-1 XMP sidecars identified; 6314 bytes total
+- sidecar migration beside the external original plus asset_file path update passed a rescan
+
+Tier-1 derived-file inventory:
+- encoded_video: 149
+- preview: 410
+- thumbnail: 410
+- sidecar: 11
+
+Production rollback from the experimental transparent tier:
+- the single COLD_ACTIVE pilot asset was rehydrated successfully
+- COLD_ACTIVE=0
+- manifest state now HOT_LOCAL=1 / READY_TO_TIER=409
+- custom delete-gate/tiering services disabled and stopped
+- production Immich returned to stock ghcr.io/immich-app/immich-server:v3.2.1
+- restart policy restored to always
+- delete-gate environment and socket mount absent
+- production Immich running/healthy
+
+Current preferred end state:
+Filen/rclone read-only -> official Immich External Libraries -> watcher OFF -> built-in auto-scan OFF -> systemd safe-scan guard -> official REST scan only after positive guard.
+
+Important backup requirement discovered:
+The offline L2 mirror must also protect files after they become External Library assets. The existing COLD_ACTIVE-only protection contract is not sufficient for the final architecture and must be adapted before any local production originals are removed.
+
+Deutsch
+-------
+Safe-Scan-Fail-Closed-Proof: PASS
+- Immich Library-Watcher im isolierten Klon deaktiviert
+- eingebauter automatischer Library-Scan im isolierten Klon deaktiviert
+- Remote 60 Sekunden nicht sichtbar, ohne Scan blieb die DB exakt unverändert
+- negative Guard-Probe: Scan blockiert, DB unverändert
+- positive Guard-Probe: fuse.rclone + read-only + Sentinel PASS, kontrollierter Scan PASS
+- Remote-Inventar mit rclone size --files-from-raw:
+  erwartet 410 Dateien / 107404462414 Bytes
+  gemessen 410 Dateien / 107404462414 Bytes
+  Laufzeit ca. 10 Sekunden
+- absichtlich fehlender Pfad erzeugte Count-Mismatch und sicheren Block
+
+Direkte Asset-ID-erhaltende External-Library-Migration: PASS
+- direkte Konvertierung ohne temporaeres Duplikat ist technisch moeglich
+- Asset-ID bleibt erhalten
+- Benutzer bleibt erhalten
+- Favorit bleibt erhalten
+- Albumzuordnungen bleiben erhalten
+- Face-Links bleiben erhalten
+- Memory-Links blieben im Rich-Relation-Test erhalten
+- Tag-Links blieben im Rich-Relation-Test erhalten
+- Derived-asset_file-Relationen bleiben erhalten
+- offizieller Rescan erzeugt keine Duplikate
+- 11 Tier-1-XMP-Sidecars gefunden; zusammen 6314 Bytes
+- Sidecar neben External-Original + einmalige asset_file-Pfadanpassung bestand Rescan
+
+Tier-1 Derived-Files:
+- encoded_video: 149
+- preview: 410
+- thumbnail: 410
+- sidecar: 11
+
+Produktiver Rueckbau des experimentellen transparenten Tiers:
+- einziges COLD_ACTIVE-Pilotasset erfolgreich rehydriert
+- COLD_ACTIVE=0
+- Manifest jetzt HOT_LOCAL=1 / READY_TO_TIER=409
+- eigener Delete-Gate/Tiering-Dienste deaktiviert und gestoppt
+- produktives Immich wieder stock ghcr.io/immich-app/immich-server:v3.2.1
+- Restart-Policy wieder always
+- Delete-Gate-Environment und Socket-Mount entfernt
+- produktives Immich running/healthy
+
+Bevorzugter Endzustand:
+Filen/rclone read-only -> offizielle Immich External Libraries -> Watcher AUS -> eingebauter Auto-Scan AUS -> systemd Safe-Scan Guard -> offizieller REST-Scan nur nach positivem Guard.
+
+Wichtige neue Backup-Anforderung:
+Der offline L2-Mirror muss auch nach der External-Library-Migration die dort ausgelagerten Dateien dauerhaft vor rsync-Loeschung schuetzen. Der bisherige COLD_ACTIVE-only-Vertrag reicht fuer die Zielarchitektur nicht aus und muss vor produktiver Dateiloeschung angepasst werden.
