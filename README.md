@@ -4,7 +4,7 @@
 
 Fail-closed disaster recovery framework for self-hosted Linux servers.
 
-> **Status:** public sanitized pre-release. The current codebase is published for review, testing and continued development. Do not use it as a production recovery solution yet.
+> **Status:** public sanitized pre-release. The public tree is intended for review, testing and continued development. The complete private recovery package has now passed its isolated FULL_SERVER end-to-end realtest; the public repository is still only a sanitized subset and is not a drop-in production recovery image.
 
 ## What it does
 
@@ -27,61 +27,117 @@ Persistent reports and audit data are checked for secret-marker leakage before a
 
 See [SECURITY.md](SECURITY.md) and `docs/SAFETY-MODEL.md`.
 
-## Development milestone — 2026-09-24
+## Final private recovery milestone — 2026-09-27
 
 ### English
 
-The private full recovery package has progressed through K56.
+The private recovery package has completed its final K56 end-to-end validation.
 
 Current sanitized validation status:
 
-- canonical private regression and retained focused gates: **PASS**
+- private canonical regression suite: **1050/1050 PASS**
+- retained focused fresh-tree gates: **PASS**
 - dynamic backup-bound CURRENT release resolution: **PASS**
 - worker-root and report-state hardening: **PASS**
 - Compose symbolic/runtime release-binding hardening: **PASS**
 - DeviceWatchdog configuration-format contract hardening: **PASS**
-- focused isolated DeviceWatchdog `APP_FULL` realtest: **PASS**
-- isolated runtime cleanup and read-only source boundary after that run: **PASS**
-- current-K56 `FULL_SERVER` realtest: **not yet executed**
-- full-server restore, disaster-recovery certification and production readiness: **not claimed**
+- isolated FULL_SERVER realtest: **COMPLETED**
+- restore mode: **COMBINED_L2_L3**
+- isolated runtime cleanup: **PASS**
+- final realtest return code: **0**
+- isolated containerd and Docker after completion: **inactive**
+- system Docker and Docker socket after completion: **inactive / absent**
 
-The remaining full-server gate is currently blocked by insufficient isolated target capacity rather than by a known K56 code failure.
+The final full-server blocker was resolved by keeping declarative APP_RELEASE binding separate from the validated runtime image identity and Docker image ID, and by applying writable-mount ownership only after both symbolic and runtime bindings are complete and unambiguous.
 
-A separate private Immich/Filen path-preserving remote-archive track has completed its corrected non-destructive Phase 1 implementation. The corrected private tiering suite reports **36/36 PASS**, including an explicit BLAKE3-only hashing contract and a small real performance/I/O gate. The first roughly 100 GiB tier batch has now passed local, remote and offline Level-2 BLAKE3 verification as well as a real Level-2 protection dry run. All 410 entries are READY_TO_TIER and Level-2-protected. Local media remain present; no productive overlay or media deletion has been activated.
+The current private recovery scope is therefore end-to-end proven. Automatic onboarding of entirely unknown new applications remains a future enhancement and is not part of this completed scope.
 
 See:
 
-- `docs/REALTEST-MILESTONE-2026-09-24.md`
-- `docs/IMMICH-FILEN-TIERING-PHASE1-2026-09-24.md`
-
-The public repository intentionally remains a sanitized subset and does not contain production backup archives, credentials, machine identities, private infrastructure paths, raw recovery evidence, private run identifiers or private archive hashes.
+- `docs/FINAL-RECOVERY-MILESTONE-2026-09-27.md`
 
 ### Deutsch
 
-Das private vollständige Recovery-Paket ist bis K56 fortgeschritten.
+Das private Recovery-Paket hat seine finale K56-End-to-End-Validierung abgeschlossen.
 
 Aktueller sanitisierter Validierungsstand:
 
-- kanonische private Regressionen und beibehaltene fokussierte Gates: **PASS**
+- private kanonische Regression: **1050/1050 PASS**
+- beibehaltene fokussierte Fresh-Gates: **PASS**
 - dynamische backup-gebundene CURRENT-Release-Auflösung: **PASS**
 - Worker-Root- und Report-State-Härtung: **PASS**
 - Härtung der symbolischen/Runtime-Compose-Release-Bindung: **PASS**
 - Härtung des DeviceWatchdog-Konfigurationsformat-Vertrags: **PASS**
-- fokussierter isolierter DeviceWatchdog-`APP_FULL`-Realtest: **PASS**
-- Cleanup der isolierten Runtime und Read-only-Quellgrenze nach diesem Lauf: **PASS**
-- aktueller K56-`FULL_SERVER`-Realtest: **noch nicht ausgeführt**
-- Full-Server-Restore, Disaster-Recovery-Zertifizierung und Produktionsreife: **nicht beansprucht**
+- isolierter FULL_SERVER-Realtest: **COMPLETED**
+- Restore-Modus: **COMBINED_L2_L3**
+- Cleanup der isolierten Runtime: **PASS**
+- finaler Realtest-Rückgabecode: **0**
+- isoliertes containerd und Docker nach Abschluss: **inactive**
+- System-Docker und Docker-Socket nach Abschluss: **inactive / absent**
 
-Das verbleibende Full-Server-Gate ist derzeit durch unzureichende isolierte Zielkapazität blockiert, nicht durch einen bekannten K56-Codefehler.
+Der letzte Full-Server-Blocker wurde dadurch behoben, dass die deklarative APP_RELEASE-Bindung getrennt von validierter Runtime-Image-Identität und Docker-Image-ID erhalten bleibt und Writable-Mount-Ownership erst nach vollständiger, eindeutiger symbolischer und realer Bindung angewendet wird.
 
-Ein separater privater Immich/Filen-Zweig für ein pfaderhaltendes Remote-Archiv hat außerdem seine korrigierte nicht-destruktive Phase-1-Implementierung abgeschlossen. Die korrigierte private Tiering-Suite meldet **36/36 PASS**, einschließlich eines expliziten BLAKE3-only-Hashvertrags und eines kleinen realen Performance-/I/O-Gates. Der erste Tier-Batch von ungefähr 100 GiB hat jetzt lokale, Remote- und Offline-Level-2-BLAKE3-Verifikation sowie einen realen Level-2-Schutz-Dryrun bestanden. Alle 410 Einträge sind READY_TO_TIER und Level-2-geschützt. Lokale Medien bleiben erhalten; produktives Overlay und Medienlöschung sind weiterhin nicht aktiviert.
+Der aktuelle private Recovery-Umfang ist damit End-to-End real bewiesen. Die automatische Integration völlig unbekannter neuer Apps bleibt ein späterer Ausbau und gehört nicht zum jetzt abgeschlossenen Umfang.
 
 Siehe:
 
-- `docs/REALTEST-MILESTONE-2026-09-24.md`
-- `docs/IMMICH-FILEN-TIERING-PHASE1-2026-09-24.md`
+- `docs/FINAL-RECOVERY-MILESTONE-2026-09-27.md`
 
-Das öffentliche Repository bleibt absichtlich ein sanitisiertes Teilprojekt und enthält keine produktiven Backup-Archive, Zugangsdaten, Maschinenidentitäten, privaten Infrastrukturpfade, Roh-Evidenz, privaten Run-IDs oder privaten Archiv-Hashes.
+## Immich / Filen official External Libraries — 2026-09-27
+
+### English
+
+The private production Immich system now uses the official External Libraries path for the migrated tier:
+
+Filen -> read-only rclone FUSE -> official Immich External Libraries -> stock Immich
+
+Validated production state:
+
+- Immich **v3.2.2**, healthy
+- exactly four owner-specific External Libraries
+- **410** migrated external assets
+- **11** sidecars
+- **421** files in the reclaimed allowlist
+- **0** offline external assets
+- **0** deleted external assets
+- **0** duplicate external original paths
+- **100.03 GiB** local space reclaimed
+- direct Filen-side post-delete verification: **PASS**
+- Level-2 protection with all migrated local sources absent: **PASS**
+- read-only Filen mount and systemd Safe-Scan Guard: **active**
+
+The entire Immich media library has not yet been moved to Filen. The architecture is complete and the first approximately 100 GiB production tranche has been migrated, verified and locally reclaimed. The remaining suitable media will be migrated in a later storage phase using the same ID-preserving, owner-preserving process.
+
+See:
+
+- `docs/IMMICH-FILEN-EXTERNAL-LIBRARIES-2026-09-27.md`
+
+### Deutsch
+
+Das private produktive Immich-System nutzt für die bereits migrierte Tranche jetzt den offiziellen External-Libraries-Pfad:
+
+Filen -> read-only rclone FUSE -> offizielle Immich External Libraries -> Stock-Immich
+
+Bewiesener Produktivstand:
+
+- Immich **v3.2.2**, healthy
+- genau vier benutzerspezifische External Libraries
+- **410** migrierte External Assets
+- **11** Sidecars
+- **421** Dateien in der lokal freigegebenen Allowlist
+- **0** Offline-Assets
+- **0** Deleted-Assets
+- **0** doppelte External-Originalpfade
+- **100,03 GiB** lokaler Speicher freigegeben
+- direkter Filen-Post-Delete-Nachweis: **PASS**
+- Level-2-Schutz bei vollständig fehlenden lokalen Quellen: **PASS**
+- read-only Filen-Mount und systemd Safe-Scan Guard: **active**
+
+Die gesamte Immich-Mediathek liegt noch nicht auf Filen. Die Architektur ist vollständig und die erste produktive Tranche von ungefähr 100 GiB wurde migriert, verifiziert und lokal freigegeben. Der verbleibende geeignete Medienbestand wird in einer späteren Speicherphase nach demselben ID- und Owner-erhaltenden Verfahren migriert.
+
+Siehe:
+
+- `docs/IMMICH-FILEN-EXTERNAL-LIBRARIES-2026-09-27.md`
 
 ## Repository structure
 
@@ -107,6 +163,6 @@ The sanitized public release tree currently passes **183/183 automated tests**, 
 - cleanup and resume behavior
 - secret-marker redaction and final evidence checks
 
-The private full recovery package has a broader regression suite and additional real-runtime gates; those results are tracked separately from the sanitized public tree to avoid implying that unpublished private tests are part of this repository.
+The private full recovery package has the broader **1050/1050 PASS** regression suite plus the successful isolated FULL_SERVER realtest described above. Those private results are tracked separately from the sanitized public tree to avoid implying that unpublished private tests are part of this repository.
 
 The publication scan currently reports no personal username, personal domain, private-LAN address, standard UUID, e-mail address, private key or risky archive/database/dump file in the release tree.
