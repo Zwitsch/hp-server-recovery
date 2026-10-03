@@ -16,7 +16,7 @@ The project is currently preparing its first stable OSS release.
 - Public documentation of the 2026-09-15 K22 real-runtime validation milestone, while keeping private recovery evidence and production data out of the repository.
 - Public sanitized documentation of the 2026-09-16 K25 read-only realtest milestone and backup/release identity checks.
 - Public sanitized documentation of the 2026-09-16 K27 isolated application data restore milestone.
-- Public sanitized documentation of the 2026-09-17 K30 isolated full-application restore milestone.
+- Public sanitized documentation of the 2026-09-17 K30 isolated full-application restore milestone.\n- Public sanitized documentation of the 2026-10-03 recovery and Immich/Filen migration milestone.
 
 ### Changed
 
@@ -60,6 +60,23 @@ The project is currently preparing its first stable OSS release.
 - Full-server real restore validation remains pending; a full-server restore has not been claimed yet.
 - No production-ready or disaster-recovery certification is claimed yet.
 - Public releases remain intentionally sanitized and exclude production backup data, credentials, private infrastructure details, machine-specific paths and raw recovery evidence.
+
+### Development status — 2026-10-03
+
+- Private K56 canonical regression suite: **1050/1050 PASS**.
+- Isolated private `FULL_SERVER` realtest: **COMPLETED**, `COMBINED_L2_L3`, cleanup **PASS**, return code **0**.
+- The remaining disaster-recovery endgame is recovery-medium/GUI integration, automatic onboarding of unknown applications, restore-from-Cold integration and a real bare-metal end-to-end run.
+- Production Immich uses stock Immich with official External Libraries through a read-only Filen/rclone FUSE mount.
+- Current active asset state: **83,227 total**, **81,735 external**, **1,492 local**, **0 external offline**.
+- Final large reclaim manifest: **81,328 files / 252.66 GiB**.
+- Exact-set local-to-Filen BLAKE3 verification: **81,328/81,328 PASS**.
+- Exact-set local-to-Level-2 BLAKE3 verification: **81,328/81,328 PASS**.
+- Level-2 Cold archive materialization and same-inode verification: **81,328/81,328 PASS**.
+- Level-2 mirror detach: **81,328/81,328 PASS**.
+- Final local reclaim: **PASS** with **0** reclaim targets remaining locally and **949/949** sidecars preserved.
+- Post-reclaim database validation: **PASS**; external offline count remained **0**.
+- Daily Level-2 backup remains unchanged; monthly full BLAKE3 verification of the Cold archive is enabled.
+- The first scheduled automatic Cold deep verify and the first normal productive Level-2 run after reclaim remain open operational proof points.
 
 ### Security
 
