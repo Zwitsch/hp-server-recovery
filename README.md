@@ -4,7 +4,7 @@
 
 Fail-closed disaster recovery framework for self-hosted Linux servers.
 
-> **Status:** public sanitized pre-release. The current codebase is published for review, testing and continued development. Do not use it as a production recovery solution yet.
+> **Status:** public sanitized pre-release. The complete private recovery package has passed its isolated FULL_SERVER end-to-end realtest. The public repository remains a sanitized engineering subset and is not a drop-in production recovery image.
 
 ## What it does
 
@@ -27,61 +27,117 @@ Persistent reports and audit data are checked for secret-marker leakage before a
 
 See [SECURITY.md](SECURITY.md) and `docs/SAFETY-MODEL.md`.
 
-## Development milestone — 2026-09-24
+## Current private recovery milestone — 2026-10-03
 
 ### English
 
-The private full recovery package has progressed through K56.
+The private K56 recovery package remains end-to-end proven.
 
 Current sanitized validation status:
 
-- canonical private regression and retained focused gates: **PASS**
+- private canonical regression suite: **1050/1050 PASS**
+- retained focused fresh-tree gates: **PASS**
 - dynamic backup-bound CURRENT release resolution: **PASS**
 - worker-root and report-state hardening: **PASS**
 - Compose symbolic/runtime release-binding hardening: **PASS**
 - DeviceWatchdog configuration-format contract hardening: **PASS**
-- focused isolated DeviceWatchdog `APP_FULL` realtest: **PASS**
-- isolated runtime cleanup and read-only source boundary after that run: **PASS**
-- current-K56 `FULL_SERVER` realtest: **not yet executed**
-- full-server restore, disaster-recovery certification and production readiness: **not claimed**
+- isolated FULL_SERVER realtest: **COMPLETED**
+- restore mode: **COMBINED_L2_L3**
+- isolated runtime cleanup: **PASS**
+- final realtest return code: **0**
 
-The remaining full-server gate is currently blocked by insufficient isolated target capacity rather than by a known K56 code failure.
-
-A separate private Immich/Filen path-preserving remote-archive track has completed its corrected non-destructive Phase 1 implementation. The corrected private tiering suite reports **36/36 PASS**, including an explicit BLAKE3-only hashing contract and a small real performance/I/O gate. The first roughly 100 GiB tier batch has now passed local, remote and offline Level-2 BLAKE3 verification as well as a real Level-2 protection dry run. All 410 entries are READY_TO_TIER and Level-2-protected. Local media remain present; no productive overlay or media deletion has been activated.
-
-See:
-
-- `docs/REALTEST-MILESTONE-2026-09-24.md`
-- `docs/IMMICH-FILEN-TIERING-PHASE1-2026-09-24.md`
-
-The public repository intentionally remains a sanitized subset and does not contain production backup archives, credentials, machine identities, private infrastructure paths, raw recovery evidence, private run identifiers or private archive hashes.
+The remaining project-endgame work is primarily automatic onboarding of unknown applications, final recovery-medium/GUI integration, restore-from-Cold integration and a real bare-metal end-to-end disaster-recovery run.
 
 ### Deutsch
 
-Das private vollständige Recovery-Paket ist bis K56 fortgeschritten.
+Das private K56-Recovery-Paket ist weiterhin End-to-End real bewiesen.
 
 Aktueller sanitisierter Validierungsstand:
 
-- kanonische private Regressionen und beibehaltene fokussierte Gates: **PASS**
+- private kanonische Regression: **1050/1050 PASS**
+- beibehaltene fokussierte Fresh-Gates: **PASS**
 - dynamische backup-gebundene CURRENT-Release-Auflösung: **PASS**
 - Worker-Root- und Report-State-Härtung: **PASS**
 - Härtung der symbolischen/Runtime-Compose-Release-Bindung: **PASS**
 - Härtung des DeviceWatchdog-Konfigurationsformat-Vertrags: **PASS**
-- fokussierter isolierter DeviceWatchdog-`APP_FULL`-Realtest: **PASS**
-- Cleanup der isolierten Runtime und Read-only-Quellgrenze nach diesem Lauf: **PASS**
-- aktueller K56-`FULL_SERVER`-Realtest: **noch nicht ausgeführt**
-- Full-Server-Restore, Disaster-Recovery-Zertifizierung und Produktionsreife: **nicht beansprucht**
+- isolierter FULL_SERVER-Realtest: **COMPLETED**
+- Restore-Modus: **COMBINED_L2_L3**
+- Cleanup der isolierten Runtime: **PASS**
+- finaler Realtest-Rückgabecode: **0**
 
-Das verbleibende Full-Server-Gate ist derzeit durch unzureichende isolierte Zielkapazität blockiert, nicht durch einen bekannten K56-Codefehler.
+Die verbleibenden Arbeiten bis zum eigentlichen Disaster-Recovery-Endziel betreffen vor allem Auto-Onboarding unbekannter Apps, das finale Recovery-Medium samt GUI, Restore-from-Cold sowie einen echten Bare-Metal-End-to-End-Lauf.
 
-Ein separater privater Immich/Filen-Zweig für ein pfaderhaltendes Remote-Archiv hat außerdem seine korrigierte nicht-destruktive Phase-1-Implementierung abgeschlossen. Die korrigierte private Tiering-Suite meldet **36/36 PASS**, einschließlich eines expliziten BLAKE3-only-Hashvertrags und eines kleinen realen Performance-/I/O-Gates. Der erste Tier-Batch von ungefähr 100 GiB hat jetzt lokale, Remote- und Offline-Level-2-BLAKE3-Verifikation sowie einen realen Level-2-Schutz-Dryrun bestanden. Alle 410 Einträge sind READY_TO_TIER und Level-2-geschützt. Lokale Medien bleiben erhalten; produktives Overlay und Medienlöschung sind weiterhin nicht aktiviert.
+See:
 
-Siehe:
+- `docs/FINAL-RECOVERY-MILESTONE-2026-09-27.md`
+- `docs/RECOVERY-IMMICH-MILESTONE-2026-10-03.md`
 
-- `docs/REALTEST-MILESTONE-2026-09-24.md`
-- `docs/IMMICH-FILEN-TIERING-PHASE1-2026-09-24.md`
+## Immich / Filen official External Libraries — 2026-10-03
 
-Das öffentliche Repository bleibt absichtlich ein sanitisiertes Teilprojekt und enthält keine produktiven Backup-Archive, Zugangsdaten, Maschinenidentitäten, privaten Infrastrukturpfade, Roh-Evidenz, privaten Run-IDs oder privaten Archiv-Hashes.
+### English
+
+The production storage architecture is now:
+
+Filen -> read-only rclone FUSE -> official Immich External Libraries -> stock Immich
+
+Current sanitized production state:
+
+- Immich server **v3.2.1**, healthy
+- machine-learning service **v3.2.4**, healthy
+- exactly four owner-specific External Libraries
+- **83,227** active assets total
+- **81,735** active external assets
+- **1,492** active local assets
+- **0** offline external assets
+- final large reclaim set: **81,328 files / 252.66 GiB**
+- local-to-Filen BLAKE3: **81,328/81,328 PASS**
+- local-to-Level-2 BLAKE3: **81,328/81,328 PASS**
+- Level-2 Cold archive: **81,328/81,328 PASS**
+- Level-2 mirror detach: **81,328/81,328 PASS**
+- final local reclaim: **PASS**
+- local reclaim targets remaining: **0**
+- preserved sidecars: **949/949**
+- post-reclaim database validation: **PASS**
+- monthly Cold-archive BLAKE3 deep verifier: **enabled**
+
+The productive daily Level-2 backup script remains unchanged. The large Cold archive is stored outside the normal mirror tree, so daily backup operation does not require an 81k-entry rsync protection filter or daily full-content hashing.
+
+The first scheduled automatic Cold deep-verify and the first normal productive Level-2 backup after the reclaim remain the next operational proof points.
+
+### Deutsch
+
+Die produktive Speicherarchitektur lautet jetzt:
+
+Filen -> read-only rclone FUSE -> offizielle Immich External Libraries -> Stock-Immich
+
+Aktueller sanitisierter Produktivstand:
+
+- Immich-Server **v3.2.1**, healthy
+- Machine-Learning-Service **v3.2.4**, healthy
+- genau vier benutzerspezifische External Libraries
+- **83.227** aktive Assets insgesamt
+- **81.735** aktive External Assets
+- **1.492** aktive lokale Assets
+- **0** Offline-External-Assets
+- finaler großer Reclaim: **81.328 Dateien / 252,66 GiB**
+- Local↔Filen BLAKE3: **81.328/81.328 PASS**
+- Local↔Level-2 BLAKE3: **81.328/81.328 PASS**
+- Level-2-Cold-Archiv: **81.328/81.328 PASS**
+- Level-2-Mirror-Detach: **81.328/81.328 PASS**
+- finaler lokaler Reclaim: **PASS**
+- verbleibende Reclaim-Zieldateien lokal: **0**
+- Sidecars erhalten: **949/949**
+- Post-Reclaim-Datenbankprüfung: **PASS**
+- monatlicher Cold-Archiv-BLAKE3-Deep-Verify: **enabled**
+
+Das produktive tägliche Level-2-Backup-Skript bleibt unverändert. Das große Cold-Archiv liegt außerhalb des normalen Mirror-Baums; dadurch sind weder ein 81k-Rsync-Schutzfilter noch tägliche Vollhashes erforderlich.
+
+Der erste automatische Cold-Deep-Verify und ein normaler produktiver Level-2-Lauf nach dem Reclaim sind die nächsten noch offenen Betriebsnachweise.
+
+See:
+
+- `docs/RECOVERY-IMMICH-MILESTONE-2026-10-03.md`
+- `docs/IMMICH-FILEN-EXTERNAL-LIBRARIES-2026-09-27.md`
 
 ## Repository structure
 
@@ -107,6 +163,6 @@ The sanitized public release tree currently passes **183/183 automated tests**, 
 - cleanup and resume behavior
 - secret-marker redaction and final evidence checks
 
-The private full recovery package has a broader regression suite and additional real-runtime gates; those results are tracked separately from the sanitized public tree to avoid implying that unpublished private tests are part of this repository.
+The private full recovery package has the broader **1050/1050 PASS** regression suite plus the successful isolated FULL_SERVER realtest described above. Those private results are tracked separately from the sanitized public tree to avoid implying that unpublished private tests are part of this repository.
 
-The publication scan currently reports no personal username, personal domain, private-LAN address, standard UUID, e-mail address, private key or risky archive/database/dump file in the release tree.
+The public repository intentionally excludes production backup data, credentials, personal identifiers, private infrastructure details, machine-specific paths, raw recovery evidence and private archive hashes.
