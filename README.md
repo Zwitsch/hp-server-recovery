@@ -4,7 +4,7 @@
 
 Fail-closed disaster recovery framework for self-hosted Linux servers.
 
-> **Status:** public sanitized pre-release. The public tree is intended for review, testing and continued development. The complete private recovery package has now passed its isolated FULL_SERVER end-to-end realtest; the public repository is still only a sanitized subset and is not a drop-in production recovery image.
+> **Status:** public sanitized pre-release. The complete private recovery package has passed its isolated FULL_SERVER end-to-end realtest. The public repository remains a sanitized engineering subset and is not a drop-in production recovery image.
 
 ## What it does
 
@@ -27,11 +27,11 @@ Persistent reports and audit data are checked for secret-marker leakage before a
 
 See [SECURITY.md](SECURITY.md) and `docs/SAFETY-MODEL.md`.
 
-## Final private recovery milestone — 2026-09-27
+## Current private recovery milestone — 2026-10-03
 
 ### English
 
-The private recovery package has completed its final K56 end-to-end validation.
+The private K56 recovery package remains end-to-end proven.
 
 Current sanitized validation status:
 
@@ -45,20 +45,12 @@ Current sanitized validation status:
 - restore mode: **COMBINED_L2_L3**
 - isolated runtime cleanup: **PASS**
 - final realtest return code: **0**
-- isolated containerd and Docker after completion: **inactive**
-- system Docker and Docker socket after completion: **inactive / absent**
 
-The final full-server blocker was resolved by keeping declarative APP_RELEASE binding separate from the validated runtime image identity and Docker image ID, and by applying writable-mount ownership only after both symbolic and runtime bindings are complete and unambiguous.
-
-The current private recovery scope is therefore end-to-end proven. Automatic onboarding of entirely unknown new applications remains a future enhancement and is not part of this completed scope.
-
-See:
-
-- `docs/FINAL-RECOVERY-MILESTONE-2026-09-27.md`
+The remaining project-endgame work is primarily automatic onboarding of unknown applications, final recovery-medium/GUI integration, restore-from-Cold integration and a real bare-metal end-to-end disaster-recovery run.
 
 ### Deutsch
 
-Das private Recovery-Paket hat seine finale K56-End-to-End-Validierung abgeschlossen.
+Das private K56-Recovery-Paket ist weiterhin End-to-End real bewiesen.
 
 Aktueller sanitisierter Validierungsstand:
 
@@ -72,71 +64,79 @@ Aktueller sanitisierter Validierungsstand:
 - Restore-Modus: **COMBINED_L2_L3**
 - Cleanup der isolierten Runtime: **PASS**
 - finaler Realtest-Rückgabecode: **0**
-- isoliertes containerd und Docker nach Abschluss: **inactive**
-- System-Docker und Docker-Socket nach Abschluss: **inactive / absent**
 
-Der letzte Full-Server-Blocker wurde dadurch behoben, dass die deklarative APP_RELEASE-Bindung getrennt von validierter Runtime-Image-Identität und Docker-Image-ID erhalten bleibt und Writable-Mount-Ownership erst nach vollständiger, eindeutiger symbolischer und realer Bindung angewendet wird.
-
-Der aktuelle private Recovery-Umfang ist damit End-to-End real bewiesen. Die automatische Integration völlig unbekannter neuer Apps bleibt ein späterer Ausbau und gehört nicht zum jetzt abgeschlossenen Umfang.
-
-Siehe:
-
-- `docs/FINAL-RECOVERY-MILESTONE-2026-09-27.md`
-
-## Immich / Filen official External Libraries — 2026-09-27
-
-### English
-
-The private production Immich system now uses the official External Libraries path for the migrated tier:
-
-Filen -> read-only rclone FUSE -> official Immich External Libraries -> stock Immich
-
-Validated production state:
-
-- Immich **v3.2.2**, healthy
-- exactly four owner-specific External Libraries
-- **410** migrated external assets
-- **11** sidecars
-- **421** files in the reclaimed allowlist
-- **0** offline external assets
-- **0** deleted external assets
-- **0** duplicate external original paths
-- **100.03 GiB** local space reclaimed
-- direct Filen-side post-delete verification: **PASS**
-- Level-2 protection with all migrated local sources absent: **PASS**
-- read-only Filen mount and systemd Safe-Scan Guard: **active**
-
-The entire Immich media library has not yet been moved to Filen. The architecture is complete and the first approximately 100 GiB production tranche has been migrated, verified and locally reclaimed. The remaining suitable media will be migrated in a later storage phase using the same ID-preserving, owner-preserving process.
+Die verbleibenden Arbeiten bis zum eigentlichen Disaster-Recovery-Endziel betreffen vor allem Auto-Onboarding unbekannter Apps, das finale Recovery-Medium samt GUI, Restore-from-Cold sowie einen echten Bare-Metal-End-to-End-Lauf.
 
 See:
 
-- `docs/IMMICH-FILEN-EXTERNAL-LIBRARIES-2026-09-27.md`
+- `docs/FINAL-RECOVERY-MILESTONE-2026-09-27.md`
+- `docs/RECOVERY-IMMICH-MILESTONE-2026-10-03.md`
+
+## Immich / Filen official External Libraries — 2026-10-03
+
+### English
+
+The production storage architecture is now:
+
+Filen -> read-only rclone FUSE -> official Immich External Libraries -> stock Immich
+
+Current sanitized production state:
+
+- Immich server **v3.2.1**, healthy
+- machine-learning service **v3.2.4**, healthy
+- exactly four owner-specific External Libraries
+- **83,227** active assets total
+- **81,735** active external assets
+- **1,492** active local assets
+- **0** offline external assets
+- final large reclaim set: **81,328 files / 252.66 GiB**
+- local-to-Filen BLAKE3: **81,328/81,328 PASS**
+- local-to-Level-2 BLAKE3: **81,328/81,328 PASS**
+- Level-2 Cold archive: **81,328/81,328 PASS**
+- Level-2 mirror detach: **81,328/81,328 PASS**
+- final local reclaim: **PASS**
+- local reclaim targets remaining: **0**
+- preserved sidecars: **949/949**
+- post-reclaim database validation: **PASS**
+- monthly Cold-archive BLAKE3 deep verifier: **enabled**
+
+The productive daily Level-2 backup script remains unchanged. The large Cold archive is stored outside the normal mirror tree, so daily backup operation does not require an 81k-entry rsync protection filter or daily full-content hashing.
+
+The first scheduled automatic Cold deep-verify and the first normal productive Level-2 backup after the reclaim remain the next operational proof points.
 
 ### Deutsch
 
-Das private produktive Immich-System nutzt für die bereits migrierte Tranche jetzt den offiziellen External-Libraries-Pfad:
+Die produktive Speicherarchitektur lautet jetzt:
 
 Filen -> read-only rclone FUSE -> offizielle Immich External Libraries -> Stock-Immich
 
-Bewiesener Produktivstand:
+Aktueller sanitisierter Produktivstand:
 
-- Immich **v3.2.2**, healthy
+- Immich-Server **v3.2.1**, healthy
+- Machine-Learning-Service **v3.2.4**, healthy
 - genau vier benutzerspezifische External Libraries
-- **410** migrierte External Assets
-- **11** Sidecars
-- **421** Dateien in der lokal freigegebenen Allowlist
-- **0** Offline-Assets
-- **0** Deleted-Assets
-- **0** doppelte External-Originalpfade
-- **100,03 GiB** lokaler Speicher freigegeben
-- direkter Filen-Post-Delete-Nachweis: **PASS**
-- Level-2-Schutz bei vollständig fehlenden lokalen Quellen: **PASS**
-- read-only Filen-Mount und systemd Safe-Scan Guard: **active**
+- **83.227** aktive Assets insgesamt
+- **81.735** aktive External Assets
+- **1.492** aktive lokale Assets
+- **0** Offline-External-Assets
+- finaler großer Reclaim: **81.328 Dateien / 252,66 GiB**
+- Local↔Filen BLAKE3: **81.328/81.328 PASS**
+- Local↔Level-2 BLAKE3: **81.328/81.328 PASS**
+- Level-2-Cold-Archiv: **81.328/81.328 PASS**
+- Level-2-Mirror-Detach: **81.328/81.328 PASS**
+- finaler lokaler Reclaim: **PASS**
+- verbleibende Reclaim-Zieldateien lokal: **0**
+- Sidecars erhalten: **949/949**
+- Post-Reclaim-Datenbankprüfung: **PASS**
+- monatlicher Cold-Archiv-BLAKE3-Deep-Verify: **enabled**
 
-Die gesamte Immich-Mediathek liegt noch nicht auf Filen. Die Architektur ist vollständig und die erste produktive Tranche von ungefähr 100 GiB wurde migriert, verifiziert und lokal freigegeben. Der verbleibende geeignete Medienbestand wird in einer späteren Speicherphase nach demselben ID- und Owner-erhaltenden Verfahren migriert.
+Das produktive tägliche Level-2-Backup-Skript bleibt unverändert. Das große Cold-Archiv liegt außerhalb des normalen Mirror-Baums; dadurch sind weder ein 81k-Rsync-Schutzfilter noch tägliche Vollhashes erforderlich.
 
-Siehe:
+Der erste automatische Cold-Deep-Verify und ein normaler produktiver Level-2-Lauf nach dem Reclaim sind die nächsten noch offenen Betriebsnachweise.
 
+See:
+
+- `docs/RECOVERY-IMMICH-MILESTONE-2026-10-03.md`
 - `docs/IMMICH-FILEN-EXTERNAL-LIBRARIES-2026-09-27.md`
 
 ## Repository structure
@@ -165,4 +165,4 @@ The sanitized public release tree currently passes **183/183 automated tests**, 
 
 The private full recovery package has the broader **1050/1050 PASS** regression suite plus the successful isolated FULL_SERVER realtest described above. Those private results are tracked separately from the sanitized public tree to avoid implying that unpublished private tests are part of this repository.
 
-The publication scan currently reports no personal username, personal domain, private-LAN address, standard UUID, e-mail address, private key or risky archive/database/dump file in the release tree.
+The public repository intentionally excludes production backup data, credentials, personal identifiers, private infrastructure details, machine-specific paths, raw recovery evidence and private archive hashes.
