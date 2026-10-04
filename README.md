@@ -27,7 +27,7 @@ Persistent reports and audit data are checked for secret-marker leakage before a
 
 See [SECURITY.md](SECURITY.md) and `docs/SAFETY-MODEL.md`.
 
-## Current private recovery milestone — 2026-10-03
+## Current private recovery milestone — 2026-10-04
 
 ### English
 
@@ -46,7 +46,7 @@ Current sanitized validation status:
 - isolated runtime cleanup: **PASS**
 - final realtest return code: **0**
 
-The remaining project-endgame work is primarily automatic onboarding of unknown applications, final recovery-medium/GUI integration, restore-from-Cold integration and a real bare-metal end-to-end disaster-recovery run.
+The remaining project-endgame work is primarily automatic onboarding of unknown applications, final recovery-medium/GUI integration, full Cold-restore acceptance and a real bare-metal end-to-end disaster-recovery run.
 
 ### Deutsch
 
@@ -65,12 +65,29 @@ Aktueller sanitisierter Validierungsstand:
 - Cleanup der isolierten Runtime: **PASS**
 - finaler Realtest-Rückgabecode: **0**
 
-Die verbleibenden Arbeiten bis zum eigentlichen Disaster-Recovery-Endziel betreffen vor allem Auto-Onboarding unbekannter Apps, das finale Recovery-Medium samt GUI, Restore-from-Cold sowie einen echten Bare-Metal-End-to-End-Lauf.
+Die verbleibenden Arbeiten bis zum eigentlichen Disaster-Recovery-Endziel betreffen vor allem Auto-Onboarding unbekannter Apps, das finale Recovery-Medium samt GUI, die vollständige Cold-Restore-Abnahme sowie einen echten Bare-Metal-End-to-End-Lauf.
 
 See:
 
 - `docs/FINAL-RECOVERY-MILESTONE-2026-09-27.md`
 - `docs/RECOVERY-IMMICH-MILESTONE-2026-10-03.md`
+
+## K57 Cold-restore validation — 2026-10-04
+
+The private K57 package now supports a manifest-bound Cold overlay after the normal Level-2 mirror restore and before database/service restoration.
+
+- private canonical regression and fresh-extraction root regression: **1092/1092 PASS** each
+- fresh extraction manifests: **PASS** for both independent extractions
+- real L2 and COMBINED Cold pilots: **100 production-origin files / 2,167,636 bytes** each
+- target BLAKE3: **100/100 PASS** in both pilots
+- existing non-Cold sentinel preservation: **PASS** in both pilots
+- full **81,328-file / 252.66-GiB** Cold restore: **not yet executed**
+
+K57 pilot validation does not replace the earlier K56 FULL_SERVER result or certify a complete K57 bare-metal recovery.
+
+Der private K57-Cold-Restore ist im L2- und COMBINED-Pilot real bewiesen. Beide Piloten restaurierten je **100 echte Dateien / 2.167.636 Bytes**, mit **100/100 BLAKE3-PASS**. Die Root-Regression und die Fresh-Root-Regression bestanden jeweils **1092/1092** Tests. Der vollständige Restore von **81.328 Dateien / 252,66 GiB** bleibt für den ausreichend großen Fresh-Target-/Bare-Metal-Abnahmetest offen.
+
+See [K57 Cold-restore milestone](docs/K57-COLD-RESTORE-MILESTONE-2026-10-04.md).
 
 ## Immich / Filen official External Libraries — 2026-10-03
 
@@ -163,6 +180,6 @@ The sanitized public release tree currently passes **183/183 automated tests**, 
 - cleanup and resume behavior
 - secret-marker redaction and final evidence checks
 
-The private full recovery package has the broader **1050/1050 PASS** regression suite plus the successful isolated FULL_SERVER realtest described above. Those private results are tracked separately from the sanitized public tree to avoid implying that unpublished private tests are part of this repository.
+The private K57 recovery package has the broader **1092/1092 PASS** regression suite and real Cold pilots; the earlier K56 isolated FULL_SERVER realtest remains the completed end-to-end baseline. Those private results are tracked separately from the sanitized public tree to avoid implying that unpublished private tests are part of this repository.
 
 The public repository intentionally excludes production backup data, credentials, personal identifiers, private infrastructure details, machine-specific paths, raw recovery evidence and private archive hashes.

@@ -16,7 +16,8 @@ The project is currently preparing its first stable OSS release.
 - Public documentation of the 2026-09-15 K22 real-runtime validation milestone, while keeping private recovery evidence and production data out of the repository.
 - Public sanitized documentation of the 2026-09-16 K25 read-only realtest milestone and backup/release identity checks.
 - Public sanitized documentation of the 2026-09-16 K27 isolated application data restore milestone.
-- Public sanitized documentation of the 2026-09-17 K30 isolated full-application restore milestone.\n- Public sanitized documentation of the 2026-10-03 recovery and Immich/Filen migration milestone.
+- Public sanitized documentation of the 2026-09-17 K30 isolated full-application restore milestone.
+- Public sanitized documentation of the 2026-10-03 recovery and Immich/Filen migration milestone.
 
 ### Changed
 
@@ -77,6 +78,19 @@ The project is currently preparing its first stable OSS release.
 - Post-reclaim database validation: **PASS**; external offline count remained **0**.
 - Daily Level-2 backup remains unchanged; monthly full BLAKE3 verification of the Cold archive is enabled.
 - The first scheduled automatic Cold deep verify and the first normal productive Level-2 run after reclaim remain open operational proof points.
+
+### Development status — 2026-10-04
+
+- Private K57 manifest-bound Immich Cold overlay implemented for L2_ONLY and COMBINED_L2_L3.
+- Private canonical and fresh-extraction root suites: **1092/1092 PASS** each.
+- Focused K57 tests: **42/42 PASS**; relevant combined regression: **113/113 PASS**.
+- Both fresh archive extractions passed payload/package manifest verification.
+- Real L2 and COMBINED Cold pilots restored **100 production-origin files / 2,167,636 bytes** each, with **100/100 target BLAKE3 PASS** and existing non-Cold sentinel preservation.
+- Cold content is restored after the normal mirror and verified before database/service operations.
+- Full **81,328-file / 252.66-GiB** Cold restore remains pending on a sufficiently large fresh target.
+- K57 Cold pilots do not certify a complete new FULL_SERVER or bare-metal run.
+- The first automatic Cold deep verify and normal post-reclaim Level-2 backup completed successfully, closing the earlier operational proof points.
+- See `docs/K57-COLD-RESTORE-MILESTONE-2026-10-04.md`.
 
 ### Security
 
