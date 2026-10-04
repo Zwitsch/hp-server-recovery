@@ -89,6 +89,16 @@ Der private K57-Cold-Restore ist im L2- und COMBINED-Pilot real bewiesen. Beide 
 
 See [K57 Cold-restore milestone](docs/K57-COLD-RESTORE-MILESTONE-2026-10-04.md).
 
+## K58 inventory and backup binding — 2026-10-04
+
+The private K58 phase-2 root regression passed **1144/1144** tests. The production backup integration passed **18/18** separate binding tests, installation, a fresh application export, receipt verification and bound inventory publication to a local pilot target.
+
+The installed L2/L3 scripts now include explicit inventory publication. Complete post-installation L2/L3 backup runs and full K58 recovery acceptance remain open. Automatic onboarding is incomplete: runtime service/mount coverage, exact offline images, secrets and isolated restore contracts still require validation.
+
+Die K58-Root-Regression bestand **1144/1144** Tests; **18/18** separate Bindungstests und der frische produktive App-Export mit Inventarpublikation bestanden ebenfalls. Dies bestätigt noch keinen vollständigen L2/L3-Backup-Lauf oder K58-Full-Server-Restore.
+
+See [K58 accepted checkpoints and remaining work](docs/K58-INVENTORY-BINDING-MILESTONE-2026-10-04.md).
+
 ## Immich / Filen official External Libraries — 2026-10-03
 
 ### English
@@ -117,7 +127,7 @@ Current sanitized production state:
 - post-reclaim database validation: **PASS**
 - monthly Cold-archive BLAKE3 deep verifier: **enabled**
 
-The productive daily Level-2 backup script remains unchanged. The large Cold archive is stored outside the normal mirror tree, so daily backup operation does not require an 81k-entry rsync protection filter or daily full-content hashing.
+At the 2026-10-03 milestone, the productive daily Level-2 backup script remained unchanged; the later K58 inventory integration is recorded above. The large Cold archive is stored outside the normal mirror tree, so daily backup operation does not require an 81k-entry rsync protection filter or daily full-content hashing.
 
 The first scheduled automatic Cold deep-verify and the first normal productive Level-2 backup after reclaim have both completed successfully. Exact post-run structure verification confirmed **0/81,328** detached reclaim paths in the normal mirror and **81,328/81,328** files present in the Cold archive.
 
@@ -147,7 +157,7 @@ Aktueller sanitisierter Produktivstand:
 - Post-Reclaim-Datenbankprüfung: **PASS**
 - monatlicher Cold-Archiv-BLAKE3-Deep-Verify: **enabled**
 
-Das produktive tägliche Level-2-Backup-Skript bleibt unverändert. Das große Cold-Archiv liegt außerhalb des normalen Mirror-Baums; dadurch sind weder ein 81k-Rsync-Schutzfilter noch tägliche Vollhashes erforderlich.
+Zum Meilenstein vom 03.10.2026 blieb das produktive tägliche Level-2-Backup-Skript unverändert; die spätere K58-Inventarintegration ist oben dokumentiert. Das große Cold-Archiv liegt außerhalb des normalen Mirror-Baums; dadurch sind weder ein 81k-Rsync-Schutzfilter noch tägliche Vollhashes erforderlich.
 
 Der erste automatische Cold-Deep-Verify und der erste normale produktive Level-2-Lauf nach dem Reclaim sind erfolgreich abgeschlossen. Die exakte Strukturprüfung bestätigte **0/81.328** abgetrennte Reclaim-Pfade im normalen Mirror und **81.328/81.328** Dateien im Cold-Archiv.
 

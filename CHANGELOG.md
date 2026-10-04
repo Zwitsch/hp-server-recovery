@@ -92,6 +92,16 @@ The project is currently preparing its first stable OSS release.
 - The first automatic Cold deep verify and normal post-reclaim Level-2 backup completed successfully, closing the earlier operational proof points.
 - See `docs/K57-COLD-RESTORE-MILESTONE-2026-10-04.md`.
 
+### K58 accepted checkpoints — 2026-10-04
+
+- Private phase-2 root canonical suite: **1144/1144 PASS**, return code **0**.
+- Discovery/inventory focused tests: **52/52 PASS**.
+- Separate production backup binding tests: **18/18 PASS**.
+- Production installation, fresh application export, receipt verification and bound inventory publication to a local pilot target: **PASS**.
+- L2/L3 scripts now explicitly publish the run-bound inventory; complete post-installation backup runs remain open.
+- Automatic onboarding, complete runtime mount coverage and new K58 full-server/bare-metal acceptance remain incomplete.
+- See `docs/K58-INVENTORY-BINDING-MILESTONE-2026-10-04.md`.
+
 ### Security
 
 - Destructive recovery logic remains fail-closed when required target identity or safety bindings are missing.
