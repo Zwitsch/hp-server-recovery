@@ -102,7 +102,7 @@ Current sanitized production state:
 
 The productive daily Level-2 backup script remains unchanged. The large Cold archive is stored outside the normal mirror tree, so daily backup operation does not require an 81k-entry rsync protection filter or daily full-content hashing.
 
-The first scheduled automatic Cold deep-verify and the first normal productive Level-2 backup after the reclaim remain the next operational proof points.
+The first scheduled automatic Cold deep-verify and the first normal productive Level-2 backup after reclaim have both completed successfully. Exact post-run structure verification confirmed **0/81,328** detached reclaim paths in the normal mirror and **81,328/81,328** files present in the Cold archive.
 
 ### Deutsch
 
@@ -132,7 +132,7 @@ Aktueller sanitisierter Produktivstand:
 
 Das produktive tägliche Level-2-Backup-Skript bleibt unverändert. Das große Cold-Archiv liegt außerhalb des normalen Mirror-Baums; dadurch sind weder ein 81k-Rsync-Schutzfilter noch tägliche Vollhashes erforderlich.
 
-Der erste automatische Cold-Deep-Verify und ein normaler produktiver Level-2-Lauf nach dem Reclaim sind die nächsten noch offenen Betriebsnachweise.
+Der erste automatische Cold-Deep-Verify und der erste normale produktive Level-2-Lauf nach dem Reclaim sind erfolgreich abgeschlossen. Die exakte Strukturprüfung bestätigte **0/81.328** abgetrennte Reclaim-Pfade im normalen Mirror und **81.328/81.328** Dateien im Cold-Archiv.
 
 See:
 
