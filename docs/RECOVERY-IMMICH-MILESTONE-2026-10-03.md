@@ -98,18 +98,33 @@ A dedicated monthly Cold-archive deep verifier is installed and enabled.
 
 It performs full-content BLAKE3 verification of the Cold archive independently from the normal daily Level-2 backup.
 
-The first scheduled automatic run is on 2026-10-04. Its real run result remains an open operational proof point until it has completed.
+The first scheduled automatic run completed successfully on 2026-10-04.
+
+Validated result:
+
+- full Cold archive BLAKE3 verification: **81,328/81,328 PASS**
+- service result: **SUCCESS / return code 0**
+- Level-2 filesystem was unmounted cleanly afterwards
 
 ## Remaining storage/recovery work
 
 The main remaining items are:
 
-1. observe the first automatic Cold deep-verify result;
-2. validate a normal productive Level-2 backup after the reclaim and prove that the detached mirror paths are not recreated while the Cold archive remains intact;
-3. integrate restore-from-Cold into the final disaster-recovery workflow and test it against a fresh target;
-4. classify the remaining 1,492 active local Immich assets;
-5. consolidate the earlier small legacy tiering tranche into the long-term Cold/recovery model;
-6. complete recovery-medium, automatic onboarding and bare-metal end-to-end validation.
+1. integrate restore-from-Cold into the final disaster-recovery workflow and test it against a fresh target;
+2. classify the remaining 1,492 active local Immich assets;
+3. consolidate the earlier small legacy tiering tranche into the long-term Cold/recovery model;
+4. complete recovery-medium, automatic onboarding and bare-metal end-to-end validation.
+
+The first normal productive Level-2 run after reclaim is also proven:
+
+- Level-2 service result: **rc=0**
+- data mirror: **OK**
+- ioBroker mirror: **OK**
+- productive Level-2 script identity remained unchanged
+- exact post-run structural verification: **PASS**
+- detached reclaim paths present in normal mirror: **0/81,328**
+- reclaim files present in Cold archive: **81,328/81,328**
+- Level-2 filesystem unmounted after verification
 
 ## Public/private separation
 
