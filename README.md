@@ -89,6 +89,23 @@ Der private K57-Cold-Restore ist im L2- und COMBINED-Pilot real bewiesen. Beide 
 
 See [K57 Cold-restore milestone](docs/K57-COLD-RESTORE-MILESTONE-2026-10-04.md).
 
+## K58 phase 24 common pilot contract — 2026-10-05
+
+Private validation checkpoint (sanitized; private implementation and production payloads remain excluded):
+
+- common capture-contract negative tests: **42/42 PASS**
+- real archive anchors for DB/Redis input, application-file input, bound image metadata and recovery config: **PASS**
+- cross-package metadata binding: **PASS**
+- selected payload hashes: **PASS** for 4 database/Redis payloads and 335 application files
+- six runtime/image roles bound to the same capture run: **PASS**
+- common pilot contract: **PASS**
+
+This contract prevents silent mixing of capture runs. It does not certify application database/job-queue consistency, full application behavior, or a complete FULL_SERVER/bare-metal restore.
+
+- `APP_DATABASE_JOBQUEUE_CONSISTENCY=NOT_CERTIFIED`
+- `FULL_81328_COLD_RESTORE_PASS=false`
+- `IMAGE_ARCHIVE_RECHECK=NOT_RUN` in this cross-package audit; the full OCI archive verification remains covered by the earlier image-transfer gate.
+
 ## K58 progress checkpoint — 2026-10-05
 
 This checkpoint supersedes the earlier K58 progress paragraph below. It records private validation results; it does not claim that the corresponding private implementation or tests have been published in this sanitized repository.
