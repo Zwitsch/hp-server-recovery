@@ -89,6 +89,30 @@ Der private K57-Cold-Restore ist im L2- und COMBINED-Pilot real bewiesen. Beide 
 
 See [K57 Cold-restore milestone](docs/K57-COLD-RESTORE-MILESTONE-2026-10-04.md).
 
+## K58 progress checkpoint — 2026-10-05
+
+This checkpoint supersedes the earlier K58 progress paragraph below. It records private validation results; it does not claim that the corresponding private implementation or tests have been published in this sanitized repository.
+
+- latest completed private canonical root regression (phase 14): **1281/1281 PASS**
+- real Redis restore from bound published input, package materialization and engine staging: **PASS**, including isolated cleanup
+- complete post-integration L2 and local L3 backup runs: **PASS**; remote cloud completion is not established by the local L3 result
+- application writer-hold capture with subsequent service resumption and payload hashing: **PASS**
+- isolated restore of the captured Immich PostgreSQL database, Paperless SQLite database and both Redis snapshots (phase 20): **PASS**
+- additional capture-bound offline image export, transfer and archive validation (phase 21): **PASS**
+- bound Paperless file package and limited Immich marker package, including transfer verification (phase 22): **PASS**
+- limited Paperless ORM / Immich API start pilot (phase 23): **IN PROGRESS** at this checkpoint; source binding and isolation passed, PostgreSQL restoration started
+
+**Acceptance limits remain explicit:**
+
+- `APP_DATABASE_JOBQUEUE_CONSISTENCY=NOT_CERTIFIED`
+- `FULL_81328_COLD_RESTORE_PASS=false`
+- no complete K58 FULL_SERVER or bare-metal acceptance is claimed
+- common database/queue capture is not yet integrated and accepted throughout the regular backup/restore workflow
+- the app-start pilot does not include the complete Immich media library or certify queue-consumer behavior
+- the full Cold restore remains deferred because an adequately sized recovery target is unavailable
+
+Deutsch: Der private Stand ist bis Phase 22 durch die genannten Teilnachweise dokumentiert. Phase 23 läuft noch. Erfolgreiche Datenbank- und Redis-Ladevorgänge ersetzen weder die Prüfung der Datenbank-/Jobqueue-Konsistenz noch einen vollständigen Disaster-Recovery-Test. Der letzte kanonische Root-Lauf bestand 1281/1281 Tests; die spätere Pilotentwicklung wurde separat geprüft.
+
 ## K58 inventory and backup binding — 2026-10-04
 
 The private K58 phase-2 root regression passed **1144/1144** tests. The production backup integration passed **18/18** separate binding tests, installation, a fresh application export, receipt verification and bound inventory publication to a local pilot target.
@@ -190,6 +214,6 @@ The sanitized public release tree currently passes **183/183 automated tests**, 
 - cleanup and resume behavior
 - secret-marker redaction and final evidence checks
 
-The private K57 recovery package has the broader **1092/1092 PASS** regression suite and real Cold pilots; the earlier K56 isolated FULL_SERVER realtest remains the completed end-to-end baseline. Those private results are tracked separately from the sanitized public tree to avoid implying that unpublished private tests are part of this repository.
+The private K58 phase-14 package has a **1281/1281 PASS** canonical root regression; K57 additionally has real Cold pilots; the earlier K56 isolated FULL_SERVER realtest remains the completed end-to-end baseline. Those private results are tracked separately from the sanitized public tree to avoid implying that unpublished private tests are part of this repository.
 
 The public repository intentionally excludes production backup data, credentials, personal identifiers, private infrastructure details, machine-specific paths, raw recovery evidence and private archive hashes.
