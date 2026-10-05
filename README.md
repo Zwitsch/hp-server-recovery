@@ -100,7 +100,7 @@ This checkpoint supersedes the earlier K58 progress paragraph below. It records 
 - isolated restore of the captured Immich PostgreSQL database, Paperless SQLite database and both Redis snapshots (phase 20): **PASS**
 - additional capture-bound offline image export, transfer and archive validation (phase 21): **PASS**
 - bound Paperless file package and limited Immich marker package, including transfer verification (phase 22): **PASS**
-- limited Paperless ORM / Immich API start pilot (phase 23): **IN PROGRESS** at this checkpoint; source binding and isolation passed, PostgreSQL restoration started
+- limited Paperless ORM / Immich API start pilot (phase 23): **PASS**, with both database and Redis loads, source binding, isolation and cleanup passing; elapsed time **15 min 42 sec**
 
 **Acceptance limits remain explicit:**
 
@@ -111,7 +111,7 @@ This checkpoint supersedes the earlier K58 progress paragraph below. It records 
 - the app-start pilot does not include the complete Immich media library or certify queue-consumer behavior
 - the full Cold restore remains deferred because an adequately sized recovery target is unavailable
 
-Deutsch: Der private Stand ist bis Phase 22 durch die genannten Teilnachweise dokumentiert. Phase 23 läuft noch. Erfolgreiche Datenbank- und Redis-Ladevorgänge ersetzen weder die Prüfung der Datenbank-/Jobqueue-Konsistenz noch einen vollständigen Disaster-Recovery-Test. Der letzte kanonische Root-Lauf bestand 1281/1281 Tests; die spätere Pilotentwicklung wurde separat geprüft.
+Deutsch: Der private Stand ist bis Phase 23 durch die genannten Teilnachweise dokumentiert. Paperless-ORM und Immich-API-Start sowie das Cleanup bestanden; vollständige App-/Queue-Funktionalität bleibt offen. Erfolgreiche Datenbank- und Redis-Ladevorgänge ersetzen weder die Prüfung der Datenbank-/Jobqueue-Konsistenz noch einen vollständigen Disaster-Recovery-Test. Der letzte kanonische Root-Lauf bestand 1281/1281 Tests; die spätere Pilotentwicklung wurde separat geprüft.
 
 ## K58 inventory and backup binding — 2026-10-04
 
