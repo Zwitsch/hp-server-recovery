@@ -1,73 +1,84 @@
-# K58 Phase 29 – Full-App Certification (WIP)
+# K58 Phase 29 – Full-App Certification – PASS
 
-Stand: 2026-10-09
+Stand: 2026-10-10
 
-## Ziel
+## Ergebnis
 
-Phase 29 erweitert die bereits root-abgenommene Worker-Zertifizierung aus Phase 28 auf den normalen Stock-Startumfang der Anwendungen, ohne den fail-closed APP_FULL/FULL_SERVER-Guard vorzeitig zu öffnen.
+Phase 29 ist vollständig real getestet, root-abgenommen und in den K58-Recovery-Vertrag integriert.
 
-## Bereits bewiesene Grundlage
+- Full-App Realtest: PASS
+- Full-App Start Certificate v1: PASS
+- Phase29 Report Binding: PASS
+- Capture Contract Reuse: PASS
+- Full-App Scope Binding: PASS
+- Paperless Process Roles: PASS
+- Database Integrity: PASS
+- Certificate Sidecar: PASS
+- Canonical Root Regression: 1330/1330 PASS
+- USB Manifest Final: PASS
+- Runtime Cleanup / Socket Absence: PASS
+- K58 Phase29 Integration Root Acceptance: PASS
 
-- Phase 28 Worker-Start-Zertifikat v1 ist root-abgenommen.
-- Kanonischer Root-Testlauf: 1317/1317 PASS.
-- Isolierter Docker/containerd-Runtime-Vertrag und Socket-Cleanup sind PASS.
-- APP_FULL/FULL_SERVER bleibt weiterhin fail-closed, solange Phase 29 nicht vollständig bestanden ist.
+## Zertifizierter Scope
 
-## Phase-29-Scope
-
-- Immich: Stock-Serverstart ohne WORKERS_INCLUDE/EXCLUDE-Override, also API + Microservices im normalen Prozessumfang.
+- Immich: Stock API + Microservices im normalen Server-Prozessumfang.
 - Paperless: Stock `/init` mit Webserver, Celery Worker, Celery Beat/Scheduler und Document Consumer.
 - Kein externes Netzwerk.
-- Leeres Consume-Verzeichnis vor Start.
-- Pre-/Post-Queue-Gates und DB-/Schema-Integrität bleiben fail-closed.
+- Pre-/Post-Queue-Gates und Datenbank-/Schema-Integrität bleiben Bestandteil des fail-closed Vertrags.
 
-## Lauf V1
+## Fehlerkette und Korrekturen
 
-V1 erreichte erfolgreich:
+### V1
 
-- Capture-Binding PASS
-- Isolation PASS
-- Image-Binding PASS
-- PostgreSQL-Restore PASS
-- Pre-Start-Queue PASS
+Capture, Isolation, Image-Binding, PostgreSQL-Restore und Pre-Start-Queue bestanden. Der Stock-Start scheiterte an der Redis-URL für Paperless. Für den Stock-Init-Pfad ist `unix://` erforderlich; Paperless übersetzt diesen Wert intern passend für Celery.
 
-Danach fail-closed vor Stock-App-Zertifizierung:
+### V2
 
-- Ursache: Paperless-Redis-URL war für den Stock-Init-Pfad falsch formuliert.
-- `redis+socket://...` funktioniert für Celery, aber der Paperless-Init-Waiter verwendet redis-py und erwartet `unix://...` für einen Unix-Socket.
-- Exakter Paperless-2.20.15-Code bestätigt, dass `PAPERLESS_REDIS=unix:///...?...` intern für Celery in `redis+socket://...` übersetzt wird.
+Nach Korrektur der Redis-URL wurde Paperless real gesund gestartet. Der Zertifizierungslauf scheiterte jedoch bei der Prozessrollenprüfung. Ursache war nicht Paperless, sondern die Docker-Top-Abfrage: Docker Engine 29 verlangt ein PID-Feld im `ps`-Output. Die Abfrage `docker top <cid> -eo args` ist daher ungeeignet.
 
-V1 startete daher keinen zertifizierten Full-App-Scope; fail-closed-Verhalten war korrekt.
+### V3
 
-## V2-Korrektur
+Die Prozessrollenprüfung verwendet `docker top <cid> -eo pid,args`. Nach einem rein speicherplatzbedingten Vorabstopp wurde Fail-Evidence verlustfrei auf das separate Evidence-Target verschoben und der vollständige Lauf erneut gestartet.
 
-V2 verwendet für Paperless einen `unix://`-Redis-Socket mit DB-Parameter. Dadurch können Init-Waiter, Django Channels und Celery denselben isolierten Unix-Socket korrekt verwenden.
+Der anschließende Realtest bestand vollständig einschließlich:
 
-Ein erster V2-Start stoppte noch vor Restore wegen zu wenig freiem Platz auf dem isolierten Data-Target. Die vorhandene V1-FAIL-Evidenz wurde verlustfrei auf das separate System-Target verschoben; danach war wieder ausreichend Platz vorhanden.
+- Capture Binding
+- Isolation
+- Image Binding
+- PostgreSQL Restore
+- Pre-Start Queue Gate
+- Stock Apps Started
+- Post-Start Queue Gate
+- Full-App Certification
+- Runtime Cleanup
 
-## Aktueller V2-Stand
+## Integration
 
-Der erneut gestartete V2-Lauf erreichte:
+Phase 28 bleibt als eigenständiger Worker-Start-Vertrag bestehen. Phase 29 ergänzt einen separaten Full-App-Start-Vertrag. Ein Worker-Zertifikat allein darf den größeren Startumfang weiterhin nicht freigeben.
 
-- Capture-Binding PASS
-- Isolation PASS
-- Image-Binding PASS
-- PostgreSQL-Restore PASS
-- Pre-Start-Queue PASS
+Die Full-App-Freigabe ist an den tatsächlich zertifizierten Scope und dessen Capture-, Image-, Queue- und Datenbankintegritätsbedingungen gebunden. Fehlende oder manipulierte Bindungen bleiben fail-closed.
 
-Danach endete der Lauf erneut fail-closed vor `STOCK_APPS_STARTED` mit einem noch nicht aufgelösten RuntimeError. Die isolierte Runtime wurde anschließend vollständig gestoppt und der Realtest-Docker-Socket entfernt.
+Die kanonische Test-ID-Liste wurde nach Aufnahme der neuen Phase29-Vertrags- und Guardtests neu registriert. Der finale Root-Lauf bestand mit 1330/1330 Tests. Danach wurde das USB-Manifest neu versiegelt und erfolgreich verifiziert.
 
-Der behaltene V2-FAIL-Zustand wird für die nächste gezielte Diagnose benötigt.
+## Sicherheitszustand nach Abschluss
 
-## Verbindliche Sicherheitsgrenze
+- isolierter Docker-Dienst: inactive
+- isolierter containerd-Dienst: inactive
+- isolierter Docker-Socket: absent
+- System-Docker-Socket im Recovery-Kontext: absent
 
-Bis Phase 29 vollständig PASS ist:
+## Lessons Learned
 
-- kein APP_FULL/FULL_SERVER-Start freigeben,
-- kein Teilzertifikat auf größeren Startumfang hochstufen,
-- keine Queue-/Schema-Gates abschwächen,
-- nur den exakten V2-Fehler im behaltenen isolierten Zustand diagnostizieren.
+- Bei Docker Engine 29 für Prozessrollen direkt `docker top <cid> -eo pid,args` verwenden.
+- `required=False` behandelt Nonzero-Returncodes, aber keinen `subprocess.TimeoutExpired`; Diagnose-Probes müssen Timeout explizit behandeln.
+- Retained mutable App-Ziele nicht direkt für Diagnosen starten, wenn Scheduler/Worker Daten verändern können; frische oder geklonte Staging-Daten verwenden.
+- Vor großen Realtests freien Platz prüfen. Diagnostizierte Fail-Evidence bei Bedarf verlustfrei auf ein separates Evidence-Target verschieben statt pauschal zu löschen.
+- `systemctl show Result=success` ist bei laufenden Units nicht final; ActiveState/SubState und Journal-Marker gemeinsam bewerten.
+- Root-private Evidence nicht für bequemere Inspektion auflockern; nur sichere Felder begrenzt extrahieren.
+- Nach Erweiterung des kanonischen Testsatzes müssen Test-ID-Vertrag und USB-Manifest gemeinsam aktualisiert und anschließend root-validiert werden.
 
-## Nächster Schritt
+## Abschluss
 
-Gezielte Root-Diagnose des behaltenen V2-FAIL-Zustands, um zu bestimmen, ob der Abbruch im Paperless-Prozessumfang, HTTP-Health, Immich-API-Health oder einem Docker-Exec/Inspect-Schritt entstand. Erst danach V3 bauen und erneut den vollständigen isolierten Zertifizierungslauf ausführen.
+`K58_PHASE29_INTEGRATION_ROOT_ACCEPTANCE=PASS`
+
+Phase 29 ist damit abgeschlossen. Private Capture-Identitäten, Run-IDs, Container-IDs, interne Pfade und vollständige private Evidenz-Hashes werden bewusst nicht im öffentlichen Repository dokumentiert.
