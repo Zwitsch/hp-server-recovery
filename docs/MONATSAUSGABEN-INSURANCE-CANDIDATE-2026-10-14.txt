@@ -1,0 +1,38 @@
+MONATSAUSGABEN – INSURANCE EXTENSION CANDIDATE
+Date: 2026-10-14
+
+Scope: extend the existing application with insurance management. Preserve
+existing expense rows, payment states, month navigation and authentication.
+No spreadsheet import, historical overlay, reset or replacement of user data.
+
+Implemented in the private application candidate (version 1.0.0, schema 1):
+contracts, provider and policy metadata, benefits, billing cadence and average
+costs, user-entered deadline hints, search/filter/sort/archive, private documents,
+claims and effective-month contribution history. Budget integration is opt-in;
+linking an existing expense does not modify it. Documents are included in the
+same consistent SQLite snapshot as the application data.
+
+Observed development validation:
+- 13 domain/migration regression tests passed;
+- HTTP validation passed, including preservation of synthetic legacy rows and
+  schema through the explicitly enabled upgrade;
+- Chromium flow passed at a mobile viewport; this is not a real Safari test;
+- 25 Python tests passed for online PRE backup, actual age-X25519 crypto/staged
+  restore and immutable PREPARED-release staging;
+- local lint, TypeScript and Next production build passed.
+
+Release staging rejects unknown/partial targets and links, verifies exact
+source manifest paths, source/image hashes, image config identity, platform,
+layer DiffIDs and source labels, and publishes without overwrite. Re-running
+against an identical complete target is read-only. It does not change CURRENT,
+PREVIOUS, Compose, services or a production database.
+
+Pending: pinned Docker build and executable image export, offline image import,
+production Node/Alpine validation, canonical recovery integration, actual tier
+and remote/monthly evidence, isolated runtime restore, real Safari, fresh PRE
+and POST around any later cutover, and validated production rollback.
+
+The private candidate is not a production release. No production app cutover
+or database migration has been performed. Existing recovery contracts remain
+in force. This public note contains no host identities, private paths, archive
+hashes, backup data, credentials or user contracts.
