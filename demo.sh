@@ -8,7 +8,7 @@ printf '%s\n' 'HP Server Recovery - synthetic public demo'
 printf '%s\n' 'No production backup or destructive restore is used.'
 
 PYTHON="${PYTHON:-python3}"
-"$PYTHON" -c 'import sys; assert sys.version_info >= (3, 10), "Python 3.10+ required"'
+"$PYTHON" -c 'import sys; assert sys.version_info >= (3, 12), "Python 3.12+ required"'
 
 if ! "$PYTHON" -c 'import yaml' >/dev/null 2>&1; then
     printf '%s\n' 'Missing dependency: PyYAML'
