@@ -1,6 +1,6 @@
 # HP Server Recovery
 
-[![Tests](https://github.com/Zwitsch/hp-server-recovery/actions/workflows/tests.yml/badge.svg)](https://github.com/Zwitsch/hp-server-recovery/actions/workflows/tests.yml)
+[![Tests](https://github.com/Zwitsch/hp-server-recovery/actions/workflows/tests.yml/badge.svg)](https://github.com/Zwitsch/hp-server-recovery/actions/workflows/tests.yml) ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg) ![Ubuntu](https://img.shields.io/badge/target-Ubuntu%2022.04-E95420) ![Python](https://img.shields.io/badge/Python-3.12%2B-3776AB)
 
 **Fail-closed disaster recovery for self-hosted Linux servers, built around proof before restore.**
 HP Server Recovery binds backups, release identity, target identity and recovery state before destructive actions are allowed; ambiguous or stale evidence stops the run.
@@ -8,6 +8,38 @@ It adds isolated restore/runtime certification, secret-leak checks, resumable au
 The public repository is a sanitized, reproducible engineering subset; production backups, credentials and machine identities are deliberately excluded.
 
 > **Status — 2026-10-16:** the private recovery package has passed isolated FULL_SERVER recovery, K59 fresh-host bootstrap validation and K60 real-runtime certification for fail-closed onboarding of an unknown application. The final fresh-installed-host restore + reboot certification is still pending. The public repository is not a drop-in production recovery image.
+
+## Recovery model at a glance
+
+```text
+Backup source
+     |
+     v
+Discover + inventory
+     |
+     v
+Bind snapshot + manifests + release identity
+     |
+     v
+Deterministic restore plan
+     |
+     v
+Safety + target + secret gates
+     |
+     v
+Isolated restore + runtime verification
+     |
+     v
+Certificate
+     |
+     v
+Real restore
+     |
+     v
+Integrity + cleanup + reboot verification
+```
+
+The core rule is simple: **discovery is not authorization**. Missing, stale or ambiguous evidence stops the restore instead of being guessed around.
 
 ## How is this different from ReaR?
 
@@ -28,6 +60,8 @@ The emphasis here is different and deliberately stricter at the **application re
 
 “Stricter” therefore means **more fail-closed evidence gates around application restore**, not a claim that HP Server Recovery is more complete than ReaR as a general-purpose Linux disaster-recovery product.
 
+For a broader, non-competitive positioning against ReaR, Borg/Restic, disk imaging and Docker Compose backups, see [Why HP Server Recovery?](docs/WHY-HP-SERVER-RECOVERY.md).
+
 ## 5-minute public quickstart
 
 This runs the sanitized public test package with synthetic fixtures. It does **not** touch production backups and does not perform a destructive system restore.
@@ -40,11 +74,16 @@ cd hp-server-recovery
 python3 -m venv .venv
 . .venv/bin/activate
 python -m pip install --disable-pip-version-check PyYAML
-python -m compileall -q lib tests
-python -m unittest tests.test_t01_t35 tests.test_wizard_v028 tests.test_realtest_mode
+bash demo.sh
 ```
 
-Expected result: the public regression suites finish with `OK`. The same three suites are executed by the repository's GitHub Actions workflow on Ubuntu.
+A successful run ends with:
+
+```text
+DEMO_RESULT=PASS
+```
+
+`demo.sh` compiles the public Python sources and runs the same three sanitized regression suites used by GitHub Actions. It refuses to continue if the required Python dependency is unavailable; it contains no production backup path or destructive restore command.
 
 To focus specifically on the isolated-realtest contract and its synthetic fixtures:
 
@@ -125,6 +164,7 @@ See:
 - `runtime-data/` — synthetic catalog data used by the test package
 - `manifests/` — integrity manifest for the synthetic package
 - `payload/` — synthetic test-only package contracts; no production payloads
+- `demo.sh` — one-command synthetic public regression demo
 
 ## Public vs. private validation
 
