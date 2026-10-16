@@ -2,9 +2,57 @@
 
 [![Tests](https://github.com/Zwitsch/hp-server-recovery/actions/workflows/tests.yml/badge.svg)](https://github.com/Zwitsch/hp-server-recovery/actions/workflows/tests.yml)
 
-Fail-closed disaster recovery framework for self-hosted Linux servers.
+**Fail-closed disaster recovery for self-hosted Linux servers, built around proof before restore.**
+HP Server Recovery binds backups, release identity, target identity and recovery state before destructive actions are allowed; ambiguous or stale evidence stops the run.
+It adds isolated restore/runtime certification, secret-leak checks, resumable audited state and explicit cleanup gates around application-aware recovery.
+The public repository is a sanitized, reproducible engineering subset; production backups, credentials and machine identities are deliberately excluded.
 
-> **Status:** public sanitized pre-release. The complete private recovery package has passed its isolated FULL_SERVER end-to-end realtest. The public repository remains a sanitized engineering subset and is not a drop-in production recovery image.
+> **Status — 2026-10-16:** the private recovery package has passed isolated FULL_SERVER recovery, K59 fresh-host bootstrap validation and K60 real-runtime certification for fail-closed onboarding of an unknown application. The final fresh-installed-host restore + reboot certification is still pending. The public repository is not a drop-in production recovery image.
+
+## How is this different from ReaR?
+
+[Relax-and-Recover (ReaR)](https://relax-and-recover.org/) is a mature Linux disaster-recovery system focused on recreating a machine's rescue environment, storage layout and backup/restore workflow. HP Server Recovery is not intended as a replacement for ReaR's rescue-media and bare-metal capabilities.
+
+The emphasis here is different and deliberately stricter at the **application recovery contract** layer:
+
+| Area | ReaR | HP Server Recovery |
+| --- | --- | --- |
+| Primary focus | Linux rescue / system recreation / backup integration | Fail-closed, application-aware restore orchestration and certification |
+| Ambiguous recovery input | Configuration/workflow dependent | Restore gate stops when required identity/binding evidence is missing or ambiguous |
+| Backup binding | Integrates multiple backup methods | Explicit source, snapshot, manifest and release-identity binding before restore |
+| Application identity | Not its primary abstraction | Exact application/runtime release identity is part of the recovery contract |
+| Unknown applications | General system recovery model | Discovered app remains non-restorable until isolated restore/runtime evidence certifies it |
+| Runtime isolation | Rescue/recovery environment | Dedicated isolated container runtime with production-socket boundary checks |
+| Completion | Successful recovery workflow | Requires integrity evidence, cleanup state and secret-free persistent reports |
+| Testing model | Rescue/recovery workflows | Synthetic fixtures + negative gates + isolated real-restore/runtime certification |
+
+“Stricter” therefore means **more fail-closed evidence gates around application restore**, not a claim that HP Server Recovery is more complete than ReaR as a general-purpose Linux disaster-recovery product.
+
+## 5-minute public quickstart
+
+This runs the sanitized public test package with synthetic fixtures. It does **not** touch production backups and does not perform a destructive system restore.
+
+Requirements: Linux/macOS/WSL, Git, Python 3.12+ and `pip`.
+
+```bash
+git clone https://github.com/Zwitsch/hp-server-recovery.git
+cd hp-server-recovery
+python3 -m venv .venv
+. .venv/bin/activate
+python -m pip install --disable-pip-version-check PyYAML
+python -m compileall -q lib tests
+python -m unittest tests.test_t01_t35 tests.test_wizard_v028 tests.test_realtest_mode
+```
+
+Expected result: the public regression suites finish with `OK`. The same three suites are executed by the repository's GitHub Actions workflow on Ubuntu.
+
+To focus specifically on the isolated-realtest contract and its synthetic fixtures:
+
+```bash
+python -m unittest tests.test_realtest_mode
+```
+
+The fixtures live under `tests/fixtures/`; synthetic catalog/package data is under `runtime-data/` and `payload/`. These public tests exercise safety and recovery logic without publishing or requiring the private production recovery payload.
 
 ## What it does
 
@@ -27,185 +75,46 @@ Persistent reports and audit data are checked for secret-marker leakage before a
 
 See [SECURITY.md](SECURITY.md) and `docs/SAFETY-MODEL.md`.
 
-## Current private recovery milestone — 2026-10-04
-
-### English
-
-The private K56 recovery package remains end-to-end proven.
+## Latest private certification — K59/K60, 2026-10-16
 
 Current sanitized validation status:
 
-- private canonical regression suite: **1050/1050 PASS**
-- retained focused fresh-tree gates: **PASS**
-- dynamic backup-bound CURRENT release resolution: **PASS**
-- worker-root and report-state hardening: **PASS**
-- Compose symbolic/runtime release-binding hardening: **PASS**
-- DeviceWatchdog configuration-format contract hardening: **PASS**
-- isolated FULL_SERVER realtest: **COMPLETED**
-- restore mode: **COMBINED_L2_L3**
-- isolated runtime cleanup: **PASS**
-- final realtest return code: **0**
+- K58 restore engine and prior isolated FULL_SERVER recovery: **certified baseline**
+- K59 fresh-host preflight, package/repository plan, mapped-root apply, identities, metadata and boot preparation: **PASS**
+- K59 USB/recovery entry-point integration: **PASS**
+- K60 fail-closed unknown-application candidate/classification/certificate chain: **PASS**
+- K60 dual plan/runtime certificate gate: **PASS**
+- K60 actual isolated unknown-app restore/runtime/integrity certification: **PASS**
+- final manifest reseal after K60: **PASS**
+- latest authoritative private root canonical regression: **1376/1376 PASS**
+- post-certification isolated Docker/containerd cleanup and socket boundary: **PASS**
+- final fresh-installed-host restore + reboot certification: **PENDING**
 
-The remaining project-endgame work is primarily automatic onboarding of unknown applications, final recovery-medium/GUI integration, full Cold-restore acceptance and a real bare-metal end-to-end disaster-recovery run.
+K60 specifically prevents metadata discovery from silently authorizing a new application. A discovered application remains `PENDING_ONBOARDING` and non-restorable until an isolated restore/runtime report has passed and a bound certificate explicitly permits restore.
 
-### Deutsch
+For tagless OCI archives, archive/config identity and Docker runtime addressability are treated as separate immutable bindings instead of assuming that a config-blob digest is interchangeable with Docker's runtime image identity.
 
-Das private K56-Recovery-Paket ist weiterhin End-to-End real bewiesen.
+See [K59/K60 USB Cold Recovery status](docs/K59-USB-COLD-RECOVERY-WIP-2026-10-12.md).
 
-Aktueller sanitisierter Validierungsstand:
+## Earlier recovery milestones
 
-- private kanonische Regression: **1050/1050 PASS**
-- beibehaltene fokussierte Fresh-Gates: **PASS**
-- dynamische backup-gebundene CURRENT-Release-Auflösung: **PASS**
-- Worker-Root- und Report-State-Härtung: **PASS**
-- Härtung der symbolischen/Runtime-Compose-Release-Bindung: **PASS**
-- Härtung des DeviceWatchdog-Konfigurationsformat-Vertrags: **PASS**
-- isolierter FULL_SERVER-Realtest: **COMPLETED**
-- Restore-Modus: **COMBINED_L2_L3**
-- Cleanup der isolierten Runtime: **PASS**
-- finaler Realtest-Rückgabecode: **0**
+The repository retains detailed milestone documents for the earlier K56-K58 development and the Immich/Filen Cold-storage work. Those checkpoints document the progression from isolated FULL_SERVER recovery through Cold-restore pilots, capture binding, database/Redis restoration and application-start certification.
 
-Die verbleibenden Arbeiten bis zum eigentlichen Disaster-Recovery-Endziel betreffen vor allem Auto-Onboarding unbekannter Apps, das finale Recovery-Medium samt GUI, die vollständige Cold-Restore-Abnahme sowie einen echten Bare-Metal-End-to-End-Lauf.
+Notable retained results include:
+
+- K57 L2 and COMBINED Cold pilots: **100/100 BLAKE3 PASS** for each pilot
+- Immich/Filen Cold archive: **81,328/81,328 BLAKE3 PASS**
+- K58 capture/database/runtime phases: progressively integrated into the later certified K59/K60 baseline
+
+Earlier checkpoint counts are historical and must not be interpreted as the current regression total. The current authoritative private regression result is the K60 result above.
 
 See:
 
 - `docs/FINAL-RECOVERY-MILESTONE-2026-09-27.md`
 - `docs/RECOVERY-IMMICH-MILESTONE-2026-10-03.md`
-
-## K57 Cold-restore validation — 2026-10-04
-
-The private K57 package now supports a manifest-bound Cold overlay after the normal Level-2 mirror restore and before database/service restoration.
-
-- private canonical regression and fresh-extraction root regression: **1092/1092 PASS** each
-- fresh extraction manifests: **PASS** for both independent extractions
-- real L2 and COMBINED Cold pilots: **100 production-origin files / 2,167,636 bytes** each
-- target BLAKE3: **100/100 PASS** in both pilots
-- existing non-Cold sentinel preservation: **PASS** in both pilots
-- full **81,328-file / 252.66-GiB** Cold restore: **not yet executed**
-
-K57 pilot validation does not replace the earlier K56 FULL_SERVER result or certify a complete K57 bare-metal recovery.
-
-Der private K57-Cold-Restore ist im L2- und COMBINED-Pilot real bewiesen. Beide Piloten restaurierten je **100 echte Dateien / 2.167.636 Bytes**, mit **100/100 BLAKE3-PASS**. Die Root-Regression und die Fresh-Root-Regression bestanden jeweils **1092/1092** Tests. Der vollständige Restore von **81.328 Dateien / 252,66 GiB** bleibt für den ausreichend großen Fresh-Target-/Bare-Metal-Abnahmetest offen.
-
-See [K57 Cold-restore milestone](docs/K57-COLD-RESTORE-MILESTONE-2026-10-04.md).
-
-## K58 phase 24 common pilot contract — 2026-10-05
-
-Private validation checkpoint (sanitized; private implementation and production payloads remain excluded):
-
-- common capture-contract negative tests: **42/42 PASS**
-- real archive anchors for DB/Redis input, application-file input, bound image metadata and recovery config: **PASS**
-- cross-package metadata binding: **PASS**
-- selected payload hashes: **PASS** for 4 database/Redis payloads and 335 application files
-- six runtime/image roles bound to the same capture run: **PASS**
-- common pilot contract: **PASS**
-
-This contract prevents silent mixing of capture runs. It does not certify application database/job-queue consistency, full application behavior, or a complete FULL_SERVER/bare-metal restore.
-
-- `APP_DATABASE_JOBQUEUE_CONSISTENCY=NOT_CERTIFIED`
-- `FULL_81328_COLD_RESTORE_PASS=false`
-- `IMAGE_ARCHIVE_RECHECK=NOT_RUN` in this cross-package audit; the full OCI archive verification remains covered by the earlier image-transfer gate.
-
-## K58 progress checkpoint — 2026-10-05
-
-This checkpoint supersedes the earlier K58 progress paragraph below. It records private validation results; it does not claim that the corresponding private implementation or tests have been published in this sanitized repository.
-
-- latest completed private canonical root regression (phase 14): **1281/1281 PASS**
-- real Redis restore from bound published input, package materialization and engine staging: **PASS**, including isolated cleanup
-- complete post-integration L2 and local L3 backup runs: **PASS**; remote cloud completion is not established by the local L3 result
-- application writer-hold capture with subsequent service resumption and payload hashing: **PASS**
-- isolated restore of the captured Immich PostgreSQL database, Paperless SQLite database and both Redis snapshots (phase 20): **PASS**
-- additional capture-bound offline image export, transfer and archive validation (phase 21): **PASS**
-- bound Paperless file package and limited Immich marker package, including transfer verification (phase 22): **PASS**
-- limited Paperless ORM / Immich API start pilot (phase 23): **PASS**, with both database and Redis loads, source binding, isolation and cleanup passing; elapsed time **15 min 42 sec**
-
-**Acceptance limits remain explicit:**
-
-- `APP_DATABASE_JOBQUEUE_CONSISTENCY=NOT_CERTIFIED`
-- `FULL_81328_COLD_RESTORE_PASS=false`
-- no complete K58 FULL_SERVER or bare-metal acceptance is claimed
-- common database/queue capture is not yet integrated and accepted throughout the regular backup/restore workflow
-- the app-start pilot does not include the complete Immich media library or certify queue-consumer behavior
-- the full Cold restore remains deferred because an adequately sized recovery target is unavailable
-
-Deutsch: Der private Stand ist bis Phase 23 durch die genannten Teilnachweise dokumentiert. Paperless-ORM und Immich-API-Start sowie das Cleanup bestanden; vollständige App-/Queue-Funktionalität bleibt offen. Erfolgreiche Datenbank- und Redis-Ladevorgänge ersetzen weder die Prüfung der Datenbank-/Jobqueue-Konsistenz noch einen vollständigen Disaster-Recovery-Test. Der letzte kanonische Root-Lauf bestand 1281/1281 Tests; die spätere Pilotentwicklung wurde separat geprüft.
-
-## K58 inventory and backup binding — 2026-10-04
-
-The private K58 phase-2 root regression passed **1144/1144** tests. The production backup integration passed **18/18** separate binding tests, installation, a fresh application export, receipt verification and bound inventory publication to a local pilot target.
-
-The installed L2/L3 scripts now include explicit inventory publication. Complete post-installation L2/L3 backup runs and full K58 recovery acceptance remain open. Automatic onboarding is incomplete: runtime service/mount coverage, exact offline images, secrets and isolated restore contracts still require validation.
-
-Die K58-Root-Regression bestand **1144/1144** Tests; **18/18** separate Bindungstests und der frische produktive App-Export mit Inventarpublikation bestanden ebenfalls. Dies bestätigt noch keinen vollständigen L2/L3-Backup-Lauf oder K58-Full-Server-Restore.
-
-See [K58 accepted checkpoints and remaining work](docs/K58-INVENTORY-BINDING-MILESTONE-2026-10-04.md).
-
-## Immich / Filen official External Libraries — 2026-10-03
-
-### English
-
-The production storage architecture is now:
-
-Filen -> read-only rclone FUSE -> official Immich External Libraries -> stock Immich
-
-Current sanitized production state:
-
-- Immich server **v3.2.1**, healthy
-- machine-learning service **v3.2.4**, healthy
-- exactly four owner-specific External Libraries
-- **83,227** active assets total
-- **81,735** active external assets
-- **1,492** active local assets
-- **0** offline external assets
-- final large reclaim set: **81,328 files / 252.66 GiB**
-- local-to-Filen BLAKE3: **81,328/81,328 PASS**
-- local-to-Level-2 BLAKE3: **81,328/81,328 PASS**
-- Level-2 Cold archive: **81,328/81,328 PASS**
-- Level-2 mirror detach: **81,328/81,328 PASS**
-- final local reclaim: **PASS**
-- local reclaim targets remaining: **0**
-- preserved sidecars: **949/949**
-- post-reclaim database validation: **PASS**
-- monthly Cold-archive BLAKE3 deep verifier: **enabled**
-
-At the 2026-10-03 milestone, the productive daily Level-2 backup script remained unchanged; the later K58 inventory integration is recorded above. The large Cold archive is stored outside the normal mirror tree, so daily backup operation does not require an 81k-entry rsync protection filter or daily full-content hashing.
-
-The first scheduled automatic Cold deep-verify and the first normal productive Level-2 backup after reclaim have both completed successfully. Exact post-run structure verification confirmed **0/81,328** detached reclaim paths in the normal mirror and **81,328/81,328** files present in the Cold archive.
-
-### Deutsch
-
-Die produktive Speicherarchitektur lautet jetzt:
-
-Filen -> read-only rclone FUSE -> offizielle Immich External Libraries -> Stock-Immich
-
-Aktueller sanitisierter Produktivstand:
-
-- Immich-Server **v3.2.1**, healthy
-- Machine-Learning-Service **v3.2.4**, healthy
-- genau vier benutzerspezifische External Libraries
-- **83.227** aktive Assets insgesamt
-- **81.735** aktive External Assets
-- **1.492** aktive lokale Assets
-- **0** Offline-External-Assets
-- finaler großer Reclaim: **81.328 Dateien / 252,66 GiB**
-- Local↔Filen BLAKE3: **81.328/81.328 PASS**
-- Local↔Level-2 BLAKE3: **81.328/81.328 PASS**
-- Level-2-Cold-Archiv: **81.328/81.328 PASS**
-- Level-2-Mirror-Detach: **81.328/81.328 PASS**
-- finaler lokaler Reclaim: **PASS**
-- verbleibende Reclaim-Zieldateien lokal: **0**
-- Sidecars erhalten: **949/949**
-- Post-Reclaim-Datenbankprüfung: **PASS**
-- monatlicher Cold-Archiv-BLAKE3-Deep-Verify: **enabled**
-
-Zum Meilenstein vom 03.10.2026 blieb das produktive tägliche Level-2-Backup-Skript unverändert; die spätere K58-Inventarintegration ist oben dokumentiert. Das große Cold-Archiv liegt außerhalb des normalen Mirror-Baums; dadurch sind weder ein 81k-Rsync-Schutzfilter noch tägliche Vollhashes erforderlich.
-
-Der erste automatische Cold-Deep-Verify und der erste normale produktive Level-2-Lauf nach dem Reclaim sind erfolgreich abgeschlossen. Die exakte Strukturprüfung bestätigte **0/81.328** abgetrennte Reclaim-Pfade im normalen Mirror und **81.328/81.328** Dateien im Cold-Archiv.
-
-See:
-
-- `docs/RECOVERY-IMMICH-MILESTONE-2026-10-03.md`
-- `docs/IMMICH-FILEN-EXTERNAL-LIBRARIES-2026-09-27.md`
+- `docs/K57-COLD-RESTORE-MILESTONE-2026-10-04.md`
+- `docs/K58-INVENTORY-BINDING-MILESTONE-2026-10-04.md`
+- `docs/K59-USB-COLD-RECOVERY-WIP-2026-10-12.md`
 
 ## Repository structure
 
@@ -217,20 +126,26 @@ See:
 - `manifests/` — integrity manifest for the synthetic package
 - `payload/` — synthetic test-only package contracts; no production payloads
 
-## Test status
+## Public vs. private validation
 
-The sanitized public release tree currently passes **183/183 automated tests**, including:
+The public repository intentionally contains only sanitized logic, tests and synthetic fixtures. Its GitHub Actions workflow compiles the Python sources and runs the three published unittest suites shown in the quickstart.
 
-- recovery planner and state-machine tests
-- confirmation and storage safety gates
-- wizard behavior
-- isolated realtest identity binding
-- read-only source enforcement
-- target/source overlap protection
-- Docker Compose isolation
-- cleanup and resume behavior
-- secret-marker redaction and final evidence checks
+The private recovery tree contains additional host-specific contracts, recovery payload metadata, isolated runtime machinery and certification tests. Its latest authoritative root canonical regression is **1376/1376 PASS** after K60 real-runtime certification.
 
-The private K58 phase-14 package has a **1281/1281 PASS** canonical root regression; K57 additionally has real Cold pilots; the earlier K56 isolated FULL_SERVER realtest remains the completed end-to-end baseline. Those private results are tracked separately from the sanitized public tree to avoid implying that unpublished private tests are part of this repository.
+Private results are stated separately so that unpublished tests are never presented as if they were executable from this public repository.
 
 The public repository intentionally excludes production backup data, credentials, personal identifiers, private infrastructure details, machine-specific paths, raw recovery evidence and private archive hashes.
+
+## Remaining end-to-end acceptance
+
+The final project-level acceptance remains intentionally open until the complete workflow is demonstrated on a genuinely fresh Ubuntu 22.04 installation:
+
+1. start through the intended recovery/USB entry point
+2. validate fresh-host bootstrap and dedicated data target
+3. select and bind the recovery source/snapshot
+4. perform the complete restore through the recovery engine
+5. certify applications, databases and integrity gates
+6. reboot the restored host
+7. repeat the required post-reboot system/application/integrity checks
+
+Until that succeeds, the project does not claim final bare-metal/fresh-host disaster-recovery certification.
