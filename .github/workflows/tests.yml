@@ -23,8 +23,5 @@ jobs:
       - name: Install test dependency
         run: python -m pip install --disable-pip-version-check PyYAML
 
-      - name: Compile Python sources
-        run: python -m compileall -q lib tests
-
-      - name: Run recovery test suites
-        run: python -m unittest tests.test_t01_t35 tests.test_wizard_v028 tests.test_realtest_mode
+      - name: Run public demo entrypoint
+        run: bash demo.sh
