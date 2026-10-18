@@ -1,5 +1,7 @@
 # HP Server Recovery
 
+**Language / Sprache:** English · [Deutsch](README-DE.md)
+
 [![Tests](https://github.com/Zwitsch/hp-server-recovery/actions/workflows/tests.yml/badge.svg)](https://github.com/Zwitsch/hp-server-recovery/actions/workflows/tests.yml) ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg) ![Ubuntu](https://img.shields.io/badge/target-Ubuntu%2022.04-E95420) ![Python](https://img.shields.io/badge/Python-3.12%2B-3776AB)
 
 **Fail-closed disaster recovery for self-hosted Linux servers, built around proof before restore.**
