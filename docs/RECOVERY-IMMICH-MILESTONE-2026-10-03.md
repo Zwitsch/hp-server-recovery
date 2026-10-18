@@ -1,5 +1,7 @@
 # Recovery and Immich/Filen milestone — 2026-10-03
 
+**Language / Sprache:** English · [Deutsch](RECOVERY-IMMICH-MILESTONE-2026-10-03-DE.md)
+
 ## Scope
 
 This document records a sanitized private-system milestone for HP Server Recovery and the Immich/Filen storage architecture.
