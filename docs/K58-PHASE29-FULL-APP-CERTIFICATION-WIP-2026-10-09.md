@@ -1,5 +1,7 @@
 # K58 Phase 29 – Full-App Certification – PASS
 
+**Sprache / Language:** Deutsch · [English](K58-PHASE29-FULL-APP-CERTIFICATION-WIP-2026-10-09-DE.md)
+
 Stand: 2026-10-10
 
 ## Ergebnis
