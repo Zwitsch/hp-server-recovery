@@ -1,5 +1,7 @@
 # K58 Phase 25 — private capture binding
 
+**Language / Sprache:** English · [Deutsch](K58-PHASE25-PRIVATE-CAPTURE-BINDING-2026-10-05-DE.md)
+
 Date: 2026-10-05
 
 This is a sanitized milestone record. Private implementation details, production payloads, machine-specific paths, run identifiers, archive hashes and secrets remain excluded from the public repository.
