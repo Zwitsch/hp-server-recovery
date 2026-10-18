@@ -1,5 +1,7 @@
 # K59 USB Cold Recovery – WIP
 
+English | [Deutsch](K59-USB-COLD-RECOVERY-WIP-2026-10-12-DE.md)
+
 Status: 2026-10-16
 
 ## Goal
