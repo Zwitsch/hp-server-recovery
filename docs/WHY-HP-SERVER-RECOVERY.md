@@ -1,5 +1,7 @@
 # Why HP Server Recovery?
 
+**Language / Sprache:** English · [Deutsch](WHY-HP-SERVER-RECOVERY-DE.md)
+
 HP Server Recovery explores a specific problem in self-hosted disaster recovery: **how do you prove that the backup, application release, target, restore procedure and recovered runtime still belong together before declaring a restore successful?**
 
 It is not intended to replace established backup, imaging or Linux rescue tools. It adds a fail-closed orchestration and certification layer around application-aware recovery.
