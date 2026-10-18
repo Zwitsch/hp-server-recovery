@@ -91,6 +91,7 @@ REPOSITORY_METADATA = {
     "CONTRIBUTING.md",
     "CHANGELOG.md",
     "CHANGELOG-DE.md",
+    "demo.sh",
 }
 REPOSITORY_METADATA_DIRS = {".git", ".github", "docs"}
 
