@@ -1,5 +1,7 @@
 # Immich / Filen official External Libraries milestone — 2026-09-27
 
+**Language / Sprache:** English · [Deutsch](IMMICH-FILEN-EXTERNAL-LIBRARIES-2026-09-27-DE.md)
+
 ## Architecture
 
 The private production Immich system has moved away from a permanent Immich code-patch architecture for the migrated tier.
