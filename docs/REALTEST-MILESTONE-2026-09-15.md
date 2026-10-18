@@ -1,5 +1,7 @@
 # K22 real-runtime validation milestone — 2026-09-15
 
+**Language / Sprache:** English · [Deutsch](REALTEST-MILESTONE-2026-09-15-DE.md)
+
 This document records a sanitized development milestone for HP Server Recovery.
 
 It deliberately excludes production backup data, credentials, machine identities, private hostnames, private filesystem paths, archive hashes and raw recovery reports.
