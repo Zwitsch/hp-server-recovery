@@ -1,5 +1,7 @@
 # Final recovery milestone — 2026-09-27
 
+**Language / Sprache:** English · [Deutsch](FINAL-RECOVERY-MILESTONE-2026-09-27-DE.md)
+
 ## Scope
 
 This document records the sanitized final milestone of the private HP Server Recovery project.
