@@ -1,5 +1,7 @@
 # Architecture
 
+**Language / Sprache:** English · [Deutsch](ARCHITECTURE-DE.md)
+
 HP Server Recovery separates recovery planning, validation and execution from host-specific data.
 
 ## Core layers
