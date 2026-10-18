@@ -1,5 +1,7 @@
 # Changelog
 
+**Language / Sprache:** English · [Deutsch](CHANGELOG-DE.md)
+
 All notable changes to HP Server Recovery will be documented in this file.
 
 The project is currently preparing its first stable OSS release.
