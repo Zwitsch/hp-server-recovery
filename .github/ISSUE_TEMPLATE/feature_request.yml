@@ -1,5 +1,5 @@
-name: Feature request
-description: Suggest a generic, fail-closed improvement
+name: Feature request / Funktionswunsch
+description: Suggest a generic, fail-closed improvement / Generische Fail-Closed-Verbesserung vorschlagen
 title: "[Feature]: "
 labels:
   - enhancement
@@ -8,33 +8,34 @@ body:
     attributes:
       value: |
         Proposals must remain generic and sanitized. Do not include production manifests, backups, secrets, private infrastructure details, or real device identifiers.
+        Vorschläge müssen generisch und bereinigt bleiben. Keine produktiven Manifeste, Backups, Secrets, privaten Infrastrukturdetails oder realen Gerätekennungen veröffentlichen.
   - type: textarea
     id: problem
     attributes:
-      label: Problem
-      description: What generic recovery problem should be solved?
+      label: Problem / Problem
+      description: What generic recovery problem should be solved? / Welches allgemeine Recovery-Problem soll gelöst werden?
     validations:
       required: true
   - type: textarea
     id: proposal
     attributes:
-      label: Proposed solution
-      description: Describe the desired behavior using synthetic examples.
+      label: Proposed solution / Lösungsvorschlag
+      description: Describe the desired behavior using synthetic examples. / Gewünschtes Verhalten anhand synthetischer Beispiele beschreiben.
     validations:
       required: true
   - type: textarea
     id: safety
     attributes:
-      label: Safety impact
-      description: Explain how the proposal preserves or strengthens fail-closed behavior.
+      label: Safety impact / Sicherheitsauswirkung
+      description: Explain how the proposal preserves or strengthens fail-closed behavior. / Erläutern, wie der Vorschlag das Fail-Closed-Verhalten erhält oder verstärkt.
     validations:
       required: true
   - type: checkboxes
     id: privacy
     attributes:
-      label: Publication confirmation
+      label: Publication confirmation / Veröffentlichungsbestätigung
       options:
-        - label: This request contains only generic or synthetic information.
+        - label: This request contains only generic or synthetic information. / Diese Anfrage enthält ausschließlich generische oder synthetische Informationen.
           required: true
-        - label: I removed secrets and production-specific identifiers.
+        - label: I removed secrets and production-specific identifiers. / Ich habe Secrets und produktionsspezifische Kennungen entfernt.
           required: true
