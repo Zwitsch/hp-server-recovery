@@ -1,5 +1,7 @@
 # K57 manifest-bound Immich Cold restore — 2026-10-04
 
+**Language / Sprache:** English · [Deutsch](K57-COLD-RESTORE-MILESTONE-2026-10-04-DE.md)
+
 ## Scope
 
 The private recovery package extends the previously completed K56 FULL_SERVER restore with a manifest-bound Cold overlay. These private validation results are separate from the sanitized public repository's test suite.
