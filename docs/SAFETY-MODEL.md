@@ -1,5 +1,7 @@
 # Safety Model
 
+**Language / Sprache:** English · [Deutsch](SAFETY-MODEL-DE.md)
+
 HP Server Recovery is designed around a fail-closed recovery boundary.
 
 ## Required principles
