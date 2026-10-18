@@ -82,7 +82,16 @@ def validate_image_lock(usb_root):
     return {"status": "PASS", "service_contracts": len(contracts)}
 
 
-REPOSITORY_METADATA = {".gitignore", "README.md", "LICENSE", "SECURITY.md", "CONTRIBUTING.md", "CHANGELOG.md"}
+REPOSITORY_METADATA = {
+    ".gitignore",
+    "README.md",
+    "README-DE.md",
+    "LICENSE",
+    "SECURITY.md",
+    "CONTRIBUTING.md",
+    "CHANGELOG.md",
+    "CHANGELOG-DE.md",
+}
 REPOSITORY_METADATA_DIRS = {".git", ".github", "docs"}
 
 
