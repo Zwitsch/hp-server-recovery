@@ -1,5 +1,7 @@
 # K58 phases 27–28 — certified capture and worker-start certification
 
+**Language / Sprache:** English · [Deutsch](K58-PHASE27-28-WORKER-CERTIFICATION-2026-10-08-DE.md)
+
 Updated: 2026-10-09
 
 This document records a **sanitized private validation milestone**. Production payloads, host-specific paths, addresses, run identifiers, container identifiers, secrets and private hashes are intentionally excluded.
