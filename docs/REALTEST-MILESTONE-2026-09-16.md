@@ -1,5 +1,7 @@
 # Realtest milestone — 2026-09-16
 
+**Language / Sprache:** English · [Deutsch](REALTEST-MILESTONE-2026-09-16-DE.md)
+
 This document records a sanitized development milestone from the private HP Server Recovery validation environment.
 
 It intentionally excludes production backup data, credentials, hostnames, machine identities, private paths, raw recovery reports and private release artifacts.
