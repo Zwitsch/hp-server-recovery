@@ -1,5 +1,7 @@
 # K58 inventory and backup-run binding — 2026-10-04
 
+**Language / Sprache:** English · [Deutsch](K58-INVENTORY-BINDING-MILESTONE-2026-10-04-DE.md)
+
 K58 adds conservative discovery of applications and a sanitized Docker inventory to the private recovery work tree. This page records the accepted checkpoints; it does not certify automatic onboarding or a new full-server restore.
 
 ## Accepted validation
