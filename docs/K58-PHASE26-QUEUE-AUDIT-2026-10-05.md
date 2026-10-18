@@ -1,5 +1,7 @@
 # K58 Phase 26 queue audit — 2026-10-05
 
+**Language / Sprache:** English · [Deutsch](K58-PHASE26-QUEUE-AUDIT-2026-10-05-DE.md)
+
 Sanitized private validation checkpoint. Production payloads, private paths, machine identities, run identifiers and raw key names are intentionally excluded.
 
 ## Result
