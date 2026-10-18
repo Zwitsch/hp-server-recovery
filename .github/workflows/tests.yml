@@ -23,5 +23,8 @@ jobs:
       - name: Install test dependency
         run: python -m pip install --disable-pip-version-check PyYAML
 
+      - name: Manifest diagnostic
+        run: sha256sum lib/hp_recovery/validation.py
+
       - name: Run public demo entrypoint
         run: bash demo.sh
