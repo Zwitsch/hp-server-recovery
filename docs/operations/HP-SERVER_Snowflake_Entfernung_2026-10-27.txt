@@ -1,0 +1,101 @@
+HP-SERVER - Snowflake entfernen
+Stand: 2026-10-27, Europe/Berlin
+Status: VORBEREITET; ADMINISTRATORLAUF UND ABSCHLUSSPRUEFUNG AUSSTEHEND.
+
+Auftrag
+Snowflake Proxy entfernen und aufrufende Skripte bereinigen.
+Keine anderen produktiven Container entfernen oder neu starten.
+
+Erhobener Bestand
+- Container snowflake-proxy, ohne Datenmounts, Neustartregel unless-stopped.
+- Zwei Compose-Verzeichnisse: docker/snowflake und docker/snowflake-proxy.
+- Vier Timer samt Services: snowflake-monitor, snowflake-weekly-report,
+  snowflake-monthly-report und hp-check-snowflake.
+- Aktive ioBroker-Steuerung: script.js.Docker.UpdatePerContainer.
+- 16 zugehoerige ioBroker-Objekte.
+- Drei Yahka-Geraete fuer Start, Status und Updateverfuegbarkeit.
+- Gemeinsamer HP-Agent enthaelt einen Snowflake-Log-Befehl.
+
+Vorbereitete Aenderungen
+13 vollstaendige Kandidatendateien, jeweils mit SHA-256 vor/nach Aenderung:
+- check-docker-updates-v2.sh und check-docker-updates.sh
+- pin-docker-tags.sh
+- backup_level3.sh
+- docker-monitor.sh und zugehoerige Konfiguration
+- beide installierten Analyzer-Skripte
+- drei Diagnose-/Exportskripte im Benutzerverzeichnis
+- eine dortige Docker-Monitor-Arbeitskopie
+- HP-Agent-Befehlsliste
+/usr/local/bin/check-docker-updates.sh ist ein Symlink auf das sbin-Skript.
+
+Installationspaket auf hp-server
+/home/daniel/snowflake-retire-20261027/
+- retire-snowflake.py: Root-Installer mit --check
+- audit_snowflake.py: Scan aktiver Referenzen und Root-Crontab
+- iobroker-cleanup.cjs: Live-DB-Zugriff; --check, --apply, --verify
+- plan.json und candidates/: private, vollstaendige Kandidaten
+
+Administratoraufruf
+sudo python3 -u /home/daniel/snowflake-retire-20261027/retire-snowflake.py
+
+Vorgesehener Ablauf
+1. Quellenhashes und Syntax erneut pruefen.
+2. Mit Root-Rechten auch bisher unlesbare Bereiche auditieren.
+   Ungeplante aktive Referenzen stoppen den Lauf vor Aenderungen.
+3. Originaldateien, Compose-Dateien und Monitor-Daten privat sichern.
+4. Snowflake-Timer stoppen/deaktivieren; gemeinsame Timer kurz pausieren.
+5. Gezielte Systemdateien installieren, Eigentuemer/Rechte/Attribute erhalten.
+6. Live-ioBroker-Originalobjekte sichern; nur Snowflake aus Skript/Yahka
+   entfernen und seine States/Objekte loeschen.
+7. Snowflake-Units, Pruefskripte, Konfiguration und Container entfernen.
+8. Compose-/Monitor-Verzeichnisse und unbenutzte Snowflake-Images/Netze entfernen.
+9. HP-Agent wegen seiner geaenderten Befehlsliste neu starten.
+10. Andere Container auf unveraenderten Status und Startzeitpunkt pruefen.
+11. Aktive Skript-/Konfigurationsreferenzen und ioBroker erneut pruefen.
+12. Gemeinsame Timer wieder starten; Abschlussbeleg schreiben.
+
+Erwarteter Abschluss
+SNOWFLAKE_RETIREMENT=PASS
+OTHER_CONTAINERS_UNCHANGED=PASS
+Voraussichtlich 15 laufende Container, sofern der Bestand unveraendert bleibt.
+Der Abschlussbeleg existiert erst nach erfolgreichem Administratorlauf.
+
+Pruefung
+- Alle 13 Kandidaten syntaxgeprueft (Bash, Python bzw. JSON).
+- Node-Syntax und Live-ioBroker-Vorpruefung erfolgreich.
+- Diff der gemeinsamen Dateien auf sachfremde Aenderungen geprueft.
+- L3: Alle Abschnitte ab Analyzer-Archiv bytegleich zum Ausgangsstand.
+- Benutzer-Crontab: kein aktiver Snowflake-Aufruf.
+- Vier geschuetzte Bereiche verbleiben fuer den Root-Audit:
+  backup_level2-Verzeichnis, backup_level3_export.sh,
+  HP-Agent-Umgebungsdatei und dessen Environment-Drop-in.
+- Geschuetzte hp-watchdogs-Crondatei enthaelt nur auskommentierte
+  Snowflake-Zeilen. Ihr Immutable-Schutz wird nicht aufgehoben.
+- Historische Sicherungen und Dokumentation bleiben erhalten.
+
+Lessons Learned - Erhebungsbefehle
+- rg ist auf hp-server nicht installiert. Kein wiederholter rg-Versuch:
+  kuenftig Python os.walk mit Groessenlimit und Verzeichnisfiltern verwenden.
+- Keine pauschalen Inhalte von .env, Docker-Inspect oder ioBroker-Objekten
+  ausgeben. Inventar auf benoetigte Felder begrenzen; Secrets bleiben lokal.
+- os.walk-Fehler separat sammeln; geschuetzte oder defekte Pfade nicht
+  verschweigen. PermissionError bei .git-Existenzpruefungen gesondert abfangen.
+- Breite Home-Verzeichnislisten erzeugen unnoetige, teils abgeschnittene
+  Ausgaben. Kuenftig zuerst aktive Systempfade und genaue Treffer anzeigen.
+- read_process_output wiederholt anfangs bereits ausgegebene Zeilen.
+  Kleine, gezielt begrenzte Erhebungsbloecke bevorzugen.
+- Kein pauschales Loeschen von Treffern: Libraries enthalten teils
+  gleichnamige Emojis oder generische Snowflake-Begriffe.
+- Eine multiline Regex mit DOTALL und gierigem Ende entfernte im
+  VORBEREITETEN L3-Kandidaten zu viel. Die Diff-Pruefung erkannte das vor
+  Installation. Korrigiert durch exakten Blockvergleich und Nachweis, dass
+  alle folgenden Backupabschnitte bytegleich bleiben.
+- Verbindlich: kleine exakte Ersetzungen, danach Syntax- UND Diff-Pruefung;
+  bash -n allein erkennt semantisch fehlende Backupabschnitte nicht.
+- systemctl disable --now pruefen und die Units danach separat auf
+  Inaktivitaet kontrollieren; historische Unit-Sicherungen nicht ausfuehren.
+- docker stop mit --timeout statt veraltetem --time.
+- Keine globale Docker-Prune-Aktion. Nur explizit identifizierte Container,
+  Images und leere projektbezogene Netze entfernen.
+- Filen-Verzeichnisse werden fuer diese Entfernung nicht durchsucht
+  oder geloescht. Keine rekursiven Scans ueber Remote-Mounts.
