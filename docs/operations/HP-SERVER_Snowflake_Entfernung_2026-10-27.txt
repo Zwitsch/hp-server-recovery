@@ -1,6 +1,6 @@
 HP-SERVER - Snowflake entfernen
 Stand: 2026-10-27, Europe/Berlin
-Status: VORBEREITET; ADMINISTRATORLAUF UND ABSCHLUSSPRUEFUNG AUSSTEHEND.
+Status: ABGESCHLOSSEN - SNOWFLAKE_RETIREMENT=PASS; Abschlusspruefung erfolgreich.
 
 Auftrag
 Snowflake Proxy entfernen und aufrufende Skripte bereinigen.
@@ -16,8 +16,8 @@ Erhobener Bestand
 - Drei Yahka-Geraete fuer Start, Status und Updateverfuegbarkeit.
 - Gemeinsamer HP-Agent enthaelt einen Snowflake-Log-Befehl.
 
-Vorbereitete Aenderungen
-13 vollstaendige Kandidatendateien, jeweils mit SHA-256 vor/nach Aenderung:
+Installierte Aenderungen
+13 vollstaendige Dateien, jeweils mit SHA-256 vor/nach Aenderung:
 - check-docker-updates-v2.sh und check-docker-updates.sh
 - pin-docker-tags.sh
 - backup_level3.sh
@@ -35,10 +35,10 @@ Installationspaket auf hp-server
 - iobroker-cleanup.cjs: Live-DB-Zugriff; --check, --apply, --verify
 - plan.json und candidates/: private, vollstaendige Kandidaten
 
-Administratoraufruf
+Ausgefuehrter Administratoraufruf (nicht erneut erforderlich)
 sudo python3 -u /home/daniel/snowflake-retire-20261027/retire-snowflake.py
 
-Vorgesehener Ablauf
+Ausgefuehrter Ablauf
 1. Quellenhashes und Syntax erneut pruefen.
 2. Mit Root-Rechten auch bisher unlesbare Bereiche auditieren.
    Ungeplante aktive Referenzen stoppen den Lauf vor Aenderungen.
@@ -54,11 +54,19 @@ Vorgesehener Ablauf
 11. Aktive Skript-/Konfigurationsreferenzen und ioBroker erneut pruefen.
 12. Gemeinsame Timer wieder starten; Abschlussbeleg schreiben.
 
-Erwarteter Abschluss
+Bestaetigter Abschluss
 SNOWFLAKE_RETIREMENT=PASS
 OTHER_CONTAINERS_UNCHANGED=PASS
-Voraussichtlich 15 laufende Container, sofern der Bestand unveraendert bleibt.
-Der Abschlussbeleg existiert erst nach erfolgreichem Administratorlauf.
+15 laufende Container, keine gestoppten Container.
+Kein Snowflake-Container, kein Snowflake-Image und kein Snowflake-Netz.
+Keine Snowflake-Systemd-Units mehr installiert.
+13 installierte Dateien stimmen mit den geprueften Kandidaten per SHA-256 ueberein.
+ioBroker-Livepruefung: keine Snowflake-Objekte/Skriptverweise; 75 Yahka-Geraete.
+HP-Agent laeuft nach bereinigter Befehlsliste.
+Gemeinsame Docker-Monitor-/Update-Timer aktiv; zuvor deaktivierter Pin-Timer
+bleibt deaktiviert. Die anderen Container wurden nicht neu gestartet.
+Abschlussbeleg: retirement-receipt.json im Installationspaket.
+Originalsicherungen: privates Unterverzeichnis system-backups/.
 
 Pruefung
 - Alle 13 Kandidaten syntaxgeprueft (Bash, Python bzw. JSON).
@@ -66,9 +74,11 @@ Pruefung
 - Diff der gemeinsamen Dateien auf sachfremde Aenderungen geprueft.
 - L3: Alle Abschnitte ab Analyzer-Archiv bytegleich zum Ausgangsstand.
 - Benutzer-Crontab: kein aktiver Snowflake-Aufruf.
-- Vier geschuetzte Bereiche verbleiben fuer den Root-Audit:
+- Root-Audit waehrend des erfolgreichen Installationslaufs abgeschlossen:
   backup_level2-Verzeichnis, backup_level3_export.sh,
   HP-Agent-Umgebungsdatei und dessen Environment-Drop-in.
+  Remote-Nachpruefung unter daniel kann diese vier Bereiche weiterhin nicht lesen;
+  deren Nachweis stammt aus dem erfolgreich abgeschlossenen Root-Installer.
 - Geschuetzte hp-watchdogs-Crondatei enthaelt nur auskommentierte
   Snowflake-Zeilen. Ihr Immutable-Schutz wird nicht aufgehoben.
 - Historische Sicherungen und Dokumentation bleiben erhalten.
@@ -99,3 +109,8 @@ Lessons Learned - Erhebungsbefehle
   Images und leere projektbezogene Netze entfernen.
 - Filen-Verzeichnisse werden fuer diese Entfernung nicht durchsucht
   oder geloescht. Keine rekursiven Scans ueber Remote-Mounts.
+
+- Der Root-Installer erstellt seinen Abschlussbeleg absichtlich mit Modus 600.
+  Remote-Zugriff unter daniel darf diesen Beleg nicht lesen. Fuer die Nachpruefung
+  Quellenhashes, Docker-/Systemd-Abfragen und die Live-ioBroker-API nutzen;
+  den Root-Audit anhand der vollstaendigen Installer-Erfolgsausgabe dokumentieren.
