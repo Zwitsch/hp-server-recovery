@@ -1,0 +1,59 @@
+HP-SERVER - Nextcloud aus ioBroker und Yahka entfernt
+Stand: 2026-10-27, Europe/Berlin
+Ausfuehrung: 2026-10-27 12:54:33 UTC / 13:54:33 Europe/Berlin
+Status: NEXTCLOUD_IOBROKER_CLEANUP=PASS
+
+Auftrag
+Nach bereits abgeschlossener Nextcloud-Deinstallation auch ioBroker und
+Yahka/Apple Home von den verbleibenden Betriebseintraegen bereinigen.
+
+Aenderungen
+- script.js.Docker.UpdatePerContainer:
+  Nextcloud-Stack einschliesslich seiner Versionsfelder entfernt.
+- Separaten ensureState-Aufruf fuer nextcloud.mariadb_available_tag entfernt.
+- 17 Objekte einschliesslich Ordner und zugehoeriger State-Werte unter
+  javascript.0.Eigene_Datenpunkte.Docker.nextcloud entfernt.
+- Drei Yahka-Geraete entfernt: Nextcloud Update Starten, Update Status,
+  Update verfuegbar.
+- Andere Yahka-Geraete mit den gesicherten Originalen identisch.
+- Andere Skripte und Container nicht geaendert.
+
+Sicherung und Ablauf
+Private Originalobjekte, State-Werte sowie vollstaendige Skriptdateien
+vorher/nachher gesichert unter:
+/home/daniel/nextcloud-iobroker-cleanup-20261027/runs/20261027T125433Z
+Live-Aenderung ueber die ioBroker-DB-API; keine Bearbeitung der JSONL-Datenbank.
+Vorher alle Docker-Update-Locks geprueft.
+Update-Skript fuer die Bereinigung kurz deaktiviert und anschliessend mit
+urspruenglichem Aktivierungsstatus wieder gestartet.
+Bei Fehlern ist die Wiederherstellung der gezielt gesicherten Objekte vorgesehen.
+
+Pruefergebnisse
+- JavaScript-Syntax vor Installation erfolgreich geprueft.
+- Keine weiteren Nextcloud-Verweise in ioBroker-Skriptquellen gefunden.
+- Keine Nextcloud-Objekte oder State-Schluessel mehr vorhanden.
+- Update-Skript aktiv und Runtime-State scriptEnabled=true.
+- Yahka aktiv; 72 verbleibende Geraete.
+- Verbleibende Yahka-Geraetekonfigurationen exakt mit Originalen verglichen.
+- Keine Snowflake-Reste im aktualisierten Skript oder in Yahka.
+- Installierte Docker-Checker und Tag-Pinning-Skript ohne Nextcloud-Verweise.
+- Containerbestand und Startzeitpunkte unveraendert.
+- Repository-Katalog system.repositories bleibt unveraendert:
+  Nextcloud-Erwaehnungen in allgemeiner Adapter-Metadatenliste sind
+  keine installierten Nextcloud-Instanzen oder aktiven Betriebsaufrufe.
+
+SHA-256 des vollstaendigen aktualisierten Update-Skripts
+0b04a74ebb97f7abc3f96e4d910fd8802b7e8a27dc610febff1225ef4be081b1
+
+Lessons Learned - Erhebungsbefehle
+- Nicht nur den STACKS-Eintrag entfernen: separate ensureState-Aufrufe
+  koennen geloeschte Datenpunkte beim Skriptstart erneut anlegen.
+- Vor State-Loeschungen den alten Skriptstand beenden und erst danach
+  den bereinigten Stand wieder aktivieren.
+- Objekt- UND State-Datenbank pruefen; reine Objektloeschung reicht nicht.
+- Private Originalobjekte und Skriptquellen lokal sichern; keine
+  vollstaendigen Yahka-Konfigurationen oder Secrets in Tool-Ausgaben/GitHub.
+- Live-DB-API fuer Aenderungen verwenden; JSONL-Dateien niemals direkt aendern.
+- Kuenftiger Direktcheck: cleanup.cjs --verify im obigen Paketverzeichnis.
+- Fuer Erhebung weiter Python statt nicht vorhandenem rg verwenden;
+  nur gezielte Objekt-IDs, Trefferkontexte und Erfolgsmarker ausgeben.
