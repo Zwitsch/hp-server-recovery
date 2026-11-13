@@ -13,7 +13,7 @@ Der reguläre HP-Server-Analyzer erfasst die externe Level-2-HDD sowohl im autom
 - Den Level-2-Lock erwirbt weiterhin der Analyzer selbst.
 - Die HDD wird ausschließlich read-only über bekannte UUID, ext4 und Sentinel akzeptiert.
 - HDD-Rohdaten: findmnt, blkid, SMART, ext4-Superblock, Kapazität/Inodes und begrenzte Top-Level-Strukturprüfung.
-- Der frühere rekursive `du -xhd 3`-Vollscan über rund 500 GB sowie die rekursive Dateisuche entfallen.
+- Rekursive Vollinventuren der Backup-HDD entfallen vollständig: weder Modul 3 noch Modul 16 führen noch `du -xhd 3 /mnt/backup_hdd` aus.
 - Docker-Inspect-Ausgaben werden vor Speicherung redigiert.
 - Secret-Redaction umfasst authorization, bearer, cookie und client_secret.
 - Frozen-Function-Hashes sind auf den kontrolliert geprüften 5.2.0-dev-Stand aktualisiert.
@@ -56,19 +56,22 @@ Recovery bleibt damit bewusst der schwächste Bereich; das Scoring wird also nic
 
 ## Installation / Realtest
 
-Produktiver Stand vor dieser Scoring-Korrektur:
-
-`d832f03a6cd9276d2641171d609e3c303d8c359f4dafeb17a671d8fa5f94f5ca`
-
-Vorbereiteter Kandidat nach Scoring- und Performance-Korrektur:
+Zwischenstand mit erster Performance-Korrektur:
 
 `70b3b7b0742f3160af327b44186811749ad1899446f3abe8426cd9674bf98fd1`
+
+Beim Realtest 14:04 wurde erkannt, dass Modul 16 noch einen zweiten rekursiven HDD-`du` enthielt. Dieser wurde ebenfalls entfernt.
+
+Aktueller vollständiger Kandidat:
+
+`c2c8ef9b576b8f4a05d5d95dc8bf501125974e4be5b6c880934a2493029115bb`
 
 Statische Validierung:
 
 - Bash-Syntax: PASS
 - 27 eingebettete Python-Blöcke: 0 Syntaxfehler
 - 2 Frozen-Hash-Tabellen mit je 57 Funktionen: 0 Abweichungen
+- rekursive HDD-`du`-Scans: 0
 
 ## Sicherheitsvertrag
 
